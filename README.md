@@ -8,7 +8,8 @@ If you enjoy the Bluecord project (of which many dozens of hours were put into),
 If you are inspired by, or end up copying or using any of the works contained herein, please give credit by linking back to this repository.
 
 # Download
-[Latest Bluecord Version: 2.2](https://bluesmods.com/bluecord)
+[Official Website](https://bluesmods.com/bluecord/)
+[GitHub Releases](https://github.com/bluemods/Bluecord/releases/)
 
 # Building / Installing
 You will need the following pieces of software:
@@ -16,7 +17,7 @@ You will need the following pieces of software:
 - [Android Studio](https://developer.android.com/studio)
 
 1) Download / Clone this repository
-2) Decompile the Bluecord APK from [bluesmods.com (my site)](https://bluesmods.com/downloads/Bluecord_2.2.apk) or [GDrive](https://drive.google.com/file/d/1vIDRUeHtAT-sb7L58iIvxtPKK05Mdo6s/view?usp=sharing) using APKTool (APK exceeds 100MB limit so I cannot include in this repo). Verify the [APK Hashes](https://github.com/bluemods/Bluecord/HASHES.md) as well.
+2) Download the Bluecord APK from the [Releases tab](https://github.com/bluemods/Bluecord/releases/) and decompile it using APKTool
 3) Import the project into Android Studio
 4) In the toolbar, click "Build" -> Build Bundle(s) / APK(s) -> Build APK(s)
 5) Locate the APK, and decompile it using APKTool
