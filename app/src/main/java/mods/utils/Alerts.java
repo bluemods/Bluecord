@@ -1,0 +1,50 @@
+package mods.utils;
+
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+
+import androidx.fragment.app.Fragment;
+
+import mods.DiscordTools;
+import mods.constants.Constants;
+import mods.constants.PreferenceKeys;
+import mods.preference.Prefs;
+
+public class Alerts {
+
+    public static void alertDevMenuWarning(final Fragment fragment) {
+        if (Prefs.getBoolean(PreferenceKeys.EXPERIMENT_NEVER_SHOW_AGAIN, false)) return;
+
+        DiscordTools.newBuilder(fragment.requireContext())
+                .setTitle("Warning")
+                .setMessage(
+                        "These are experimental tests written by Discord.\n\n" +
+                                "Modifying them can cause the app to crash or introduce unintended side effects.\n\n" +
+                                "Use at your own risk.\n\n" +
+                                "Note:\nBucket 0 = Control\nBucket 1 = Treatment 1\nBucket 2 = Treatment 2, etc"
+                )
+                .setNeutralButton("Never Show Again", (d, w) -> Prefs.setBoolean(PreferenceKeys.EXPERIMENT_NEVER_SHOW_AGAIN, true))
+                .setPositiveButton("Dismiss", null)
+                .show();
+    }
+
+    public static void alertNitroClick(final Context context) {
+        DiscordTools.newBuilder(context)
+                .setTitle("Discord Nitro")
+                .setMessage(
+                        "Since this is a modified application, Google Play services do not work, " +
+                                "meaning you cannot buy Nitro from the app.\n\n" +
+                                "Download Discord from the Play Store and log in there to purchase Nitro."
+                )
+                .setNegativeButton("Exit", null)
+                .setPositiveButton("Play Store", (dialog, which) -> {
+                    try {
+                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + Constants.ORIGINAL_PACKAGE_NAME)));
+                    } catch (Exception e) {
+                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + Constants.ORIGINAL_PACKAGE_NAME)));
+                    }
+                })
+                .show();
+    }
+}
