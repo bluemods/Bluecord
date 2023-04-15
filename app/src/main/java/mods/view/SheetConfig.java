@@ -176,7 +176,7 @@ public class SheetConfig {
         long channelOrGuildId = isGuild ? member.getGuildId() : StoreStream.getChannelsSelected().getId();
         long authorId = user.getId();
 
-        SearchKey searchKey = SearchKey.create(channelOrGuildId, authorId);
+        SearchKey searchKey = new SearchKey(channelOrGuildId, authorId);
         View tagView = binding.getRoot().findViewById(Constants.BLUE_ID_USERNAME_DETAILS_TV);
 
         if (tagView.getTag() instanceof SearchKey && searchKey.equals(tagView.getTag())) {

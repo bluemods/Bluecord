@@ -6,6 +6,7 @@ import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
 import mods.preference.Prefs;
 
+@SuppressWarnings("unused")
 public class AntiDiscordRebrand {
 
     public static boolean isEnabled() {
@@ -13,18 +14,16 @@ public class AntiDiscordRebrand {
     }
 
     public static int overrideTheme(int current) {
-        if (isEnabled()) {
-            switch (current) {
-                case Constants.STYLE_LIGHT: return Constants.STYLE_LIGHT_NO_REBRAND;
-                case Constants.STYLE_DARK:  return Constants.STYLE_DARK_NO_REBRAND;
-                case Constants.STYLE_EVIL:  return Constants.STYLE_EVIL_NO_REBRAND;
-                default: {
-                    LogUtils.log("Bluecord", "unknown style res (" + current + ")");
-                    return current;
-                }
+        if (!isEnabled()) return current;
+
+        switch (current) {
+            case Constants.STYLE_LIGHT: return Constants.STYLE_LIGHT_NO_REBRAND;
+            case Constants.STYLE_DARK:  return Constants.STYLE_DARK_NO_REBRAND;
+            case Constants.STYLE_EVIL:  return Constants.STYLE_EVIL_NO_REBRAND;
+            default: {
+                LogUtils.log("Bluecord", "unknown style res (" + current + ")");
+                return current;
             }
-        } else {
-            return current;
         }
     }
 }

@@ -6,16 +6,19 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+
+import mods.constants.PreferenceKeys;
 import mods.utils.LogUtils;
 
 import mods.preference.Prefs;
 
+@SuppressWarnings("unused")
 public class AntiProximitySensor implements SensorEventListener {
 
-    private static final String TAG = "AntiProximitySensor";
+    private static final String TAG = AntiProximitySensor.class.getSimpleName();
 
     public static AntiProximitySensor start(IntentService service) {
-        if (Prefs.getBoolean("blue.disable.proximity", false)) {
+        if (Prefs.getBoolean(PreferenceKeys.DISABLE_PROXIMITY_SENSOR, false)) {
             try {
                 AntiProximitySensor inst = new AntiProximitySensor();
                 SensorManager manager = (SensorManager) service.getApplication().getSystemService(Context.SENSOR_SERVICE);
