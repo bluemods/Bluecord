@@ -54,7 +54,6 @@ public class MarkRead {
                             0x3e,
                             null
                             );
-                        }, throwable -> LogUtils.log("MarkRead", "failed", throwable), () -> {})
-                );
+                        }, throwable -> LogUtils.log("MarkRead", "failed", throwable), () -> {}));
     }
 }

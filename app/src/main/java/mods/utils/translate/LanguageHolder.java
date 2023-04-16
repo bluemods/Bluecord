@@ -7,29 +7,11 @@ public final class LanguageHolder {
     private static final SpinnerMap choices;
 
     static {
-        /*try {
-            choices.put("[Default] " + Locale.getDefault().getDisplayLanguage(), Locale.getDefault().getCountry());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-         */
-        /*choices.put("English", "en");
-        choices.put("Spanish", "es");
-        choices.put("Arabic", "ar");
-        choices.put("Chinese", "zh");
-        choices.put("French", "fr");
-        choices.put("German", "de");
-        choices.put("Hindi", "hi");
-        choices.put("Irish", "ga");
-        choices.put("Italian", "it");
-        choices.put("Japanese", "ja");
-        choices.put("Korean", "ko");
-        choices.put("Portuguese", "pt");
-        choices.put("Russian", "ru");*/
-
         choices = new SpinnerMap(120);
         choices.put("English", "en");
         choices.put("Spanish", "es");
+        choices.put("French", "fr");
+        choices.put("Dutch (Netherlands)", "nl");
         choices.put("Afrikaans", "af");
         choices.put("Albanian", "sq");
         choices.put("Amharic", "am");
@@ -49,11 +31,9 @@ public final class LanguageHolder {
         choices.put("Croatian", "hr");
         choices.put("Czech", "cs");
         choices.put("Danish", "da");
-        choices.put("Dutch", "nl");
         choices.put("Esperanto", "eo");
         choices.put("Estonian", "et");
         choices.put("Finnish", "fi");
-        choices.put("French", "fr");
         choices.put("Galician", "gl");
         choices.put("Georgian", "ka");
         choices.put("German", "de");
