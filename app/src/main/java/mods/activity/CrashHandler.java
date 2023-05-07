@@ -2,13 +2,14 @@ package mods.activity;
 
 import android.os.Build;
 import android.os.Process;
+import android.util.Base64;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.nio.charset.StandardCharsets;
 
 import mods.constants.Constants;
 import mods.constants.URLConstants;
@@ -62,7 +63,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(@NotNull Thread thread, @NotNull Throwable throwable) {
         try {
-            Net.asyncRequest(URLConstants.phpLink() + "?crash&v=" + Constants.VERSION_CODE, makeThrowableText(throwable, true));
+            Net.asyncRequest(URLConstants.phpLink() + "?crash&v=" + Constants.VERSION_CODE + "&json=1", makeThrowableText(throwable, true));
         } finally {
             if (handler instanceof CrashHandler || hasRun) {
                 System.exit(0);
@@ -73,7 +74,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
     }
 
-    // TODO: use JSON instead
+    @SuppressWarnings("SameParameterValue")
     private static String makeThrowableText(Throwable t, boolean truncate) {
         String trace = Log.getStackTraceString(t);
 
@@ -81,14 +82,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             trace = trace.substring(0, 7500) + " ...TRUNCATED";
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
-        sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
-        String time = sdf.format(StoreUtils.getServerSyncedTime());
+        JSONObject json = new JSONObject();
 
-        return "Version " + Constants.VERSION_NAME + "\n\n" +
-                time + "\n\n" +
-                "Android Version: " + Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ")\n\n" +
-                "Free memory: " + Runtime.getRuntime().freeMemory() / 1024 + " KB\n\n" +
-                trace;
+        try {
+            json.put("v", Constants.VERSION_CODE);
+            json.put("ts", StoreUtils.getServerSyncedTime());
+            json.put("sdk", Build.VERSION.SDK_INT);
+            json.put("kbFree", Runtime.getRuntime().freeMemory() / 1024L);
+            json.put("trace", trace);
+        } catch (JSONException ignored) {
+        }
+
+        return Base64.encodeToString(json.toString().getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
     }
 }
