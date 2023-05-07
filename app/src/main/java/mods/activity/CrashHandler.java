@@ -1,21 +1,22 @@
 package mods.activity;
 
+import android.os.Build;
 import android.os.Process;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import mods.constants.Constants;
 import mods.constants.URLConstants;
 import mods.net.Net;
 import mods.utils.LogUtils;
+import mods.utils.StoreUtils;
 
+@SuppressWarnings("unused")
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private static final String TAG = CrashHandler.class.getSimpleName();
@@ -61,20 +62,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(@NotNull Thread thread, @NotNull Throwable throwable) {
         try {
-            String trace = Log.getStackTraceString(throwable);
-
-            if (trace.length() > 10000) trace = trace.substring(0, 10000) + "...TRUNCATED";
-
-            String pattern = "MM/dd";
-            String header = "Version " + URLConstants.getVersionString() + "\n\n";
-
-            DateFormat df = new SimpleDateFormat(pattern, Locale.US);
-            Date today = Calendar.getInstance().getTime();
-            String todayAsString = df.format(today) + "\n\n";
-            String myVersion = "Android Version: " + android.os.Build.VERSION.RELEASE + "\n\n";
-            String mem = "Free memory: " + Runtime.getRuntime().freeMemory() / 1024 + " KB\n\n";
-
-            Net.asyncRequest(URLConstants.phpLink() + "?crash&v=" + Constants.VERSION_CODE, header + myVersion + todayAsString + mem + trace);
+            Net.asyncRequest(URLConstants.phpLink() + "?crash&v=" + Constants.VERSION_CODE, makeThrowableText(throwable, true));
         } finally {
             if (handler instanceof CrashHandler || hasRun) {
                 System.exit(0);
@@ -83,5 +71,24 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             hasRun = true;
             handler.uncaughtException(thread, throwable);
         }
+    }
+
+    // TODO: use JSON instead
+    private static String makeThrowableText(Throwable t, boolean truncate) {
+        String trace = Log.getStackTraceString(t);
+
+        if (truncate && trace.length() > 7500) {
+            trace = trace.substring(0, 7500) + " ...TRUNCATED";
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+        sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+        String time = sdf.format(StoreUtils.getServerSyncedTime());
+
+        return "Version " + Constants.VERSION_NAME + "\n\n" +
+                time + "\n\n" +
+                "Android Version: " + Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ")\n\n" +
+                "Free memory: " + Runtime.getRuntime().freeMemory() / 1024 + " KB\n\n" +
+                trace;
     }
 }
