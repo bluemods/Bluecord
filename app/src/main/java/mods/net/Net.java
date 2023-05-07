@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
+@SuppressWarnings({"deprecation", "unused"})
 public class Net extends AsyncTask<Void, Void, String> {
 
     private final String url;
@@ -75,7 +76,7 @@ public class Net extends AsyncTask<Void, Void, String> {
     }
 
     public static SimpleHttpResponse getOrPostWithResult(String url, @Nullable String postData, @Nullable LinkedHashMap<String, String> headers) {
-        HttpsURLConnection conn = null;
+        HttpsURLConnection conn;
         try {
             conn = (HttpsURLConnection) new URL(url).openConnection();
             conn.setConnectTimeout(5000);
@@ -111,16 +112,12 @@ public class Net extends AsyncTask<Void, Void, String> {
             return new SimpleHttpResponse(NetUtils.readInputStream(conn, code).trim(), code);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (conn != null) {
-                try { conn.disconnect(); } catch (Exception ignored) {}
-            }
         }
         return new SimpleHttpResponse(null, SimpleHttpResponse.CODE_FAILED);
     }
 
     public static SimpleHttpResponse delete(String url, @Nullable LinkedHashMap<String, String> headers) {
-        HttpsURLConnection conn = null;
+        HttpsURLConnection conn;
         try {
             conn = (HttpsURLConnection) new URL(url).openConnection();
             conn.setConnectTimeout(5000);
@@ -144,10 +141,6 @@ public class Net extends AsyncTask<Void, Void, String> {
         } catch (Exception e) {
             LogUtils.log("Net", "request failed on url " + url, e);
             return new SimpleHttpResponse(null, SimpleHttpResponse.CODE_FAILED);
-        } finally {
-            if (conn != null) {
-                try { conn.disconnect(); } catch (Exception ignored) {}
-            }
         }
     }
 }

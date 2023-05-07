@@ -1,5 +1,7 @@
 package mods.activity;
 
+import static mods.constants.Constants.VERSION_CODE;
+
 import android.os.Build;
 import android.os.Process;
 import android.util.Base64;
@@ -11,7 +13,6 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 
-import mods.constants.Constants;
 import mods.constants.URLConstants;
 import mods.net.Net;
 import mods.utils.LogUtils;
@@ -63,7 +64,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(@NotNull Thread thread, @NotNull Throwable throwable) {
         try {
-            Net.asyncRequest(URLConstants.phpLink() + "?crash&v=" + Constants.VERSION_CODE + "&json=1", makeThrowableText(throwable, true));
+            final String url = URLConstants.phpLink() + "?crash&v=" + VERSION_CODE + "&json=1";
+            Net.asyncRequest(url, makeThrowableText(throwable, true));
         } finally {
             if (handler instanceof CrashHandler || hasRun) {
                 System.exit(0);
@@ -85,7 +87,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         JSONObject json = new JSONObject();
 
         try {
-            json.put("v", Constants.VERSION_CODE);
+            json.put("v", VERSION_CODE);
             json.put("ts", StoreUtils.getServerSyncedTime());
             json.put("sdk", Build.VERSION.SDK_INT);
             json.put("kbFree", Runtime.getRuntime().freeMemory() / 1024L);
