@@ -226,9 +226,9 @@ public class SafeDialogBuilder extends AlertDialog.Builder {
     }
 
     /**
-     * Deprecated: Use {@link SafeDialogBuilder#showSafely()} instead.
-     * <br/>
-     * If you need to access a created {@link AlertDialog} instance, use {@link SafeDialogBuilder#create()}, use the instance, then call {@link AlertDialog#show()} on it.
+     * <b>Deprecated:</b> Use {@link SafeDialogBuilder#showSafely() showSafely()} instead.
+     * <p/>
+     * If you need to access a created {@link AlertDialog} instance, call {@link SafeDialogBuilder#create()}, use the instance, then call {@link AlertDialog#show() show()} on the dialog.
      */
     @Deprecated
     @Override
