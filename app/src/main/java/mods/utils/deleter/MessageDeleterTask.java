@@ -334,6 +334,7 @@ public class MessageDeleterTask {
             }
         } catch (JSONException e) {
             LogUtils.logException(TAG, e);
+            throw new RateLimitException(true);
         }
     }
 
