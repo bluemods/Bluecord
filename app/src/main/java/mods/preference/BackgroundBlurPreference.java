@@ -99,7 +99,7 @@ public class BackgroundBlurPreference extends Preference {
                         .setView(parent)
                         .setPositiveButton("Exit", (d, w) -> DiscordTools.promptRestart(getContext()))
                         .setCancelable(false)
-                        .show();
+                        .showSafely();
             }
             return true;
         });

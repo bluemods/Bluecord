@@ -42,7 +42,7 @@ public class AccountSwitcher extends Preference {
                         }
                     })
                     .setPositiveButton("Exit", null)
-                    .show();
+                    .showSafely();
             return true;
         });
     }
@@ -88,7 +88,7 @@ public class AccountSwitcher extends Preference {
                         ToastUtil.customToast(DiscordTools.getActivity(context), count + " " + (count == 1 ? "backup" : "backups") + " deleted.");
                     }
                 })
-                .show();
+                .showSafely();
     }
 
     private void createBackup(final Context context) {
@@ -125,7 +125,7 @@ public class AccountSwitcher extends Preference {
                         ).addBackup(context);
                         ToastUtil.customToast(DiscordTools.getActivity(context), "Backup saved");
                     })
-                    .show();
+                    .showSafely();
         }
     }
 
@@ -151,10 +151,10 @@ public class AccountSwitcher extends Preference {
                                 .setMessage("Are you sure you want to restore to " + backup.getAccountName() + "?\n\nThis will log you out of your current account and restart the app.")
                                 .setNegativeButton("No", null)
                                 .setPositiveButton("Yes", (d, w) -> AuthenticationUtils.restoreTokenFromBackup(context, backup.getToken(), backup.getFingerprint()))
-                                .show();
+                                .showSafely();
                     })
                     .setPositiveButton("Exit", null)
-                    .show();
+                    .showSafely();
         }
     }
 

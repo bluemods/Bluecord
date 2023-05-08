@@ -57,7 +57,7 @@ public class Updater extends Preference {
                         .setMessage(d("VGhlIGFwcCBoYXMgYmVlbiBjbG9uZWQsIG1vZGlmaWVkLCBvciBoYWQgdGhlIGFwcCBuYW1lIGNoYW5nZWQuCgpUaGlzIGlzbid0IGEgYmlnIGRlYWwsIGJ1dCBzb21lIGZlYXR1cmVzIG1heSAodW5pbnRlbnRpb25hbGx5KSBicmVhayBpZiB5b3UgY2xvbmVkIGl0LCBhbmQgc3VwcG9ydCBjYW5ub3QgYmUgb2ZmZXJlZCBmb3IgdGhvc2UgaXNzdWVzLgoKVGhpcyBhcHAgaXMgQmx1ZWNvcmQsIGFuZCBvZmZpY2lhbCByZWxlYXNlcyBhcmUgb25seSBmb3VuZCBhdCBibHVlc21vZHMuY29t"))
                         .setNeutralButton(d("TmV2ZXIgU2hvdyBBZ2Fpbg"), (dialog, which) -> Prefs.setBoolean(d("bW9kZGVk"), true))
                         .setPositiveButton(d("Q2xvc2U"), null)
-                        .show();
+                        .showSafely();
                 return;
             }
         }
@@ -124,7 +124,7 @@ public class Updater extends Preference {
                 .setMessage(result.getMessage())
                 .setNegativeButton("Dismiss", null)
                 .setPositiveButton("Download", (d, w) -> loadUrl(context, result.getUpdateLink()))
-                .show();
+                .showSafely();
     }
 
     private static void loadUrl(Context context, String url) {

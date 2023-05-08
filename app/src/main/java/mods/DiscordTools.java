@@ -39,6 +39,7 @@ import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
 import mods.preference.Prefs;
 import mods.utils.LogUtils;
+import mods.utils.dialog.SafeDialogBuilder;
 
 @SuppressWarnings("unused")
 public class DiscordTools {
@@ -79,7 +80,7 @@ public class DiscordTools {
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton("Dismiss", null)
-                .show();
+                .showSafely();
     }
 
     public static void copyToClipboard(String text) {
@@ -94,8 +95,8 @@ public class DiscordTools {
         ProcessPhoenix.triggerRebirth(context);
     }
 
-    public static AlertDialog.Builder newBuilder(Context context) {
-        return new AlertDialog.Builder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
+    public static SafeDialogBuilder newBuilder(Context context) {
+        return new SafeDialogBuilder(context, AlertDialog.THEME_DEVICE_DEFAULT_DARK)
                 .setIcon(Constants.APP_ICON);
     }
 
@@ -141,7 +142,7 @@ public class DiscordTools {
                 .setMessage("Restart to apply changes?")
                 .setPositiveButton("Yes", (d, w) -> restartDiscord(context))
                 .setNegativeButton("No", null)
-                .show();
+                .showSafely();
     }
 
     /*

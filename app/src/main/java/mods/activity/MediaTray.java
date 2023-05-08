@@ -35,6 +35,7 @@ import mods.constants.PreferenceKeys;
 import mods.constants.URLConstants;
 import mods.net.Urban;
 import mods.preference.Prefs;
+import mods.utils.Alerts;
 import mods.utils.AuthenticationUtils;
 import mods.utils.PatternUtils;
 import mods.utils.StoreUtils;
@@ -256,21 +257,24 @@ public class MediaTray {
             //     MarkRead.sendRequest();
 
             } else if (text.startsWith("purge ")) {
-                int limit = StringUtils.getIntSafe(text.substring(6).trim());
-                Long channelId = StoreUtils.getCurrentChannelId();
+                final int limit = StringUtils.getIntSafe(text.substring(6).trim());
 
-                if (limit < 1 || limit > MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND) {
-                    // TODO: consider removing the upper bound limit?
-                    ToastUtil.toast("Use a number between 1-" + MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND);
-                } else if (channelId == null) {
-                    ToastUtil.toast("Could not locate the current channel. Restart Bluecord and retry.");
-                } else if (!DiscordTools.isConnected()) {
-                    ToastUtil.toast("You don't appear to be connected to the Internet. Check your connection and retry.");
-                } else {
-                    long authorId = StoreUtils.getSelf().getId();
-                    Long guildId = StoreUtils.getCurrentGuildId();
-                    MessageDeleterTask.start(channelId, authorId, guildId, limit);
-                }
+                Alerts.showDeleteDisclaimer(mFragment.getContext(), () -> {
+                    Long channelId = StoreUtils.getCurrentChannelId();
+
+                    if (limit < 1 || limit > MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND) {
+                        // TODO: consider removing the upper bound limit?
+                        ToastUtil.toast("Use a number between 1-" + MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND);
+                    } else if (channelId == null) {
+                        ToastUtil.toast("Could not locate the current channel. Restart Bluecord and retry.");
+                    } else if (!DiscordTools.isConnected()) {
+                        ToastUtil.toast("You don't appear to be connected to the Internet. Check your connection and retry.");
+                    } else {
+                        long authorId = StoreUtils.getSelf().getId();
+                        Long guildId = StoreUtils.getCurrentGuildId();
+                        MessageDeleterTask.start(channelId, authorId, guildId, limit);
+                    }
+                });
                 text = "";
             }
 
@@ -440,7 +444,7 @@ public class MediaTray {
                         addCommand();
                     })
                     .setNegativeButton("Exit", null)
-                    .show();
+                    .showSafely();
         });
     }
 
@@ -486,7 +490,7 @@ public class MediaTray {
                             ToastUtil.toast("No commands were selected to delete!");
                         }
                     })
-                    .show());
+                    .showSafely());
         }
     }
 

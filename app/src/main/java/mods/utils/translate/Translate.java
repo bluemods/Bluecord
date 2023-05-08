@@ -174,7 +174,7 @@ public class Translate {
                                                             ToastUtil.toast("Copied to clipboard");
                                                         })
                                                         .setPositiveButton("Exit", null)
-                                                        .show();
+                                                        .showSafely();
                                             });
                                         }
 
@@ -189,7 +189,7 @@ public class Translate {
                                     });
                         }
                     })
-                    .show();
+                    .showSafely();
         });
     }
 }

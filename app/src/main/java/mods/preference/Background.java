@@ -52,7 +52,7 @@ public class Background extends Preference {
                                     }
                                 })
                         .setPositiveButton("Exit", null)
-                        .show();
+                        .showSafely();
             }
             return true;
         });

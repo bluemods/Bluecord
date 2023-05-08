@@ -52,7 +52,7 @@ public class Urban {
                                 ToastUtil.toast("Copied to clipboard");
                             })
                             .setPositiveButton("Exit", null)
-                            .show();
+                            .showSafely();
                 });
             } catch (Exception e) {
                 e.printStackTrace();

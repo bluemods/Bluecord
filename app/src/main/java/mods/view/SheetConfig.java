@@ -506,7 +506,7 @@ public class SheetConfig {
                             }
                         })
                         .setPositiveButton("Exit", null)
-                        .show();
+                        .showSafely();
             });
         });
     }
@@ -524,7 +524,7 @@ public class SheetConfig {
                         }
                     })
                     .setPositiveButton("Exit", null)
-                    .show();
+                    .showSafely();
             return true;
         });
     }

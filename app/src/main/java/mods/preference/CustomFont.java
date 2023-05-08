@@ -44,7 +44,7 @@ public class CustomFont extends Preference {
                         }
                     })
                     .setPositiveButton("Exit", null)
-                    .show();
+                    .showSafely();
             return true;
         });
     }
@@ -76,7 +76,7 @@ public class CustomFont extends Preference {
                     }
                 })
                 .setNeutralButton("Close", null)
-                .show();
+                .showSafely();
     }
 
     private static void loadFontFromFile(final Context cont) {
@@ -137,7 +137,7 @@ public class CustomFont extends Preference {
                                 }
                             })
                             .setPositiveButton("Exit", null)
-                            .show();
+                            .showSafely();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

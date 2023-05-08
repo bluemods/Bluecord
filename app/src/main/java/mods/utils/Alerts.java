@@ -26,7 +26,7 @@ public class Alerts {
                 )
                 .setNeutralButton("Never Show Again", (d, w) -> Prefs.setBoolean(PreferenceKeys.EXPERIMENT_NEVER_SHOW_AGAIN, true))
                 .setPositiveButton("Dismiss", null)
-                .show();
+                .showSafely();
     }
 
     public static void alertNitroClick(final Context context) {
@@ -45,6 +45,25 @@ public class Alerts {
                         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + Constants.ORIGINAL_PACKAGE_NAME)));
                     }
                 })
-                .show();
+                .showSafely();
+    }
+
+    public static void showDeleteDisclaimer(final Context context, final Runnable onAccepted) {
+        if (Prefs.getBoolean(PreferenceKeys.DELETE_DISCLAIMER_ACCEPTED, false)) {
+            onAccepted.run();
+            return;
+        }
+
+        DiscordTools.newBuilder(context)
+                .setTitle("Warning")
+                .setMessage(
+                        "Use this tool at your own risk. The Bluecord developer(s) assume no responsibility if anything goes wrong.\n\nDo you wish to continue?"
+                )
+                .setNegativeButton("No", null)
+                .setPositiveButton("Yes", (d, w) -> {
+                    Prefs.setBoolean(PreferenceKeys.DELETE_DISCLAIMER_ACCEPTED, false);
+                    onAccepted.run();
+                })
+                .showSafely();
     }
 }

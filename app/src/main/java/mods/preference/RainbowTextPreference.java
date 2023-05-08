@@ -82,7 +82,7 @@ public class RainbowTextPreference extends Preference {
                     .setTitle("Rainbow Color Options")
                     .setView(parent)
                     .setPositiveButton("Exit", null)
-                    .show();
+                    .showSafely();
 
             return true;
         });

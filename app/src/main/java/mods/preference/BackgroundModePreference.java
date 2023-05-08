@@ -37,7 +37,7 @@ public class BackgroundModePreference extends Preference {
                         set();
                     })
                     .setPositiveButton("Exit", null)
-                    .show();
+                    .showSafely();
             return true;
         });
     }

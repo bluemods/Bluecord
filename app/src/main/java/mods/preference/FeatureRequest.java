@@ -84,7 +84,7 @@ public class FeatureRequest extends Preference {
                             }
                         }
                     })
-                    .show();
+                    .showSafely();
             return true;
         });
     }

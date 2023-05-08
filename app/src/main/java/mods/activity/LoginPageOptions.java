@@ -102,7 +102,7 @@ public class LoginPageOptions {
                             }
                         });
                     })
-                    .show();
+                    .showSafely();
         });
     }
 }

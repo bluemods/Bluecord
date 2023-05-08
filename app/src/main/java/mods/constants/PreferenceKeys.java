@@ -99,6 +99,7 @@ public final class PreferenceKeys {
     public static final String TEMP_GCM_PUSH_TOKEN = "blue.gcm.push.token.temp";
     public static final String DM_ICON_CLICK_SHOWN = "blue.dm.icon.toast.shown";
     public static final String DISABLE_PROXIMITY_SENSOR = "blue.disable.proximity";
+    public static final String DELETE_DISCLAIMER_ACCEPTED = "blue.delete.disclaimer";
 
     // Dead preference keys that should NOT be reused
 
