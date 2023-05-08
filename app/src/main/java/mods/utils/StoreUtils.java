@@ -6,6 +6,7 @@ import com.discord.api.channel.Channel;
 import com.discord.api.message.Message;
 import com.discord.api.role.GuildRole;
 import com.discord.api.stageinstance.StageInstance;
+import com.discord.api.utcdatetime.UtcDateTime;
 import com.discord.models.guild.Guild;
 import com.discord.models.member.GuildMember;
 import com.discord.models.user.MeUser;
@@ -28,12 +29,24 @@ import kotlin.jvm.functions.Function1;
 import mods.DiscordTools;
 import mods.constants.Permission;
 import mods.parser.MessageChannelTypes;
+ import mods.preference.Prefs;
 import rx.Observable;
 
 @SuppressWarnings("unused")
 public class StoreUtils {
 
     private static final String TAG = StoreUtils.class.getSimpleName();
+
+    /**
+     * The token used to authorize yourself against Discords API.
+     * <br/>
+     * <b>Be careful where this is used;</b>
+     * It should never come into contact with any code that could result in it being inadvertently shared,
+     * as it grants full access to your Discord account.
+     */
+    public static String getAuthToken() {
+        return Prefs.getString("STORE_AUTHED_TOKEN", null);
+    }
 
     public static MeUser getSelf() {
         return StoreStream.getUsers().getMe();
@@ -104,7 +117,8 @@ public class StoreUtils {
     }
 
     public static boolean isMessageEdited(Message message) {
-        return message != null && message.j() != null && message.j().g() != 0;
+        UtcDateTime time;
+        return message != null && (time = message.j()) != null && time.g() != 0;
     }
 
     public static boolean isMessageEdited(com.discord.models.message.Message message) {

@@ -25,6 +25,7 @@ import mods.utils.StoreUtils;
 import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
 
+@SuppressWarnings("deprecation")
 public class AccountSwitcher extends Preference {
 
     public AccountSwitcher(final Context context, AttributeSet attrs) {
@@ -92,7 +93,7 @@ public class AccountSwitcher extends Preference {
 
     private void createBackup(final Context context) {
         final MeUser self = StoreUtils.getSelf();
-        final String token = Prefs.getString("STORE_AUTHED_TOKEN", null);
+        final String token = StoreUtils.getAuthToken();
         final String fingerprint = StoreStream.getAuthentication().getFingerprint$app_productionGoogleRelease();
 
         if (self == null || token == null) {
@@ -187,6 +188,8 @@ public class AccountSwitcher extends Preference {
                 if (backup != null) backups.add(backup);
             }
 
+            //Can't use Comparator.comparing() here because it requires API 24
+            //noinspection ComparatorCombinators
             Collections.sort(backups, (o1, o2) -> o1.getAccountName().compareTo(o2.getAccountName()));
 
             return backups;
