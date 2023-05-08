@@ -19,18 +19,26 @@ public class StringUtils {
     public static String nullToEmpty(String s) { return s == null ? "" : s; }
 
     public static int getIntSafe(String s) {
+        return getIntSafe(s, -1);
+    }
+
+    public static int getIntSafe(String s, int fallback) {
         try {
             return Integer.parseInt(s);
         } catch (NumberFormatException e) {
-            return -1;
+            return fallback;
         }
     }
 
     public static long getLongSafe(String s) {
+        return getLongSafe(s, -1L);
+    }
+
+    public static long getLongSafe(String s, long fallback) {
         try {
             return Long.parseLong(s);
         } catch (NumberFormatException e) {
-            return -1;
+            return fallback;
         }
     }
 

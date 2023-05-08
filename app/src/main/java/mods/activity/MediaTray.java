@@ -37,8 +37,10 @@ import mods.net.Urban;
 import mods.preference.Prefs;
 import mods.utils.AuthenticationUtils;
 import mods.utils.PatternUtils;
+import mods.utils.StoreUtils;
 import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
+import mods.utils.deleter.MessageDeleterTask;
 import mods.utils.translate.Translate;
 
 @SuppressWarnings("unused")
@@ -110,7 +112,7 @@ public class MediaTray {
             addIfTyped("add", "adds a new custom command");
             addIfTyped("delete", "deletes a custom command");
             addIfTyped("tr ", "translate text into many languages\nExample: " + prefix + "tr hola");
-            // addIfTyped("purge ", "deletes your most recent messages in this channel\nExample: " + prefix + "purge 5");
+            addIfTyped("purge ", "deletes your most recent messages in this channel\nExample: " + prefix + "purge 5");
             addIfTyped("prefix", "changes the command prefix\nExample: " + prefix + "prefix !");
             addIfTyped("ud ", "searches urban dictionary (Example: " + prefix + "ud blue)\nWarning: may be NSFW or offensive");
             addIfTyped("spoiler ", "converts all text / media into spoilers (you cannot see it if you have show spoilers enabled)");
@@ -239,21 +241,7 @@ public class MediaTray {
             text = text.substring(prefix.length());
 
             if (text.equals("add")) {
-                /*
-                text = text.substring(3).trim();
-
-                String first = text;
-                String second = "";
-
-                int index = text.indexOf(' ');
-
-                if (index != -1) {
-                    first = text.substring(0, index).trim();
-                    second = text.substring(index + 1).trim();
-                }
-                addCommand(ensurePrefix(first), second);
-                */
-                addCommand("", "");
+                addCommand();
                 text = "";
             } else if (text.equals("delete")) {
                 deleteCommand();
@@ -267,12 +255,13 @@ public class MediaTray {
             // } else if (text.equals("read")) {
             //     MarkRead.sendRequest();
 
-            /*} else if (text.startsWith("purge ")) {
-                int limit = StringUtils.getNumberSafe(text.substring(6).trim());
+            } else if (text.startsWith("purge ")) {
+                int limit = StringUtils.getIntSafe(text.substring(6).trim());
                 Long channelId = StoreUtils.getCurrentChannelId();
 
-                if (limit < 1 || limit > 50) {
-                    ToastUtil.toast("Use a number between 1-50");
+                if (limit < 1 || limit > MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND) {
+                    // TODO: consider removing the upper bound limit?
+                    ToastUtil.toast("Use a number between 1-" + MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND);
                 } else if (channelId == null) {
                     ToastUtil.toast("Could not locate the current channel. Restart Bluecord and retry.");
                 } else if (!DiscordTools.isConnected()) {
@@ -280,9 +269,9 @@ public class MediaTray {
                 } else {
                     long authorId = StoreUtils.getSelf().getId();
                     Long guildId = StoreUtils.getCurrentGuildId();
-                    MessageDeleterTask.start(channelId, authorId, guildId, null, limit);
+                    MessageDeleterTask.start(channelId, authorId, guildId, limit);
                 }
-                text = "";*/
+                text = "";
             }
 
             else if (text.startsWith("b "))       text = "```\n" + text.substring(2) + "\n```";
@@ -361,7 +350,7 @@ public class MediaTray {
     }
 
     @SuppressLint("SetTextI18n")
-    private void addCommand(final String command, final String response) {
+    private void addCommand() {
         final FragmentActivity context = mFragment.getActivity();
 
         if (context == null) {
@@ -414,12 +403,14 @@ public class MediaTray {
 
             rootView.addView(layout);
 
-            if (!StringUtils.isEmpty(command)) {
-                etNameInput.setText(command);
-                if (!StringUtils.isEmpty(response)) {
-                    etNameOutput.setText(response);
+            /*if (!StringUtils.isEmpty("")) {
+                etNameInput.setText("");
+                if (!StringUtils.isEmpty("")) {
+                    etNameOutput.setText("");
                 }
-            }
+            }*/
+            etNameInput.setText("");
+            etNameOutput.setText("");
 
             DiscordTools.newBuilder(mFragment.getContext())
                     .setView(rootView)
@@ -446,7 +437,7 @@ public class MediaTray {
                                     .putString(input, output)
                                     .apply();
                         }
-                        addCommand("", "");
+                        addCommand();
                     })
                     .setNegativeButton("Exit", null)
                     .show();
