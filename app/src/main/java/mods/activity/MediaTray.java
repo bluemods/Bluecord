@@ -215,7 +215,10 @@ public class MediaTray {
     }
 
     private void addIfTyped(String command, String summary) {
-        if (ensurePrefix(command).startsWith(ensurePrefix(input))) {
+        final String s1 = ensurePrefix(input);
+        final String s2 = ensurePrefix(command);
+
+        if (s1.startsWith(s2) || s2.startsWith(s1)) {
             commandsList.add(ensurePrefix(command));
             commandsSummary.add(summary);
         }
