@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import mods.DiscordTools;
+import mods.utils.Alerts;
 import mods.utils.AuthenticationUtils;
 import mods.utils.StoreUtils;
 import mods.utils.StringUtils;
@@ -34,16 +35,24 @@ public class AccountSwitcher extends Preference {
         setOnPreferenceClickListener(preference -> {
             DiscordTools.newBuilder(context)
                     .setTitle("Pick an option")
-                    .setItems(new String[]{"Backup", "Restore", "Delete Backups"}, (dialog, which) -> {
+                    .setItems(new String[]{"Backup", "Restore", "Delete Backups", "Copy Current Token"}, (dialog, which) -> {
                         switch (which) {
                             case 0: createBackup(context);  break;
                             case 1: restoreBackup(context); break;
                             case 2: deleteBackups(context); break;
+                            case 3: copyToken(context); break;
                         }
                     })
                     .setPositiveButton("Exit", null)
                     .showSafely();
             return true;
+        });
+    }
+
+    private void copyToken(final Context context) {
+        Alerts.showCopyTokenWarning(context, () -> {
+            DiscordTools.copyToClipboard(StoreUtils.getAuthToken());
+            ToastUtil.toast("Token copied to clipboard. DO NOT SHARE YOUR TOKEN!");
         });
     }
 

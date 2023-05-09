@@ -16,7 +16,10 @@ public class ToastUtil {
     private static Toast lastToast;
 
     public static void toast(final String text) {
-        handler.post(() -> showBasicToast(text));
+        handler.post(() -> showBasicToast(text, Toast.LENGTH_LONG));
+    }
+    public static void toastShort(final String text) {
+        handler.post(() -> showBasicToast(text, Toast.LENGTH_SHORT));
     }
 
     public static void customToast(final Activity activity, final String text) {
@@ -45,14 +48,14 @@ public class ToastUtil {
                 e.printStackTrace();
                 // we shouldn't post twice, it probably will crash
                 // so we just copy the toast method above
-                showBasicToast(text);
+                showBasicToast(text, Toast.LENGTH_LONG);
             }
         });
     }
 
-    private static void showBasicToast(String text) {
+    private static void showBasicToast(String text, int length) {
         cancel();
-        Toast toast = Toast.makeText(DiscordTools.getApplication(), text, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(DiscordTools.getApplication(), text, length);
         toast.show();
         lastToast = toast;
     }

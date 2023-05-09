@@ -22,6 +22,7 @@ import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
 
 // TODO: This class probably needs to be rewritten
+@SuppressWarnings("deprecation")
 public class Updater extends Preference {
 
     static final String UPDATE_FOUND_KEY = Constants.VERSION_CODE + "_update_found_v2";
@@ -62,21 +63,15 @@ public class Updater extends Preference {
             }
         }
 
-        UpdateResult.get(false, new Callback<UpdateResult>() {
-            @Override
-            public void onResult(UpdateResult result) {
-                if (result.succeeded() && !result.isFromCache()) {
-                    if (result.isUpdateAvailable()) {
-                        ToastUtil.toast("Bluecord Update Is Available!");
-                        markUpdate(true);
-                    } else {
-                        markUpdate(false);
-                    }
+        UpdateResult.get(false, result -> {
+            if (result.succeeded() && !result.isFromCache()) {
+                if (result.isUpdateAvailable()) {
+                    ToastUtil.toast("Bluecord Update Is Available!");
+                    markUpdate(true);
+                } else {
+                    markUpdate(false);
                 }
             }
-
-            @Override
-            public void onError() {}
         });
 
         hasRun = true;

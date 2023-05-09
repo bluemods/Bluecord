@@ -7,13 +7,26 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListAdapter;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.TimeUnit;
+
 import mods.utils.LogUtils;
+import mods.utils.StringUtils;
 import mods.utils.ThreadUtils;
+import mods.utils.ToastUtil;
 
 @SuppressWarnings("unused")
 public class SafeDialogBuilder extends AlertDialog.Builder {
+
+    @Nullable private DialogInterface.OnClickListener mPositiveListener;
+    @Nullable private DialogInterface.OnClickListener mNegativeListener;
+    @Nullable private DialogInterface.OnClickListener mNeutralListener;
+
     public SafeDialogBuilder(Context context) {
         super(context);
     }
@@ -109,24 +122,28 @@ public class SafeDialogBuilder extends AlertDialog.Builder {
     @Override
     public SafeDialogBuilder setNegativeButton(int textId, DialogInterface.OnClickListener listener) {
         super.setNegativeButton(textId, listener);
+        this.mNegativeListener = listener;
         return this;
     }
 
     @Override
     public SafeDialogBuilder setNegativeButton(CharSequence text, DialogInterface.OnClickListener listener) {
         super.setNegativeButton(text, listener);
+        this.mNegativeListener = listener;
         return this;
     }
 
     @Override
     public SafeDialogBuilder setNeutralButton(int textId, DialogInterface.OnClickListener listener) {
         super.setNeutralButton(textId, listener);
+        this.mNeutralListener = listener;
         return this;
     }
 
     @Override
     public SafeDialogBuilder setNeutralButton(CharSequence text, DialogInterface.OnClickListener listener) {
         super.setNeutralButton(text, listener);
+        this.mNeutralListener = listener;
         return this;
     }
 
@@ -157,12 +174,14 @@ public class SafeDialogBuilder extends AlertDialog.Builder {
     @Override
     public SafeDialogBuilder setPositiveButton(int textId, DialogInterface.OnClickListener listener) {
         super.setPositiveButton(textId, listener);
+        this.mPositiveListener = listener;
         return this;
     }
 
     @Override
     public SafeDialogBuilder setPositiveButton(CharSequence text, DialogInterface.OnClickListener listener) {
         super.setPositiveButton(text, listener);
+        this.mPositiveListener = listener;
         return this;
     }
 
@@ -247,5 +266,55 @@ public class SafeDialogBuilder extends AlertDialog.Builder {
                 LogUtils.logException(e);
             }
         });
+    }
+
+    public void showWithButtonDelay(long time, TimeUnit unit) {
+        ThreadUtils.runOnUiThread(() -> {
+            try {
+                AlertDialog d = create();
+                d.setOnShowListener(dialog -> {
+                    enableButtonAfterDelay(d, DialogInterface.BUTTON_POSITIVE, time, unit);
+                    enableButtonAfterDelay(d, DialogInterface.BUTTON_NEGATIVE, time, unit);
+                    enableButtonAfterDelay(d, DialogInterface.BUTTON_NEUTRAL, time, unit);
+                });
+                d.show();
+            } catch (Throwable e) {
+                LogUtils.logException(e);
+            }
+        });
+    }
+
+    private void enableButtonAfterDelay(@NotNull AlertDialog dialog, int buttonId, long time, TimeUnit unit) {
+        Button button = dialog.getButton(buttonId);
+
+        if (button == null) return;
+
+        final long enableTime = System.currentTimeMillis() + unit.toMillis(time);
+
+        button.setOnClickListener(v -> {
+            long secondsRemaining = (int) Math.ceil((enableTime - System.currentTimeMillis()) / 1000d);
+
+            ToastUtil.toastShort("Please wait " + secondsRemaining + " more " + StringUtils.plural("second", secondsRemaining) + ".");
+        });
+
+        button.postDelayed(() -> {
+            button.setEnabled(true);
+            button.setClickable(true);
+
+            switch (buttonId) {
+                case DialogInterface.BUTTON_POSITIVE: {
+                    button.setOnClickListener(v -> {if (mPositiveListener != null) mPositiveListener.onClick(dialog, buttonId); dialog.dismiss();});
+                    break;
+                }
+                case DialogInterface.BUTTON_NEGATIVE: {
+                    button.setOnClickListener(v -> {if (mNegativeListener != null) mNegativeListener.onClick(dialog, buttonId); dialog.dismiss();});
+                    break;
+                }
+                case DialogInterface.BUTTON_NEUTRAL: {
+                    button.setOnClickListener(v -> {if (mNeutralListener != null) mNeutralListener.onClick(dialog, buttonId); dialog.dismiss();});
+                    break;
+                }
+            }
+        }, unit.toMillis(time));
     }
 }

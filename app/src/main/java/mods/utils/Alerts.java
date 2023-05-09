@@ -3,8 +3,13 @@ package mods.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.Html;
 
 import androidx.fragment.app.Fragment;
+
+import com.discord.utilities.time.TimeUtils;
+
+import java.util.concurrent.TimeUnit;
 
 import mods.DiscordTools;
 import mods.constants.Constants;
@@ -65,5 +70,19 @@ public class Alerts {
                     onAccepted.run();
                 })
                 .showSafely();
+    }
+
+    public static void showCopyTokenWarning(final Context context, final Runnable onAccepted) {
+        DiscordTools.newBuilder(context)
+                .setTitle("Copy Token?")
+                .setMessage(Html.fromHtml(
+                        "<b color=red>WARNING:</b> your token is your password and grants FULL ACCESS to your account.<br/>" +
+                                "If someone told you to do this and send you the code, it is a SCAM.<br/>" +
+                                "<u><b color=red>DO NOT share your token with anyone else.</b></u><br/>" +
+                                "By using this feature, you accept all responsibility with keeping your token secure."
+                ))
+                .setNeutralButton("Exit", null)
+                .setPositiveButton("Accept + Copy", (d, w) -> onAccepted.run())
+                .showWithButtonDelay(5, TimeUnit.SECONDS);
     }
 }

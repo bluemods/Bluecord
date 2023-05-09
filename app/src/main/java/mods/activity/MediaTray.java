@@ -407,12 +407,6 @@ public class MediaTray {
 
             rootView.addView(layout);
 
-            /*if (!StringUtils.isEmpty("")) {
-                etNameInput.setText("");
-                if (!StringUtils.isEmpty("")) {
-                    etNameOutput.setText("");
-                }
-            }*/
             etNameInput.setText("");
             etNameOutput.setText("");
 
