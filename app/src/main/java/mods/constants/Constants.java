@@ -153,4 +153,5 @@ public final class Constants {
 
     // id/blue_id_char_count
     public static final int BLUE_ID_CHAR_COUNT = 0x7f0a11a6;
+    public static final int VOICE_MESSAGE_ATTACHMENT = 0x0;
 }

@@ -1,10 +1,11 @@
-package mods.voice;
+package mods.voice.utils;
 
 import android.util.Base64;
 
 /**
  * Voice message "waveform" converter.
  */
+@SuppressWarnings("unused")
 public class Sampler {
 
     public static byte[] downSample(String sampleData, int sampleCount) {
