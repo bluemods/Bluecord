@@ -150,4 +150,7 @@ public final class Constants {
 
     // id/panel_center
     public static final long ID_PANEL_CENTER = 0x7f0a0b34;
+
+    // id/blue_id_char_count
+    public static final int BLUE_ID_CHAR_COUNT = 0x7f0a11a6;
 }

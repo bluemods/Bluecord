@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -468,5 +469,14 @@ public class ThemingTools {
                 viewX + view.getWidth(),
                 viewY + view.getHeight()
         );
+    }
+
+    public static int getMaxLength(TextView tv, int fallback) {
+        for (InputFilter filter : tv.getFilters()) {
+            if (filter instanceof InputFilter.LengthFilter) {
+                return ((InputFilter.LengthFilter) filter).getMax();
+            }
+        }
+        return fallback;
     }
 }

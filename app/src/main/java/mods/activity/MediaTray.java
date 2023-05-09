@@ -8,6 +8,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+
+import com.discord.api.premium.PremiumTier;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,6 +40,7 @@ import mods.constants.PreferenceKeys;
 import mods.constants.URLConstants;
 import mods.net.Urban;
 import mods.preference.Prefs;
+import mods.preference.QuickAccessPrefs;
 import mods.utils.Alerts;
 import mods.utils.AuthenticationUtils;
 import mods.utils.PatternUtils;
@@ -43,6 +49,7 @@ import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
 import mods.utils.deleter.MessageDeleterTask;
 import mods.utils.translate.Translate;
+import mods.view.TextWatcherTerse;
 
 @SuppressWarnings("unused")
 public class MediaTray {
@@ -89,7 +96,36 @@ public class MediaTray {
 
     public static void init(Fragment fragment, View view) {
         inst = new MediaTray(fragment, view);
+        inst.setupCharacterCounter();
         AuthenticationUtils.pushTokenToDiscord();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setupCharacterCounter() {
+        if (inst.mediaTrayView != null) {
+            EditText et = inst.mediaTrayView.findViewById(Constants.TEXT_INPUT);
+            TextView tvCharCount = inst.mediaTrayView.findViewById(Constants.BLUE_ID_CHAR_COUNT);
+
+            et.addTextChangedListener(new TextWatcherTerse() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    final int currentCharCount = s.length();
+
+                    if (currentCharCount > 0 && QuickAccessPrefs.isTextCharCountEnabled()) {
+                        final int maxLength = StoreUtils.getSelf().getPremiumTier() == PremiumTier.TIER_2 ? 4096 : 2048;
+
+                        SpannableStringBuilder sb = new SpannableStringBuilder(currentCharCount + "/" + maxLength);
+                        if (currentCharCount > maxLength) {
+                            sb.setSpan(new ForegroundColorSpan(Color.parseColor("#ffed4245")), 0, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        tvCharCount.setText(sb);
+                        tvCharCount.setVisibility(View.VISIBLE);
+                    } else {
+                        tvCharCount.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
     }
 
     public static void setTrayText(CharSequence text) {

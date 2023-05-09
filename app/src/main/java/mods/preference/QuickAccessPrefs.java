@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 
 import mods.constants.PreferenceKeys;
 
+/**
+ * Used for preferences that are frequently checked (for performance improvements)
+ */
 public class QuickAccessPrefs {
 
     private static boolean antiSpamEnabled;
@@ -12,6 +15,7 @@ public class QuickAccessPrefs {
     private static boolean attachmentFileSizeEnabled;
     private static boolean nitroStickerEnabled;
     private static boolean editTimestampsEnabled;
+    private static boolean textCharCountEnabled;
     private static EmoteMode emoteMode;
     private static String tagMode;
 
@@ -26,6 +30,7 @@ public class QuickAccessPrefs {
         attachmentFileSizeEnabled = Prefs.getBoolean(PreferenceKeys.SHOW_FILE_SIZES, false);
         nitroStickerEnabled = Prefs.getBoolean(PreferenceKeys.STICKER_SPOOF, false);
         editTimestampsEnabled = Prefs.getBoolean(PreferenceKeys.SHOW_EDIT_TIMESTAMP, false);
+        textCharCountEnabled = Prefs.getBoolean(PreferenceKeys.SHOW_TEXT_CHAR_COUNT, false);
 
         emoteMode = new EmoteMode(Prefs.getString(PreferenceKeys.EMOTE_MODE, "Off"));
         tagMode = Prefs.getString(PreferenceKeys.SHOW_TAG_V2, "Off");
@@ -48,4 +53,5 @@ public class QuickAccessPrefs {
 
     public static String getTagMode() { return tagMode; }
 
+    public static boolean isTextCharCountEnabled() { return textCharCountEnabled; }
 }

@@ -3,11 +3,8 @@ package mods.utils.translate;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
-import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.TextWatcher;
-import mods.utils.LogUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -23,10 +20,12 @@ import mods.DiscordTools;
 import mods.ThemingTools;
 import mods.constants.PreferenceKeys;
 import mods.preference.Prefs;
+import mods.utils.LogUtils;
 import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
 import mods.view.SimpleSpinner;
 import mods.view.SpinnerMap;
+import mods.view.TextWatcherTerse;
 
 public class Translate {
 
@@ -122,17 +121,11 @@ public class Translate {
             tvCharCount.setPadding(tvPadding, tvPadding, tvPadding, tvPadding);
             layout.addView(tvCharCount);
 
-            etTranslateText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
+            etTranslateText.addTextChangedListener(new TextWatcherTerse() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     tvCharCount.setText(s.length() + " / 2000");
                 }
-
-                @Override
-                public void afterTextChanged(Editable s) {}
             });
 
             if (!StringUtils.isEmpty(selectedText)) {
