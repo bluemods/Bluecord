@@ -1,4 +1,4 @@
- package mods.utils.deleter;
+package mods.utils.deleter;
 
 import android.app.Notification;
 import android.net.Uri;
@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,7 +34,7 @@ public class MessageDeleterTask {
     public static final int DELETE_LIMIT_UPPER_BOUND = 50;
     private static final String TAG = "Deleter";
     private static final int NOTIFICATIONS_DELETE_TASK_ID = "NOTIFICATION_ID_DELETE".hashCode();
-    private static final long DELAY_START = 500;
+    private static final long DELAY_START = 800;
     private static final long BATCH_DELAY = 2500;
     private static final double DELAY_INCREASE_FACTOR = 0.25d;
 
@@ -178,7 +179,13 @@ public class MessageDeleterTask {
             public void run() {
                 nextWork();
             }
-        }, delay);
+        }, addJitter(delay));
+    }
+
+    // Add variations of up to 33% to simulate human behavior
+    private long addJitter(long ms) {
+        final Random rnd = new Random();
+        return ms + rnd.nextInt((int) (ms / 3));
     }
 
     /** channelId, messageId */
