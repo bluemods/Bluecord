@@ -41,6 +41,7 @@ public class MessageDeleterTask {
     private static boolean isRunning;
 
     private final Timer timer = new Timer();
+    private final Random random = new Random();
     private final Notification.Builder builder;
 
     private final long channelId;
@@ -184,8 +185,7 @@ public class MessageDeleterTask {
 
     // Add variations of up to 33% to simulate human behavior
     private long addJitter(long ms) {
-        final Random rnd = new Random();
-        return ms + rnd.nextInt((int) (ms / 3));
+        return ms + random.nextInt((int) (ms / 3));
     }
 
     /** channelId, messageId */
