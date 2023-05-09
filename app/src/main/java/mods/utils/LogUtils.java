@@ -23,6 +23,10 @@ public final class LogUtils {
         }
     }
 
+    public static void log(String tag, Object content) {
+        log(tag, content == null ? null : content.toString());
+    }
+
     public static void log(String tag, String content, Throwable th) {
         if (content == null) content = "[NULL]";
         if (th == null) th = new NullPointerException("Throwable passed to log() was null");

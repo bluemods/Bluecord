@@ -7,24 +7,31 @@ import com.discord.widgets.chat.list.adapter.WidgetChatListItem;
 import com.discord.widgets.chat.list.entries.ChatListEntry;
 
 import mods.constants.Constants;
+import mods.utils.LogUtils;
 import mods.utils.ToastUtil;
 
 @SuppressWarnings("unused")
 public class VoiceMessageAdapterItemAttachment extends WidgetChatListItem implements FragmentLifecycleListener {
+
+    private static final String TAG = "VoiceMessageAttachment";
 
     public VoiceMessageAdapterItemAttachment(WidgetChatListAdapter adapter) {
         super(Constants.VOICE_MESSAGE_ATTACHMENT, adapter);
     }
 
     @Override
-    public void onPause() {}
+    public void onPause() {
+        // TODO: handle media player state here
+    }
 
     @Override
-    public void onResume() {}
+    public void onResume() {
+        // TODO: handle media player state here
+    }
 
     @Override
     public void onConfigure(int i, ChatListEntry data) {
-        super.onConfigure(i, data);
+        // super.onConfigure(i, data);
 
         VoiceMessageEntry entry = (VoiceMessageEntry) data;
         Message message = entry.getMessage();
@@ -34,6 +41,6 @@ public class VoiceMessageAdapterItemAttachment extends WidgetChatListItem implem
 
     private void configureUI(VoiceMessageEntry entry, Message message) {
         // TODO
-        ToastUtil.toastShort("Voice model loaded successfully");
+        LogUtils.log(TAG, message);
     }
 }
