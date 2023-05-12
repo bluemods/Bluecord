@@ -6,12 +6,17 @@ import android.preference.PreferenceManager;
 
 import com.discord.utilities.cache.SharedPreferencesProvider;
 
+import org.jetbrains.annotations.NotNull;
+
 import mods.DiscordTools;
 import mods.constants.PreferenceKeys;
+import mods.utils.LogUtils;
 
 @SuppressLint("ApplySharedPref")
+@SuppressWarnings("unused")
 public class Prefs {
 
+    @SuppressWarnings("deprecation")
     private static final SharedPreferences sp =
             PreferenceManager.getDefaultSharedPreferences(DiscordTools.getContext());
 
@@ -55,6 +60,20 @@ public class Prefs {
 
     public static void setString(String key, String value) {
         getPreferences().edit().putString(key, value).commit();
+    }
+
+    @NotNull
+    public static <T extends Enum<T>> T getEnum(@NotNull Class<T> cls, @NotNull String key, @NotNull T defaultVal) {
+        try {
+            return Enum.valueOf(cls, getPreferences().getString(key, defaultVal.name()));
+        } catch (Throwable e) {
+            LogUtils.logException(e);
+            return defaultVal;
+        }
+    }
+
+    public static <T extends Enum<T>> void setEnum(@NotNull String key, @NotNull T val) {
+        setString(key, val.name());
     }
 
     public static boolean containsKey(String key) {
