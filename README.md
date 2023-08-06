@@ -13,6 +13,7 @@ If you are inspired by, or end up copying or using any of the works contained he
 
 # Building / Installing
 You will need the following pieces of software:
+- JDK 17 or higher (required by Gradle)
 - [APKTool](https://ibotpeaches.github.io/Apktool/) v2.7.0 or higher (I use APK Easy Tool v1.57)
 - [Android Studio](https://developer.android.com/studio)
 
