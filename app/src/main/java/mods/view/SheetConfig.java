@@ -211,23 +211,23 @@ public class SheetConfig {
 
         SearchUtils.searchForLastMessage(searchKey, isGuild, new Callback<Long>() {
             @Override
-            public void accept(Long t) {
+            public void accept(Long lastMessageTimestamp) {
                 LogUtils.log(
                         TAG,
                         "got result for " + user.getUsername() +
                                 " in channel " + channelOrGuildId +
                                 " with view id " + Integer.toString(headerViewId, 16) +
-                                ": " + new Date(t)
+                                ": " + new Date(lastMessageTimestamp)
                 );
 
-                if (t == SearchUtils.EC_FETCHING) {
+                if (lastMessageTimestamp == SearchUtils.EC_FETCHING) {
                     appendDetails(binding, info + "\nLast message: Fetching...", searchKey);
-                } else if (t <= 0) {
+                } else if (lastMessageTimestamp <= 0) {
                     appendDetails(binding, info + "\nLast message: Never", searchKey);
                 } else if (useDays) {
-                    appendDetails(binding, info + "\nLast message: " + StringUtils.convertToTimeBehind(new Date(t)), searchKey);
+                    appendDetails(binding, info + "\nLast message: " + StringUtils.convertToTimeBehind(new Date(lastMessageTimestamp)), searchKey);
                 } else {
-                    appendDetails(binding, info + "\nLast message: " + DiscordTools.formatDate(t), searchKey);
+                    appendDetails(binding, info + "\nLast message: " + DiscordTools.formatDate(lastMessageTimestamp), searchKey);
                 }
             }
 
