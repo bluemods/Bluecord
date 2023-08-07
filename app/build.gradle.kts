@@ -6,23 +6,15 @@ plugins {
 }
 
 android {
-    packaging {
-        resources {
-            excludes += listOf(
-                    "META-INF/DEPENDENCIES",
-                    "META-INF/LICENSE",
-                    "META-INF/LICENSE.txt",
-                    "META-INF/license.txt",
-                    "META-INF/NOTICE",
-                    "META-INF/NOTICE.txt",
-                    "META-INF/notice.txt",
-                    "META-INF/ASL2.0",
-                    "META-INF/io.netty.versions.properties",
-                    "META-INF/INDEX.LIST",
-                    "META-INF/*.kotlin_module"
-            )
-        }
-    }
+    packaging.resources.excludes += listOf(
+        "META-INF/DEPENDENCIES",
+        "META-INF/LICENSE", "META-INF/LICENSE.txt", "META-INF/license.txt",
+        "META-INF/NOTICE", "META-INF/NOTICE.txt", "META-INF/notice.txt",
+        "META-INF/ASL2.0",
+        "META-INF/io.netty.versions.properties",
+        "META-INF/INDEX.LIST",
+        "META-INF/*.kotlin_module"
+    )
 
     defaultConfig {
         applicationId = "com.bluecord"
@@ -39,21 +31,16 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        named("release") {
-            isMinifyEnabled = false
-            proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    file("proguard-rules.pro")
-            )
-        }
+    buildTypes.named("release") {
+        isMinifyEnabled = false
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            file("proguard-rules.pro")
+        )
     }
 
-    sourceSets {
-        // https://developer.android.com/kotlin/add-kotlin#groovy
-        named("main") {
-            java.srcDirs("src/main/kotlin", "src/main/stubs")
-        }
+    sourceSets.named("main") {
+        java.srcDirs("src/main/kotlin", "src/main/stubs")
     }
 
     dependenciesInfo {
@@ -78,7 +65,6 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.0")
     implementation("androidx.preference:preference:1.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    implementation("net.sourceforge.streamsupport:android-retrostreams:1.7.4")
 
     // implementation "androidx.recyclerview:recyclerview:1.2.1"
     // implementation "com.squareup.okhttp3:okhttp:4.10.0"

@@ -1,6 +1,7 @@
 package mods.utils;
 
 import androidx.annotation.Nullable;
+import mods.utils.java8.FunctionalInterface;
 
 /**
  * Represents an operation that accepts a single input argument and returns no

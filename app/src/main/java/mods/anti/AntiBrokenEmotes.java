@@ -2,12 +2,12 @@ package mods.anti;
 
 import com.discord.models.domain.emoji.Emoji;
 import com.discord.widgets.chat.input.emoji.EmojiPickerViewModel;
-import java9.util.Optional;
-import java9.util.stream.StreamSupport;
+import mods.utils.java8.Optional;
+import mods.utils.java8.StreamSupport;
 
 import java.util.regex.Pattern;
 
-import static java9.util.stream.StreamSupport.*;
+import static mods.utils.java8.StreamSupport.*;
 
 /**
  * Adapted from <a href="https://github.com/Vendicated/AliucordPlugins/blob/main/FixEmotes/src/main/kotlin/dev/vendicated/aliucordplugins/fixemotes/FixEmotes.kt">Aliucord "FixEmotes"</a>.

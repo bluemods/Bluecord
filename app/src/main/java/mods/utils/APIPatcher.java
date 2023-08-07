@@ -4,6 +4,7 @@ import com.discord.models.domain.Model;
 
 import java.util.List;
 
+@Deprecated
 public class APIPatcher {
 
     /**

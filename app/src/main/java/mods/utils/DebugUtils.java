@@ -2,6 +2,7 @@ package mods.utils;
 
 import android.os.StrictMode;
 
+@Deprecated // TODO - this is unused - is this needed?
 public class DebugUtils {
 
     public static boolean showDebugMenu(boolean isStaff) {

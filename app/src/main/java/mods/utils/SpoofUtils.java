@@ -21,6 +21,7 @@ import mods.preference.QuickAccessPrefs;
 import rx.functions.Action0;
 import rx.functions.Action1;
 
+@Deprecated // TODO - this is unused - is this needed?
 public class SpoofUtils {
 
     private static final String TAG = "SpoofUtils";
@@ -84,22 +85,13 @@ public class SpoofUtils {
             try {
                 long id = StoreStream.getChannelsSelected().getId();
 
-                RestAPI.getApi().sendMessage(id, message).U(new j0.l.e.b<>(new Action1<Message>() {
-                    @Override
-                    public void call(Message o) {
-                        LogUtils.log(TAG, "sticker sent: " + o);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        LogUtils.log(TAG, "sticker failed to send", throwable);
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
+                RestAPI.getApi().sendMessage(id, message).U(new j0.l.e.b<>(o -> {
+                    LogUtils.log(TAG, "sticker sent: " + o);
+                }, throwable -> {
+                    LogUtils.log(TAG, "sticker failed to send", throwable);
+                }, () -> {
 
-                    }
-                }));
+				}));
             } catch (Throwable e) {
                 e.printStackTrace();
             }
