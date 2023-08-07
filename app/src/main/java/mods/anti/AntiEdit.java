@@ -1,54 +1,49 @@
 package mods.anti;
 
 import android.content.Context;
-
-import mods.constants.Constants;
-import mods.preference.QuickAccessPrefs;
-import mods.utils.LogUtils;
-
+import android.util.LruCache;
+import b.a.t.b.a.a;
 import com.discord.models.message.Message;
 import com.discord.utilities.textprocessing.node.EditedMessageNode;
 import com.discord.utilities.time.ClockFactory;
 import com.discord.utilities.time.TimeUtils;
+import mods.constants.Constants;
+import mods.constants.PreferenceKeys;
+import mods.preference.Prefs;
+import mods.preference.QuickAccessPrefs;
+import mods.utils.FileLogger;
+import mods.utils.LogUtils;
+import mods.view.PrependEditNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import b.a.t.b.a.a;
-import mods.constants.PreferenceKeys;
-import mods.preference.Prefs;
-import mods.utils.FileLogger;
-import mods.utils.LRUCache;
-import mods.utils.StoreUtils;
-import mods.view.PrependEditNode;
+import static mods.utils.StoreUtils.*;
 
 public class AntiEdit {
 
-    private static final LRUCache<Long, List<String>> editedMessages = new LRUCache<>(250);
+    private static final LruCache<Long, List<String>> editedMessages = new LruCache<>(250);
 
     public static void appendEdits(Context context, Message message, List<Object> list) {
-        if (StoreUtils.isMessageEdited(message)) {
-            // faster to use get and check for null
-            // compared to containsKey() then get()
+        if (isMessageEdited(message)) {
             List<String> edits = editedMessages.get(message.getId());
-
-            if (edits != null) {
-                List<String> copy = new ArrayList<>(edits);
-                Collections.reverse(copy);
-
-                for (String edit : copy) {
-                    list.add(0, new PrependEditNode(context, edit));
-                    list.add(1, new EditedMessageNode(context));
-                    list.add(2, new a("\n"));
-                }
+            if (edits == null) return;
+            
+            List<String> copy = new ArrayList<>(edits);
+            Collections.reverse(copy);
+            
+            for (String edit : copy) {
+                list.add(0, new PrependEditNode(context, edit));
+                list.add(1, new EditedMessageNode(context));
+                list.add(2, new a("\n"));
             }
         }
     }
 
     public static void parseEditedMessage(Map<Long, Message> map, com.discord.api.message.Message newMessage) {
-        if (map == null || !StoreUtils.isMessageEdited(newMessage)) return;
+        if (map == null || !isMessageEdited(newMessage)) return;
 
         String mode = Prefs.getString(PreferenceKeys.ANTI_EDIT_MODE, "Off");
 

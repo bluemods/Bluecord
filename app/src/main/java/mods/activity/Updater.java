@@ -8,10 +8,6 @@ import android.net.Uri;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.util.Base64;
-
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeUnit;
-
 import mods.DiscordTools;
 import mods.constants.Constants;
 import mods.constants.URLConstants;
@@ -20,6 +16,11 @@ import mods.utils.Callback;
 import mods.utils.SimpleLoadingSpinner;
 import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
+
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
+
+import static mods.utils.I18nUtils.*;
 
 // TODO: This class probably needs to be rewritten
 @SuppressWarnings("deprecation")
@@ -51,12 +52,18 @@ public class Updater extends Preference {
         String appName = activity.getApplicationInfo().loadLabel(activity.getPackageManager()).toString().toLowerCase();
         String packageName = activity.getPackageName();
 
+        // if (!appName.startsWith("bluecord") || (!packageName.equals("com.bluecord") && !packageName.equals("com.bluecordbeta"))) {
         if (!appName.startsWith(d("Ymx1ZWNvcmQ")) || (!packageName.equals(d("Y29tLmJsdWVjb3Jk")) && !packageName.equals(d("Y29tLmJsdWVjb3JkYmV0YQ")))) {
+            // if (!Prefs.getBoolean("modded", false)) {
             if (!Prefs.getBoolean(d("bW9kZGVk"), false)) {
                 DiscordTools.newBuilder(activity)
+                        // .setTitle("Bluecord")
                         .setTitle(d("Qmx1ZWNvcmQ"))
+                        // .setMessage("The app has been cloned, modified, or had the app name changed.\n\nThis is a big deal, sometimes you clone it, and support can be offered for the issue(s).\n\nThis app is Bluecord, and officially resells are allowed for the app mods.")
                         .setMessage(d("VGhlIGFwcCBoYXMgYmVlbiBjbG9uZWQsIG1vZGlmaWVkLCBvciBoYWQgdGhlIGFwcCBuYW1lIGNoYW5nZWQuCgpUaGlzIGlzbid0IGEgYmlnIGRlYWwsIGJ1dCBzb21lIGZlYXR1cmVzIG1heSAodW5pbnRlbnRpb25hbGx5KSBicmVhayBpZiB5b3UgY2xvbmVkIGl0LCBhbmQgc3VwcG9ydCBjYW5ub3QgYmUgb2ZmZXJlZCBmb3IgdGhvc2UgaXNzdWVzLgoKVGhpcyBhcHAgaXMgQmx1ZWNvcmQsIGFuZCBvZmZpY2lhbCByZWxlYXNlcyBhcmUgb25seSBmb3VuZCBhdCBibHVlc21vZHMuY29t"))
+                        // .setNeutralButton("Never Show Again", (dialog, which) -> Prefs.setBoolean("modded", true))
                         .setNeutralButton(d("TmV2ZXIgU2hvdyBBZ2Fpbg"), (dialog, which) -> Prefs.setBoolean(d("bW9kZGVk"), true))
+                        // .setPositiveButton("Close", null)
                         .setPositiveButton(d("Q2xvc2U"), null)
                         .showSafely();
                 return;
@@ -66,7 +73,7 @@ public class Updater extends Preference {
         UpdateResult.get(false, result -> {
             if (result.succeeded() && !result.isFromCache()) {
                 if (result.isUpdateAvailable()) {
-                    ToastUtil.toast("Bluecord Update Is Available!");
+                    ToastUtil.toast(translation("blue.update.UPDATE_AVAILABLE"));
                     markUpdate(true);
                 } else {
                     markUpdate(false);
@@ -83,27 +90,27 @@ public class Updater extends Preference {
 
     public static void checkFromPrefs(final Context context) {
         SimpleLoadingSpinner spinner = new SimpleLoadingSpinner(context);
-        spinner.show("Bluecord", "Checking for update...");
+        spinner.show("Bluecord", translation("blue.update.UPDATE_CHECKING"));
 
         UpdateResult.get(true, new Callback<UpdateResult>() {
             @Override
-            public void onResult(UpdateResult result) {
+            public void accept(UpdateResult t) {
                 spinner.hide();
-                if (result.isUpdateAvailable()) {
-                    alertUpdate(context, result);
+                if (t.isUpdateAvailable()) {
+                    alertUpdate(context, t);
                     markUpdate(true);
                 } else {
-                    DiscordTools.basicAlert(context, "No Update Yet", result.getMessage());
+                    DiscordTools.basicAlert(context, translation("blue.update.UPDATE_UNAVAILABLE"), t.getMessage());
                 }
             }
 
             @Override
-            public void onError() {
+            public void error(String message) {
                 spinner.hide();
                 DiscordTools.basicAlert(
                         context,
-                        "Error",
-                        "Could not connect to check for an update. Please check your Internet connection and try again."
+                        translation("blue.toasts.GENERIC_ERROR"),
+                        translation("blue.update.UPDATE_NO_CONNECTION", message)
                 );
             }
         });
@@ -115,10 +122,10 @@ public class Updater extends Preference {
 
     private static void alertUpdate(final Context context, final UpdateResult result) {
         DiscordTools.newBuilder(context)
-                .setTitle("Update Available")
+                .setTitle(translation("blue.update.UPDATE_AVAILABLE_MODAL_TITLE"))
                 .setMessage(result.getMessage())
-                .setNegativeButton("Dismiss", null)
-                .setPositiveButton("Download", (d, w) -> loadUrl(context, result.getUpdateLink()))
+                .setNegativeButton(translation("blue.update.UPDATE_AVAILABLE_MODAL_NEGATIVE"), null)
+                .setPositiveButton(translation("blue.update.UPDATE_AVAILABLE_MODAL_POSITIVE"), (d, w) -> loadUrl(context, result.getUpdateLink()))
                 .showSafely();
     }
 
@@ -128,7 +135,7 @@ public class Updater extends Preference {
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             );
         } catch (ActivityNotFoundException | NullPointerException e) {
-            ToastUtil.toast("Cannot open url (you don't have a browser installed)");
+            ToastUtil.toast(translation("blue.update.UPDATE_NO_BROWSER"));
         }
     }
 }

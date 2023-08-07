@@ -11,6 +11,8 @@ import java.util.Random;
 import mods.DiscordTools;
 import mods.utils.ToastUtil;
 
+import static mods.utils.I18nUtils.*;
+
 public class Urban {
 
     public static void getDefinition(FragmentActivity context, String query) {
@@ -56,7 +58,7 @@ public class Urban {
                 });
             } catch (Exception e) {
                 e.printStackTrace();
-                ToastUtil.toast("Something went wrong.");
+                ToastUtil.toast(translation("blue.toasts.GENERIC_ERROR"));
             }
         });
     }

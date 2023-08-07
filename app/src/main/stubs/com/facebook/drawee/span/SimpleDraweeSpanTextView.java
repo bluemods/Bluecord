@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-public class SimpleDraweeSpanTextView extends TextView {
+public class SimpleDraweeSpanTextView extends androidx.appcompat.widget.AppCompatTextView {
 
     public DraweeSpanStringBuilder j;
 

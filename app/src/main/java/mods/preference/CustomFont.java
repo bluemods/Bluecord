@@ -17,8 +17,10 @@ import mods.utils.LogUtils;
 import mods.utils.StoragePermissionUtils;
 import mods.utils.ToastUtil;
 
-public class CustomFont extends Preference {
+import static mods.utils.I18nUtils.*;
 
+public class CustomFont extends Preference {
+    
     public CustomFont(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -141,7 +143,7 @@ public class CustomFont extends Preference {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                ToastUtil.customToast(DiscordTools.getActivity(cont), "Something went wrong.");
+                ToastUtil.customToast(DiscordTools.getActivity(cont), translation("blue.toasts.GENERIC_ERROR"));
             }
         }
     }

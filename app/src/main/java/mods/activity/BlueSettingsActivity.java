@@ -12,12 +12,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import java.io.File;
-
 import mods.DiscordTools;
 import mods.ThemingTools;
 import mods.anti.AntiDiscordRebrand;
@@ -25,9 +21,14 @@ import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
 import mods.preference.Prefs;
 import mods.ucrop.UCropUtils;
+import mods.utils.I18nUtils;
 import mods.utils.LogUtils;
 import mods.utils.StoragePermissionUtils;
 import mods.utils.ToastUtil;
+
+import java.io.File;
+
+import static mods.utils.I18nUtils.*;
 
 @SuppressWarnings("unused")
 public class BlueSettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -91,7 +92,7 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_SET_BACKGROUND_UCROP) {
             Uri output = UCropUtils.getOutput(data);
             if (output == null) {
-                ToastUtil.customToast(this, "Couldn't find the image file, please try again.");
+                ToastUtil.customToast(this, translation("blue.toasts.BACKGROUND_NO_IMAGE"));
                 return;
             }
             try {
@@ -99,12 +100,12 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
                 DiscordTools.copyFile(output.getPath(), newPath);
                 Prefs.setString(PreferenceKeys.BACKGROUND_PATH, newPath);
                 Prefs.setBoolean(PreferenceKeys.BACKGROUND_UCROP_UPGRADED, true);
-                ToastUtil.customToast(this, "Background changed successfully");
+                ToastUtil.customToast(this, translation("blue.toasts.BACKGROUND_CHANGED"));
                 DiscordTools.promptRestart(this);
                 return;
             } catch (Exception e) {
                 e.printStackTrace();
-                ToastUtil.customToast(this, "Something went wrong");
+                ToastUtil.customToast(this, translation("blue.toasts.GENERIC_ERROR"));
             }
         }
 
@@ -174,10 +175,10 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
         needsFragmentRefresh = true;
 
         if (StoragePermissionUtils.needsPermissionForKey(s) && !StoragePermissionUtils.hasStoragePermission(this)) {
-            ToastUtil.customToast(this, "Storage permissions are needed to use this feature!");
+            ToastUtil.customToast(this, translation("blue.toasts.STORAGE_PERMISSION_NEEDED"));
         } else if (!this.needsRestart && StoragePermissionUtils.needsRestartForKey(s)) {
             this.needsRestart = true;
-            ToastUtil.customToast(this, "Bluecord will restart to apply changes after exiting");
+            ToastUtil.customToast(this, translation("blue.toasts.RESTART_NEEDED"));
         }
     }
 }

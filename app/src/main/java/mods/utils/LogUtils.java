@@ -2,6 +2,9 @@ package mods.utils;
 
 import android.util.Log;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 public final class LogUtils {
 
     private static final String BASE_TAG_NAME = "[Bluecord]";
@@ -21,6 +24,19 @@ public final class LogUtils {
         } else {
             Log.e(BASE_TAG_NAME, content);
         }
+    }
+    
+    public static void log(String tag, Throwable throwable) {
+		if (throwable == null) {
+            log(tag, "null");
+            return;
+        }
+        
+		StringWriter writer = new StringWriter();
+		try (PrintWriter printWriter = new PrintWriter(writer)) {
+			throwable.printStackTrace(printWriter);
+			log(tag, writer.toString());
+		}
     }
 
     public static void log(String tag, Object content) {

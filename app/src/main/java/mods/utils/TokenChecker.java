@@ -2,15 +2,13 @@ package mods.utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
-
 import com.discord.utilities.analytics.AnalyticSuperProperties;
 import com.discord.utilities.rest.RestAPI;
-
-import java.util.LinkedHashMap;
-
 import mods.DiscordTools;
 import mods.net.Net;
 import mods.net.SimpleHttpResponse;
+
+import java.util.LinkedHashMap;
 
 public class TokenChecker extends AsyncTask<Void, Void, TokenChecker.Result> {
 
@@ -44,7 +42,7 @@ public class TokenChecker extends AsyncTask<Void, Void, TokenChecker.Result> {
     @Override
     protected void onPostExecute(TokenChecker.Result result) {
         spinner.hide();
-        callback.onResult(result);
+        callback.accept(result);
     }
 
     @Override

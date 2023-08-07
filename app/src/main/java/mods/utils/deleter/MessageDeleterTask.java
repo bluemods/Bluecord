@@ -300,8 +300,8 @@ public class MessageDeleterTask {
         }
 
         final MessageIdHolder holder = this.messageIds.get(0);
-        final Long channelId = holder.getChannelId();
-        final Long messageId = holder.getMessageId();
+        final Long channelId = holder.channelId();
+        final Long messageId = holder.messageId();
 
         final String url = String.format("https://discord.com/api/v9/channels/%s/messages/%s", channelId, messageId);
 

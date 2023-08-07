@@ -93,9 +93,9 @@ class UpdateResult {
 
                 DiscordTools.HANDLER.post(() -> {
                     if (result != null && result.succeeded()) {
-                        callback.onResult(result);
+                        callback.accept(result);
                     } else {
-                        callback.onError();
+                        callback.error(String.valueOf(result));
                     }
                 });
             } catch (Throwable e) {

@@ -3,28 +3,27 @@ package mods.utils.translate;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-
+import mods.DiscordTools;
+import mods.net.Net;
+import mods.utils.Callback;
+import mods.utils.LogUtils;
+import mods.utils.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 
-import mods.DiscordTools;
-import mods.net.Net;
-import mods.utils.LogUtils;
-import mods.utils.StringUtils;
-
 public class TranslateAPI extends AsyncTask<Void, Void, String> {
 
     private static final String TAG = "TranslateAPI";
 
     private final ProgressDialog pd;
-    private final ITranslateCallback callback;
+    private final Callback<String> callback;
     private final String lang;
     private final String text;
 
-    private TranslateAPI(Activity context, ITranslateCallback callback, String lang, String text) {
+    private TranslateAPI(Activity context, Callback<String> callback, String lang, String text) {
         super();
         this.pd = DiscordTools.newProgressDialog(context);
         this.callback = callback;
@@ -32,7 +31,7 @@ public class TranslateAPI extends AsyncTask<Void, Void, String> {
         this.text = text;
     }
 
-    public static void translate(final Activity activity, final String toLanguage, final String text, ITranslateCallback callback) {
+    public static void translate(final Activity activity, final String toLanguage, final String text, Callback<String> callback) {
         new TranslateAPI(activity, callback, toLanguage, text).execute();
     }
 
@@ -121,9 +120,9 @@ public class TranslateAPI extends AsyncTask<Void, Void, String> {
         if (this.pd.isShowing()) this.pd.dismiss();
 
         if (StringUtils.isEmpty(result)) {
-            callback.onError();
+            callback.error(null);
         } else {
-            callback.onResult(result);
+            callback.accept(result);
         }
     }
 

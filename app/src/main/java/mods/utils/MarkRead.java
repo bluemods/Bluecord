@@ -3,15 +3,14 @@ package mods.utils;
 import com.discord.stores.StoreStream;
 import com.discord.utilities.rest.RestAPI;
 import com.discord.utilities.rx.ObservableExtensionsKt;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import j0.l.a.q;
 import j0.l.e.b;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import rx.Observable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MarkRead {
 

@@ -51,6 +51,9 @@ import mods.utils.deleter.MessageDeleterTask;
 import mods.utils.translate.Translate;
 import mods.view.TextWatcherTerse;
 
+import static mods.utils.I18nUtils.*;
+import static mods.utils.ToastUtil.*;
+
 @SuppressWarnings("unused")
 public class MediaTray {
 
@@ -82,11 +85,8 @@ public class MediaTray {
             Prefs.setString("commands.prefix", "!");
             DiscordTools.basicAlert(
                     fragment.getContext(),
-                    "Commands",
-                    "Since slash commands are now used for internal commands and Discord bots, " +
-                            "it is no longer available for use as a prefix." +
-                            "\n\n" +
-                            "Your commands prefix has been reset to ! (the exclamation point)"
+                    translation("blue.commands.COMMANDS_TITLE"),
+                    translation("blue.commands.COMMANDS_MESSAGE")
             );
         }
         this.themedTextColor = ThemingTools.isDarkModeOn()
@@ -146,27 +146,27 @@ public class MediaTray {
             commandsList = new ArrayList<>();
             commandsSummary = new ArrayList<>();
 
-            addIfTyped("add", "adds a new custom command");
-            addIfTyped("delete", "deletes a custom command");
-            addIfTyped("tr ", "translate text into many languages\nExample: " + prefix + "tr hola");
-            addIfTyped("purge ", "deletes your most recent messages in this channel\nExample: " + prefix + "purge 5");
-            addIfTyped("prefix", "changes the command prefix\nExample: " + prefix + "prefix !");
-            addIfTyped("ud ", "searches urban dictionary (Example: " + prefix + "ud blue)\nWarning: may be NSFW or offensive");
-            addIfTyped("spoiler ", "converts all text / media into spoilers (you cannot see it if you have show spoilers enabled)");
-            addIfTyped("blank", "sends a blank character");
-            addIfTyped("mock ", "mocks the message");
-            addIfTyped("reverse ", "reverses the text of the message");
-            addIfTyped("upper ", "converts text to uppercase");
-            addIfTyped("lower ", "converts text to lowercase");
-            addIfTyped("uwu", "ᵘʷᵘifies the message");
-            addIfTyped("owo", "ᵒʷᵒifies the message");
-            addIfTyped("b", "makes text into a code block");
-            addIfTyped("bold", "makes text bold");
-            addIfTyped("i", "makes text italic");
-            addIfTyped("u", "underlines text");
-            addIfTyped("s", "makes text strikethrough");
-            addIfTyped("bluecord", "how this mod came to be");
-            addIfTyped("update", "update link for Bluecord");
+            addIfTyped("add", translation("blue.commands.ADD_DESCRIPTION"));
+            addIfTyped("delete", translation("blue.commands.DELETE_DESCRIPTION"));
+            addIfTyped("tr", translation("blue.commands.TRANSLATE_DESCRIPTION", prefix));
+            addIfTyped("purge", translation("blue.commands.PURGE_DESCRIPTION", prefix));
+            addIfTyped("prefix", translation("blue.commands.PREFIX_DESCRIPTION", prefix));
+            addIfTyped("ud", translation("blue.commands.URBAN_DICTIONARY_DESCRIPTION", prefix));
+            addIfTyped("spoiler", translation("blue.commands.SPOILER_DESCRIPTION"));
+            addIfTyped("blank", translation("blue.commands.BLANK_DESCRIPTION"));
+            addIfTyped("mock", translation("blue.commands.MOCK_DESCRIPTION"));
+            addIfTyped("reverse", translation("blue.commands.REVERSE_DESCRIPTION"));
+            addIfTyped("upper", translation("blue.commands.UPPER_DESCRIPTION"));
+            addIfTyped("lower", translation("blue.commands.LOWER_DESCRIPTION"));
+            addIfTyped("uwu", translation("blue.commands.UWU_DESCRIPTION"));
+            addIfTyped("owo", translation("blue.commands.OWO_DESCRIPTION"));
+            addIfTyped("b", translation("blue.commands.CODEBLOCK_DESCRIPTION"));
+            addIfTyped("bold", translation("blue.commands.BOLD_DESCRIPTION"));
+            addIfTyped("i", translation("blue.commands.ITALIC_DESCRIPTION"));
+            addIfTyped("u", translation("blue.commands.UNDERLINE_DESCRIPTION"));
+            addIfTyped("s", translation("blue.commands.STRIKETHROUGH_DESCRIPTION"));
+            addIfTyped("bluecord", translation("blue.commands.BLUECORD_DESCRIPTION"));
+            addIfTyped("update", translation("blue.commands.UPDATE_DESCRIPTION"));
 
             addCustomCommands(commandsList);
 
@@ -303,11 +303,11 @@ public class MediaTray {
 
                     if (limit < 1 || limit > MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND) {
                         // TODO: consider removing the upper bound limit?
-                        ToastUtil.toast("Use a number between 1-" + MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND);
+                        toast(translation("blue.commands.PURGE_BOUND_ERROR", MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND));
                     } else if (channelId == null) {
-                        ToastUtil.toast("Could not locate the current channel. Restart Bluecord and retry.");
+                        toast(translation("blue.commands.PURSE_NO_CHANNEL"));
                     } else if (!DiscordTools.isConnected()) {
-                        ToastUtil.toast("You don't appear to be connected to the Internet. Check your connection and retry.");
+                        toast(translation("blue.toasts.NO_CONNECTION"));
                     } else {
                         long authorId = StoreUtils.getSelf().getId();
                         Long guildId = StoreUtils.getCurrentGuildId();
@@ -353,12 +353,8 @@ public class MediaTray {
                     activity.runOnUiThread(() -> {
                         DiscordTools.basicAlert(
                                 mFragment.requireActivity(),
-                                "Bluecord",
-                                "The reason I started this project was that there were no other Discord mods available for Android where you can customize all the mods to your liking with a settings UI. " +
-                                        "The goal of this mod is to bring you all the mods you like, " +
-                                        "but in a form factor that's customizable and easy to install and use with no coding or reversing required. " +
-                                        "Hope you enjoy!\n\n" +
-                                        "~Blue"
+                                translation("blue.commands_BLUECORD_MODAL_TITLE"),
+                                translation("blue.commands.BLUECORD_MODAL_BODY")
                         );
                     });
                     text = "";
@@ -367,13 +363,13 @@ public class MediaTray {
             else if (text.startsWith("prefix ")) {
                 String prefix = text.substring(7);
                 if (this.prefix.equals(prefix)) {
-                    ToastUtil.toast("Prefix is the same!");
+                    toast(translation("blue.commands.PREFIX_SAME"));
                 } else if (prefix.equals("@") || prefix.equals("#") || prefix.equals("/") || prefix.length() != 1) {
-                    ToastUtil.toast("Prefix must be 1 character long and must not be a @, # or /");
+                    toast(translation("blue.commands.PREFIX_INVALID"));
                 } else {
                     this.prefix = prefix;
                     Prefs.setString("commands.prefix", prefix);
-                    ToastUtil.toast("Prefix changed to " + prefix);
+                    toast(translation("blue.commands.PREFIX_CHANGED", prefix));
                     text = "";
                 }
             } else {
@@ -397,7 +393,7 @@ public class MediaTray {
         final FragmentActivity context = mFragment.getActivity();
 
         if (context == null) {
-            ToastUtil.toast("Something went wrong.");
+            toast(translation("blue.toasts.GENERIC_ERROR"));
             return;
         }
 
@@ -410,7 +406,7 @@ public class MediaTray {
 
             // name input
             TextView tvNameInput = new TextView(context);
-            tvNameInput.setText("Command Name");
+            tvNameInput.setText(translation("blue.commands.ADD_MODAL_NAME_INPUT"));
             tvNameInput.setTextSize(18.0f);
             tvNameInput.setTextColor(Color.parseColor("#ff26beff"));
             tvNameInput.setGravity(Gravity.CENTER);
@@ -427,7 +423,7 @@ public class MediaTray {
 
             // command output
             TextView tvNameOutput = new TextView(context);
-            tvNameOutput.setText("Command Output");
+            tvNameOutput.setText(translation("blue.commands.ADD_MODAL_OUTPUT_INPUT"));
             tvNameOutput.setTextSize(18.0f);
             tvNameOutput.setTextColor(Color.parseColor("#ff26beff"));
             tvNameOutput.setGravity(Gravity.CENTER);
@@ -451,22 +447,22 @@ public class MediaTray {
 
             DiscordTools.newBuilder(mFragment.getContext())
                     .setView(rootView)
-                    .setTitle("Add Command")
-                    .setPositiveButton("Add", (dialog, id) -> {
+                    .setTitle(translation("blue.commands.ADD_MODAL_TITLE"))
+                    .setPositiveButton(translation("blue.commands.ADD_MODAL_POSITIVE"), (dialog, id) -> {
                         String input = removePrefix(etNameInput.getText().toString().toLowerCase().trim());
                         String output = etNameOutput.getText().toString().trim();
 
                         if (StringUtils.isEmpty(input)) {
-                            ToastUtil.toast("Command cannot be empty");
+                            toast(translation("blue.commands.ADD_COMMAND_EMPTY"));
                         } else if (StringUtils.isEmpty(output)) {
-                            ToastUtil.toast("Output cannot be empty");
+                            toast(translation("blue.commands.ADD_OUTPUT_EMPTY"));
                         } else if (isBuiltInCommand(input)) {
-                            ToastUtil.toast("You cannot override a built in command");
+                            toast(translation("blue.commands.ADD_OVERRIDE_BUNDLED"));
                         } else {
-                            ToastUtil.toast(
+                            toast(
                                     isExistingCustomCommand(input)
-                                            ? "Command replaced"
-                                            : "Command added"
+                                            ? translation("blue.commands.ADD_REPLACED")
+                                            : translation("blue.commands.ADD_SUCCESS")
                             );
                             DiscordTools.getContext()
                                     .getSharedPreferences("CustomCommands", 0)
@@ -476,7 +472,7 @@ public class MediaTray {
                         }
                         addCommand();
                     })
-                    .setNegativeButton("Exit", null)
+                    .setNegativeButton(translation("blue.commands.ADD_MODAL_NEGATIVE"), null)
                     .showSafely();
         });
     }
@@ -489,7 +485,7 @@ public class MediaTray {
         final int size = map.size();
 
         if (size == 0) {
-            ToastUtil.toast("There are no commands to delete");
+            toast(translation("blue.commands.DELETE_EMPTY"));
         } else {
             final CharSequence[] coms = new CharSequence[size];
             final boolean[] checked = new boolean[size];
@@ -501,15 +497,15 @@ public class MediaTray {
             }
 
             if (mFragment.getActivity() == null) {
-                ToastUtil.toast("Something went wrong.");
+                toast(".");
                 return;
             }
 
             mFragment.getActivity().runOnUiThread(() -> DiscordTools.newBuilder(mFragment.getContext())
-                    .setTitle("Delete Commands")
+                    .setTitle(translation("blue.commands.DELETE_MODAL_TITLE"))
                     .setMultiChoiceItems(coms, checked, (dialog, which, isChecked) -> checked[which] = isChecked)
-                    .setNegativeButton("Exit", null)
-                    .setPositiveButton("Delete", (dialog, which) -> {
+                    .setNegativeButton(translation("blue.commands.DELETE_MODAL_NEGATIVE"), null)
+                    .setPositiveButton(translation("blue.commands.DELETE_MODAL_POSITIVE"), (dialog, which) -> {
                         boolean deleted = false;
                         for (int i = 0; i < size; i++) {
                             if (checked[i]) {
@@ -518,9 +514,9 @@ public class MediaTray {
                             }
                         }
                         if (deleted) {
-                            ToastUtil.toast("Successfully deleted");
+                            toast(translation("blue.commands.DELETE_SUCCESS"));
                         } else {
-                            ToastUtil.toast("No commands were selected to delete!");
+                            toast(translation("blue.commands.DELETE_NO_SELECTION"));
                         }
                     })
                     .showSafely());

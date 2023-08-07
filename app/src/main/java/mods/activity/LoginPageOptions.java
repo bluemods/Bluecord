@@ -5,11 +5,9 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
 import com.discord.app.AppActivity;
 import com.discord.app.AppFragment;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-
 import mods.DiscordTools;
 import mods.constants.PreferenceKeys;
 import mods.preference.AccountSwitcher;
@@ -17,6 +15,8 @@ import mods.preference.Prefs;
 import mods.utils.AuthenticationUtils;
 import mods.utils.ToastUtil;
 import mods.utils.TokenChecker;
+
+import static mods.utils.I18nUtils.*;
 
 public class LoginPageOptions {
 
@@ -74,11 +74,8 @@ public class LoginPageOptions {
                     .setNeutralButton("Help", (d, w) -> {
                         DiscordTools.basicAlert(
                                 fragment.getContext(),
-                                "Token Login",
-                                "Use this if you are logged in on your PC or have your token on hand. " +
-                                        "If you're not sure what a Discord token is, don't worry, it's not very important.\n\n" +
-                                        "Your token can be found on your PC browser by looking at the Authorization request headers.\n\n" +
-                                        "NOTE: No one can see your token but you and Discord, and DO NOT SCREENSHOT, SHOW OR SHARE YOUR TOKEN!"
+                                translation("blue.login.TOKEN_TITLE"),
+                                translation("blue.login.TOKEN_MESSAGE")
                         );
                     })
                     .setPositiveButton("Submit", (d, w) -> {
@@ -92,11 +89,11 @@ public class LoginPageOptions {
                                     break;
                                 }
                                 case INVALID_NO_CONNECTION: {
-                                    ToastUtil.toast("Not connected to the Internet. Check your connection and try again");
+                                    ToastUtil.toast(translation("blue.toasts.NO_CONNECTION"));
                                     break;
                                 }
                                 case INVALID_NOT_AUTHORIZED: {
-                                    ToastUtil.toast("Token is either invalid or revoked by Discord");
+                                    ToastUtil.toast(translation("blue.toasts.TOKEN_INVALID"));
                                     break;
                                 }
                             }

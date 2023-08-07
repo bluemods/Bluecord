@@ -1,10 +1,12 @@
+import android.annotation.SuppressLint
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
 }
 
 android {
-    packagingOptions {
+    packaging {
         resources {
             excludes += listOf(
                     "META-INF/DEPENDENCIES",
@@ -24,10 +26,13 @@ android {
 
     defaultConfig {
         applicationId = "com.bluecord"
-        minSdkVersion(21)
-        //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion(29)
-        compileSdkVersion(31)
+
+        @SuppressLint("ExpiredTargetSdkVersion")
+        targetSdk = 29
+
+        minSdk = 21
+        compileSdk = 31
+
         versionCode = 1
         versionName = "1.0"
 
@@ -73,6 +78,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.0")
     implementation("androidx.preference:preference:1.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation("net.sourceforge.streamsupport:android-retrostreams:1.7.4")
 
     // implementation "androidx.recyclerview:recyclerview:1.2.1"
     // implementation "com.squareup.okhttp3:okhttp:4.10.0"
