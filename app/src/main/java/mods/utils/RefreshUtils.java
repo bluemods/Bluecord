@@ -19,35 +19,30 @@ import mods.DiscordTools;
 
 public class RefreshUtils {
 
-    private static final String TAG = "RefreshUtils";
+    private static final String TAG = RefreshUtils.class.getSimpleName();
 
     public static WidgetChannelsList WIDGET_CHANNELS_LIST = null;
     public static WidgetChatList WIDGET_CHAT_LIST = null;
 
-    private static final Object lock = new Object();
-
     public static void refreshView() {
-        if (WIDGET_CHAT_LIST == null || WIDGET_CHAT_LIST.isStateSaved() || WIDGET_CHAT_LIST.getFragmentManager() == null) {
-            return;
-        }
-
         DiscordTools.HANDLER.post(() -> {
-            synchronized (lock) {
-                try {
-                    FragmentManager manager = WIDGET_CHAT_LIST.getFragmentManager();
+            if (WIDGET_CHAT_LIST == null || WIDGET_CHAT_LIST.isStateSaved() || !WIDGET_CHAT_LIST.isAdded()) {
+                return;
+            }
+            try {
+                FragmentManager manager = WIDGET_CHAT_LIST.getParentFragmentManager();
 
-                    FragmentTransaction ft = manager.beginTransaction();
+                FragmentTransaction ft = manager.beginTransaction();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        ft.detach(WIDGET_CHAT_LIST).commitNow();
-                        manager.beginTransaction().attach(WIDGET_CHAT_LIST).commitNow();
-                    } else {
-                        ft.detach(WIDGET_CHAT_LIST).attach(WIDGET_CHAT_LIST).commit();
-                    }
-                    LogUtils.log(TAG, "refreshView() - success");
-                } catch (Throwable e) {
-                    LogUtils.log(TAG, "refreshView() - failed", e);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    ft.detach(WIDGET_CHAT_LIST).commitNow();
+                    manager.beginTransaction().attach(WIDGET_CHAT_LIST).commitNow();
+                } else {
+                    ft.detach(WIDGET_CHAT_LIST).attach(WIDGET_CHAT_LIST).commit();
                 }
+                LogUtils.log(TAG, "refreshView() - success");
+            } catch (Throwable e) {
+                LogUtils.log(TAG, "refreshView() - failed", e);
             }
         });
     }
