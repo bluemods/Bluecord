@@ -61,7 +61,7 @@ public class StoreUtils {
         try {
             return StoreStream.getGuilds().getGuild(guildId);
         } catch (Throwable e) {
-			LogUtils.logException(TAG, e);
+            LogUtils.logException(TAG, e);
             return null;
         }
     }
@@ -88,7 +88,7 @@ public class StoreUtils {
                     DiscordTools.getContext(),
                     "javaClass",
                     null,
-                    (Function1<Object, Unit>) o -> null,
+                    (Function1<Object, Unit>) onNext -> null,
                     null,
                     null,
                     null,
@@ -96,7 +96,7 @@ public class StoreUtils {
                     null
             );
         } catch (Exception e) {
-			LogUtils.log(TAG, "appSubscribe failed", e);
+            LogUtils.log(TAG, "appSubscribe failed", e);
         }
     }
 

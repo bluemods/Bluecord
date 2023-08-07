@@ -11,8 +11,8 @@ import mods.DiscordTools;
 import mods.constants.Constants;
 
 public class ToastUtil {
-	
-	private static final String TAG = ToastUtil.class.getSimpleName();
+
+    private static final String TAG = ToastUtil.class.getSimpleName();
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
     private static Toast lastToast;
@@ -20,6 +20,7 @@ public class ToastUtil {
     public static void toast(final String text) {
         handler.post(() -> showBasicToast(text, Toast.LENGTH_LONG));
     }
+
     public static void toastShort(final String text) {
         handler.post(() -> showBasicToast(text, Toast.LENGTH_SHORT));
     }

@@ -14,9 +14,17 @@ import mods.DiscordTools;
 
 public class StringUtils {
 
-    public static boolean isEmpty(CharSequence c)  { return c == null || c.length() == 0; }
-    public static CharSequence nullToEmpty(CharSequence s) { return s == null ? "" : s; }
-    public static String nullToEmpty(String s) { return s == null ? "" : s; }
+    public static boolean isEmpty(CharSequence c) {
+        return c == null || c.length() == 0;
+    }
+
+    public static CharSequence nullToEmpty(CharSequence s) {
+        return s == null ? "" : s;
+    }
+
+    public static String nullToEmpty(String s) {
+        return s == null ? "" : s;
+    }
 
     public static int getIntSafe(String s) {
         return getIntSafe(s, -1);
@@ -63,13 +71,13 @@ public class StringUtils {
         if (name == null || !name.contains("#")) return name;
 
         int index = name.lastIndexOf("#");
-		if (index == -1) return name;
+        if (index == -1) return name;
 
         String accountName = name.substring(0, index);
-        int discriminator  = getIntSafe(name.substring(index + 1), 0);
+        int discriminator = getIntSafe(name.substring(index + 1), 0);
 
         return accountName + "#" + formatDiscriminator(discriminator);
-	}
+    }
 
     public static String mock(String s) {
         s = s.trim().toLowerCase();
@@ -132,8 +140,8 @@ public class StringUtils {
 
         long seconds = TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());
         long minutes = TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
-        long hours   = TimeUnit.MILLISECONDS.toHours  (now.getTime() - past.getTime());
-        long days    = TimeUnit.MILLISECONDS.toDays   (now.getTime() - past.getTime());
+        long hours = TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime());
+        long days = TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime());
 
         if (days > 0) {
             hours = hours % 24;
