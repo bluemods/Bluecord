@@ -19,6 +19,8 @@ import mods.utils.ToastUtil;
 
 public class CustomFont extends Preference {
 
+    private static final String TAG = CustomFont.class.getSimpleName();
+
     public CustomFont(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -80,69 +82,69 @@ public class CustomFont extends Preference {
     }
 
     private static void loadFontFromFile(final Context cont) {
-        if (StoragePermissionUtils.hasStoragePermission(cont)) {
-            try {
-                List<File> validFonts = new ArrayList<>();
+        if (!StoragePermissionUtils.hasStoragePermission(cont)) return;
 
-                File folder = new File(Environment.getExternalStorageDirectory(), "Bluecord/Fonts/");
-                folder.mkdirs();
-                File downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        try {
+            List<File> validFonts = new ArrayList<>();
 
-                addToValidFonts(validFonts, folder);
-                addToValidFonts(validFonts, downloadsFolder);
+            File folder = new File(Environment.getExternalStorageDirectory(), "Bluecord/Fonts/");
+            folder.mkdirs();
+            File downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
-                Collections.sort(validFonts, (o1, o2) -> {
-                    if (o1 == null || o2 == null) {
-                        return 0;
-                    } else {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                });
+            addToValidFonts(validFonts, folder);
+            addToValidFonts(validFonts, downloadsFolder);
 
-                if (validFonts.isEmpty()) {
-                    DiscordTools.basicAlert(cont,
-                            "No Fonts Found",
-                            "No fonts could be located. To add custom font files, please place them in the following folder:\n\n" +
-                                    "Internal Storage/Bluecord/Fonts/\n\n" +
-                                    "NOTE: the file must have a .ttf or .otf extension for them to show up in this list!"
-                    );
+            Collections.sort(validFonts, (o1, o2) -> {
+                if (o1 == null || o2 == null) {
+                    return 0;
                 } else {
-                    final File[] sortedFonts = validFonts.toArray(new File[0]);
-
-                    String[] fileNames = new String[sortedFonts.length];
-
-                    for (int i = 0; i < sortedFonts.length; i++) {
-                        fileNames[i] = sortedFonts[i].getName();
-                    }
-
-                    DiscordTools.newBuilder(cont)
-                            .setTitle("Pick a custom font")
-                            .setItems(fileNames, (dialogInterface, i) -> {
-                                try {
-                                    File fontFolder = new File(DiscordTools.getAppDataDir(), "custom_font");
-                                    fontFolder.mkdirs();
-
-                                    String originalPath = sortedFonts[i].getAbsolutePath();
-                                    String newPath = new File(fontFolder, "custom_font." + (originalPath.endsWith(".ttf") ? ".ttf" : ".otf")).getAbsolutePath();
-
-                                    DiscordTools.copyFile(originalPath, newPath);
-
-                                    Prefs.setString(PreferenceKeys.CUSTOM_FONT_TYPE, "Custom");
-                                    Prefs.setString(PreferenceKeys.CUSTOM_FONT_PATH, newPath);
-
-                                    ToastUtil.customToast(DiscordTools.getActivity(cont), "Font changed successfully");
-                                } catch (Exception e) {
-                                    LogUtils.log("CustomFont", "failed", e);
-                                    ToastUtil.customToast(DiscordTools.getActivity(cont), "Failed to save custom font.");
-                                }
-                            })
-                            .setPositiveButton("Exit", null)
-                            .showSafely();
+                    return o1.getName().compareTo(o2.getName());
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                ToastUtil.customToast(DiscordTools.getActivity(cont), "Something went wrong.");
+            });
+
+            if (validFonts.isEmpty()) {
+                DiscordTools.basicAlert(cont,
+                        "No Fonts Found",
+                        "No fonts could be located. To add custom font files, please place them in the following folder:\n\n" +
+                                "Internal Storage/Bluecord/Fonts/\n\n" +
+                                "NOTE: the file must have a .ttf or .otf extension for them to show up in this list!"
+                );
+            } else {
+                final File[] sortedFonts = validFonts.toArray(new File[0]);
+
+                String[] fileNames = new String[sortedFonts.length];
+
+                for (int i = 0; i < sortedFonts.length; i++) {
+                    fileNames[i] = sortedFonts[i].getName();
+                }
+
+                DiscordTools.newBuilder(cont)
+                        .setTitle("Pick a custom font")
+                        .setItems(fileNames, (dialogInterface, i) -> {
+                            try {
+                                File fontFolder = new File(DiscordTools.getAppDataDir(), "custom_font");
+                                fontFolder.mkdirs();
+
+                                String originalPath = sortedFonts[i].getAbsolutePath();
+                                String newPath = new File(fontFolder, "custom_font." + (originalPath.endsWith(".ttf") ? ".ttf" : ".otf")).getAbsolutePath();
+
+                                DiscordTools.copyFile(originalPath, newPath);
+
+                                Prefs.setString(PreferenceKeys.CUSTOM_FONT_TYPE, "Custom");
+                                Prefs.setString(PreferenceKeys.CUSTOM_FONT_PATH, newPath);
+
+                                ToastUtil.customToast(DiscordTools.getActivity(cont), "Font changed successfully");
+                            } catch (Exception e) {
+                                LogUtils.log(TAG, "failed to change font", e);
+                                ToastUtil.customToast(DiscordTools.getActivity(cont), "Failed to save custom font.");
+                            }
+                        })
+                        .setPositiveButton("Exit", null)
+                        .showSafely();
             }
+        } catch (Exception e) {
+            LogUtils.log(TAG, "failed to load fonts", e);
+            ToastUtil.customToast(DiscordTools.getActivity(cont), "Something went wrong.");
         }
     }
 

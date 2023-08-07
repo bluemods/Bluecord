@@ -15,7 +15,6 @@ public class Databases {
                 db.execSQL("CREATE TABLE IF NOT EXISTS EditedMessageTable (id LONG, old_text VARCHAR, new_text VARCHAR, timestamp LONG)");
                 upgradeDatabase(db);
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         return db;

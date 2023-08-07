@@ -6,12 +6,15 @@ import com.discord.models.message.Message;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
 import mods.DiscordTools;
 
 public class FileLogger {
+
+    private static final String TAG = FileLogger.class.getSimpleName();
 
     public static void writeWithProfileInfo(Message message, String type, String info, String dir, String action) {
         String data =
@@ -36,8 +39,8 @@ public class FileLogger {
                 writer.append("\r\n");
                 writer.flush();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            LogUtils.log(TAG, "failed to write to disk", e);
         }
     }
 }

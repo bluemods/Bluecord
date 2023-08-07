@@ -43,41 +43,42 @@ public class ChatPins {
             for (String id : set) {
                 try {
                     PINNED_IDS.add(Long.parseLong(id));
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
+                } catch (NumberFormatException ignore) {
                 }
             }
         }
     }
 
     public static void configureUI(WidgetChannelsListItemChannelActions actions, View root, Channel channel) {
-        if (DiscordTools.findFragmentByClass(actions, WidgetChannelsList.class) == null) {
+        WidgetChannelsList list = DiscordTools.findFragmentByClass(actions, WidgetChannelsList.class);
+
+        if (list == null) {
             LogUtils.log(TAG, "unable to find required fragment in stack");
-        } else {
-            WidgetChannelsList channelsFragment = (WidgetChannelsList)
-                    DiscordTools.findFragmentByClass(actions, WidgetChannelsList.class);
-
-            if (channelsFragment == null) return;
-
-            View v = root.findViewById(android.R.id.button1);
-
-            if (!(v instanceof TextView)) {
-                LogUtils.log(TAG, "unable to locate textview");
-                return;
-            }
-
-            TextView tv = (TextView) v;
-            tv.setVisibility(View.VISIBLE);
-
-            boolean isPinned = isPinned(channel);
-
-            tv.setText(isPinned ? "Unpin Chat" : "Pin Chat");
-
-            tv.setOnClickListener(view -> {
-                actions.dismiss();
-                setPinned(channelsFragment, channel.k(), !isPinned);
-            });
+            return;
         }
+        WidgetChannelsList channelsFragment = (WidgetChannelsList)
+                DiscordTools.findFragmentByClass(actions, WidgetChannelsList.class);
+
+        if (channelsFragment == null) return;
+
+        View v = root.findViewById(android.R.id.button1);
+
+        if (!(v instanceof TextView)) {
+            LogUtils.log(TAG, "unable to locate textview");
+            return;
+        }
+
+        TextView tv = (TextView) v;
+        tv.setVisibility(View.VISIBLE);
+
+        boolean isPinned = isPinned(channel);
+
+        tv.setText(isPinned ? "Unpin Chat" : "Pin Chat");
+
+        tv.setOnClickListener(view -> {
+            actions.dismiss();
+            setPinned(channelsFragment, channel.k(), !isPinned);
+        });
     }
 
     public static List<Channel> sort(List<Channel> list, Comparator<Channel> comparator) {

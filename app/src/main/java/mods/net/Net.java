@@ -6,7 +6,8 @@ import android.os.Looper;
 import mods.utils.EmptyUtils;
 import mods.utils.LogUtils;
 
-import androidx.annotation.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.OutputStream;
 import java.net.URL;
@@ -20,48 +21,59 @@ import javax.net.ssl.HttpsURLConnection;
 @SuppressWarnings({"deprecation", "unused"})
 public class Net extends AsyncTask<Void, Void, String> {
 
+    private static final String TAG = Net.class.getSimpleName();
+
+    @NotNull
     private final String url;
+    @NotNull
     private final String postData;
+    @Nullable
     private final LinkedHashMap<String, String> headers;
 
-    private Net(String url, String postData, LinkedHashMap<String, String> headers) {
+    private Net(@NotNull String url, @NotNull String postData, @Nullable LinkedHashMap<String, String> headers) {
         super();
         this.url = url;
         this.postData = postData;
         this.headers = headers;
     }
 
+    @Nullable
     public static String useAsyncIfNeeded(String url, String data) {
         return useAsyncIfNeeded(url, data, null);
     }
 
+    @Nullable
     public static String useAsyncIfNeeded(String url, String data, @Nullable LinkedHashMap<String, String> headers) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            LogUtils.log("BluecordRequest", "Thread is main for " + url + ", using async");
+            LogUtils.log(TAG, "Thread is main for " + url + ", using async");
             return asyncRequest(url, data, headers);
         } else {
-            LogUtils.log("BluecordRequest", "Thread is *not* main (" + Thread.currentThread().getName() + ") for " + url + ", using non-async");
+            LogUtils.log(TAG, "Thread is *not* main (" + Thread.currentThread().getName() + ") for " + url + ", using non-async");
             return nonAsyncRequest(url, data, headers);
         }
     }
 
+    @Nullable
     public static String asyncRequest(String url, String data) {
         return asyncRequest(url, data, null);
     }
 
+    @Nullable
     public static String asyncRequest(String url, String data, @Nullable LinkedHashMap<String, String> headers) {
         try {
             return new Net(url, data, headers).execute().get(5, TimeUnit.SECONDS);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.logException(e);
         }
         return null;
     }
 
+    @Nullable
     public static String nonAsyncRequest(String url, String data) {
         return nonAsyncRequest(url, data, null);
     }
 
+    @Nullable
     public static String nonAsyncRequest(String url, String data, @Nullable LinkedHashMap<String, String> headers) {
         return getOrPost(url, data, headers);
     }
@@ -71,11 +83,15 @@ public class Net extends AsyncTask<Void, Void, String> {
         return getOrPost(url, postData, headers);
     }
 
+    @Nullable
     public static String getOrPost(String url, @Nullable String postData, @Nullable LinkedHashMap<String, String> headers) {
         return getOrPostWithResult(url, postData, headers).getContent();
     }
 
+    @NotNull
     public static SimpleHttpResponse getOrPostWithResult(String url, @Nullable String postData, @Nullable LinkedHashMap<String, String> headers) {
+        final boolean isPost = postData != null;
+
         HttpsURLConnection conn;
         try {
             conn = (HttpsURLConnection) new URL(url).openConnection();
@@ -93,8 +109,6 @@ public class Net extends AsyncTask<Void, Void, String> {
                 }
             }
 
-            boolean isPost = postData != null;
-
             conn.setDoOutput(isPost);
             conn.setRequestMethod(isPost ? "POST" : "GET");
 
@@ -107,15 +121,16 @@ public class Net extends AsyncTask<Void, Void, String> {
 
             int code = conn.getResponseCode();
 
-            // LogUtils.log("Bluecord", "[" + conn.getRequestMethod() + "] response code = " + code);
+            // LogUtils.log(TAG, "[" + conn.getRequestMethod() + "] response code = " + code);
 
             return new SimpleHttpResponse(NetUtils.readInputStream(conn, code).trim(), code);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.log(TAG, (isPost ? "POST" : "GET") + " request failed on url " + url, e);
         }
-        return new SimpleHttpResponse(null, SimpleHttpResponse.CODE_FAILED);
+        return new SimpleHttpResponse("", SimpleHttpResponse.CODE_FAILED);
     }
 
+    @NotNull
     public static SimpleHttpResponse delete(String url, @Nullable LinkedHashMap<String, String> headers) {
         HttpsURLConnection conn;
         try {
@@ -139,8 +154,8 @@ public class Net extends AsyncTask<Void, Void, String> {
 
             return new SimpleHttpResponse(NetUtils.readInputStream(conn, code).trim(), code);
         } catch (Exception e) {
-            LogUtils.log("Net", "request failed on url " + url, e);
-            return new SimpleHttpResponse(null, SimpleHttpResponse.CODE_FAILED);
+            LogUtils.log(TAG, "DELETE request failed on url " + url, e);
+            return new SimpleHttpResponse("", SimpleHttpResponse.CODE_FAILED);
         }
     }
 }

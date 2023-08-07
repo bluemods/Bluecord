@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,9 +16,10 @@ import mods.net.Net;
 import mods.utils.LogUtils;
 import mods.utils.StringUtils;
 
+// TODO: refactor
 public class TranslateAPI extends AsyncTask<Void, Void, String> {
 
-    private static final String TAG = "TranslateAPI";
+    private static final String TAG = TranslateAPI.class.getSimpleName();
 
     private final ProgressDialog pd;
     private final ITranslateCallback callback;
@@ -36,6 +38,7 @@ public class TranslateAPI extends AsyncTask<Void, Void, String> {
         new TranslateAPI(activity, callback, toLanguage, text).execute();
     }
 
+    @Nullable
     private static String primaryMethod(String lang, String text) {
         try {
             final String url =
@@ -47,7 +50,9 @@ public class TranslateAPI extends AsyncTask<Void, Void, String> {
 
             String data = Net.nonAsyncRequest(url, null, getHeaders(true));
 
-            if (data.startsWith("[")) {
+            if (data == null) {
+                return null;
+            } else if (data.startsWith("[")) {
                 JSONArray array = new JSONArray(data);
                 Object ret = array.get(0);
                 if (ret instanceof JSONArray) {
@@ -72,11 +77,12 @@ public class TranslateAPI extends AsyncTask<Void, Void, String> {
                 return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.log(TAG, "first method failed", e);
             return null;
         }
     }
 
+    @Nullable
     private static String secondaryMethod(String lang, String text) {
         try {
             final String url = "https://translate.googleapis.com/translate_a/single?" +
@@ -97,7 +103,7 @@ public class TranslateAPI extends AsyncTask<Void, Void, String> {
             }
             return sb.toString().trim();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.log(TAG, "second method failed", e);
             return null;
         }
     }

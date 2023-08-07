@@ -61,7 +61,7 @@ public class StoreUtils {
         try {
             return StoreStream.getGuilds().getGuild(guildId);
         } catch (Throwable e) {
-            e.printStackTrace();
+			LogUtils.logException(TAG, e);
             return null;
         }
     }
@@ -78,10 +78,10 @@ public class StoreUtils {
     }
 
     public static void leaveGroupDM(long channelId) {
-        subscribe(RestAPI.Companion.getApi().deleteChannel(channelId));
+        appSubscribe(RestAPI.Companion.getApi().deleteChannel(channelId));
     }
 
-    private static void subscribe(Observable<?> observable) {
+    private static void appSubscribe(Observable<?> observable) {
         try {
             ObservableExtensionsKt.appSubscribe$default(
                     ObservableExtensionsKt.restSubscribeOn$default(observable, false, 1, null),
@@ -96,7 +96,7 @@ public class StoreUtils {
                     null
             );
         } catch (Exception e) {
-            e.printStackTrace();
+			LogUtils.log(TAG, "appSubscribe failed", e);
         }
     }
 

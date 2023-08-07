@@ -62,18 +62,14 @@ public class StringUtils {
     public static String fixAccountName(String name) {
         if (name == null || !name.contains("#")) return name;
 
-        try {
-            int index = name.lastIndexOf("#");
+        int index = name.lastIndexOf("#");
+		if (index == -1) return name;
 
-            String accountName = name.substring(0, index);
-            int discriminator  = Integer.parseInt(name.substring(index + 1));
+        String accountName = name.substring(0, index);
+        int discriminator  = getIntSafe(name.substring(index + 1), 0);
 
-            return accountName + "#" + formatDiscriminator(discriminator);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return name;
-    }
+        return accountName + "#" + formatDiscriminator(discriminator);
+	}
 
     public static String mock(String s) {
         s = s.trim().toLowerCase();

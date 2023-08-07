@@ -9,9 +9,12 @@ import java.net.URLEncoder;
 import java.util.Random;
 
 import mods.DiscordTools;
+import mods.utils.LogUtils;
 import mods.utils.ToastUtil;
 
 public class Urban {
+
+    private static final String TAG = Urban.class.getSimpleName();
 
     public static void getDefinition(FragmentActivity context, String query) {
         DiscordTools.THREAD_POOL.execute(() -> {
@@ -55,7 +58,7 @@ public class Urban {
                             .showSafely();
                 });
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtils.logException(TAG, e);
                 ToastUtil.toast("Something went wrong.");
             }
         });

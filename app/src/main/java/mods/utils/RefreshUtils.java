@@ -127,23 +127,4 @@ public class RefreshUtils {
             }
         }
     }
-
-    /*public static void refreshViewIfNeeded(final Fragment fragment) {
-        if (BlueSettings.needsFragmentRefresh) {
-            BlueSettings.needsFragmentRefresh = false;
-            new Handler(Looper.getMainLooper()).post(() -> {
-                if (fragment != null && !fragment.isStateSaved() && fragment.getFragmentManager() != null) {
-                    try {
-                        FragmentTransaction ft = fragment.getFragmentManager().beginTransaction();
-                        if (Build.VERSION.SDK_INT >= 26) {
-                            ft.setReorderingAllowed(false);
-                        }
-                        ft.detach(fragment).attach(fragment).commit();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-    }*/
 }

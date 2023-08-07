@@ -12,16 +12,20 @@ import android.widget.ScrollView;
 
 import com.discord.models.user.MeUser;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import mods.DiscordTools;
 import mods.constants.URLConstants;
 import mods.net.Net;
+import mods.utils.LogUtils;
 import mods.utils.StoreUtils;
 import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
 
 public class FeatureRequest extends Preference {
+
+    private static final String TAG = FeatureRequest.class.getSimpleName();
 
     private static final String ERROR_MESSAGE = "Error submitting your request.\n\nThe request was copied to your clipboard. Please check your Internet connection and try again";
 
@@ -77,8 +81,8 @@ public class FeatureRequest extends Preference {
                                 try {
                                     String msg = new JSONObject(result).getString("message");
                                     DiscordTools.basicAlert(preference.getContext(), "Success", msg);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                } catch (JSONException e) {
+                                    LogUtils.log(TAG, "failed to parse JSON", e);
                                     DiscordTools.basicAlert(preference.getContext(), "Error", ERROR_MESSAGE);
                                 }
                             }

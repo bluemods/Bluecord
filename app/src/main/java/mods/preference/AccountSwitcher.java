@@ -10,6 +10,7 @@ import com.discord.models.user.MeUser;
 import com.discord.stores.StoreStream;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,6 +23,7 @@ import java.util.Set;
 import mods.DiscordTools;
 import mods.utils.Alerts;
 import mods.utils.AuthenticationUtils;
+import mods.utils.LogUtils;
 import mods.utils.StoreUtils;
 import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
@@ -244,28 +246,41 @@ public class AccountSwitcher extends Preference {
             getBackupPrefs(context).edit().clear().commit();
         }
 
-        public String getAccountName() { return accountName; }
+        public String getAccountName() {
+            return accountName;
+        }
 
-        public String getAccountId() { return accountId; }
+        public String getAccountId() {
+            return accountId;
+        }
 
-        public long getBackupTime() { return backupTime; }
+        public long getBackupTime() {
+            return backupTime;
+        }
 
-        public String getToken() { return token; }
+        public String getToken() {
+            return token;
+        }
 
-        public boolean isMfaEnabled() { return mfa; }
+        public boolean isMfaEnabled() {
+            return mfa;
+        }
 
-        private String getFingerprint() { return this.fingerprint; }
+        private String getFingerprint() {
+            return this.fingerprint;
+        }
 
         private static SharedPreferences getBackupPrefs(Context context) {
             return context.getSharedPreferences("AccountBackups", 0);
         }
 
+        @Nullable
         private static AccountBackup parse(String s) {
             JSONObject json;
             try {
                 json = new JSONObject(s);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtils.logException(e);
                 return null;
             }
             return new AccountBackup(
@@ -279,21 +294,25 @@ public class AccountSwitcher extends Preference {
         }
 
         @NotNull
-        @Override
-        public String toString() {
+        public JSONObject toJson() {
+            JSONObject json = new JSONObject();
             try {
-                return new JSONObject()
-                        .put("id", getAccountId())
+                json.put("id", getAccountId())
                         .put("name", getAccountName())
                         .put("backup_time", getBackupTime())
                         .put("token", getToken())
                         .put("fingerprint", getFingerprint())
-                        .put("mfa", isMfaEnabled())
-                        .toString();
-            } catch (JSONException e) {
-                e.printStackTrace();
+                        .put("mfa", isMfaEnabled());
+            } catch (JSONException ignore) {
+                // shouldn't happen
             }
-            return "{}";
+            return json;
+        }
+
+        @NotNull
+        @Override
+        public String toString() {
+            return toJson().toString();
         }
     }
 }

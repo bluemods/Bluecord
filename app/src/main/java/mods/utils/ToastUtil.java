@@ -11,6 +11,8 @@ import mods.DiscordTools;
 import mods.constants.Constants;
 
 public class ToastUtil {
+	
+	private static final String TAG = ToastUtil.class.getSimpleName();
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
     private static Toast lastToast;
@@ -45,7 +47,7 @@ public class ToastUtil {
 
                 lastToast = toast;
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtils.log(TAG, "failed to show custom toast, falling back to basic toast", e);
                 // we shouldn't post twice, it probably will crash
                 // so we just copy the toast method above
                 showBasicToast(text, Toast.LENGTH_LONG);

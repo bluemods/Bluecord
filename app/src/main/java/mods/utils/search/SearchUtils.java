@@ -23,10 +23,10 @@ import mods.utils.LogUtils;
 import mods.utils.SnowflakeUtils;
 import mods.utils.StoreUtils;
 import rx.Subscriber;
-import rx.functions.Action0;
-import rx.functions.Action1;
 
 public class SearchUtils {
+
+    private static final String TAG = SearchUtils.class.getSimpleName();
 
     public static final long EC_NO_MESSAGES_FOUND = -1L;
     public static final long EC_FETCHING = -2L;
@@ -53,46 +53,37 @@ public class SearchUtils {
         );
         SearchQuery query = buildSearchQuery(authorId);
 
-        Subscriber<ModelSearchResponse> subscriber = new j0.l.e.b<>(new Action1<ModelSearchResponse>() {
-            @Override
-            public void call(ModelSearchResponse response) {
-                int retryAfter = response.component9() != null ? response.component9() : 0;
-                boolean isIndexing = response.getErrorCode() != null && response.getErrorCode() == 111000;
-                Message lastMessage = getLastMessage(response);
+        Subscriber<ModelSearchResponse> subscriber = new j0.l.e.b<>(response -> {
+            int retryAfter = response.component9() != null ? response.component9() : 0;
+            boolean isIndexing = response.getErrorCode() != null && response.getErrorCode() == 111000;
+            Message lastMessage = getLastMessage(response);
 
-                if (retryAfter > 0 || isIndexing) {
-                    LogUtils.log("SheetConfig", "scheduling retry for expiry in " + response);
-                    callback.onResult(EC_FETCHING);
+            if (retryAfter > 0 || isIndexing) {
+                LogUtils.log("SheetConfig", "scheduling retry for expiry in " + response);
+                callback.onResult(EC_FETCHING);
 
-                    executor.schedule(() -> searchForLastMessage(searchKey, isGuild, callback), retryAfter, TimeUnit.SECONDS);
-                } else if (response.getErrorCode() != null) {
-                    LogUtils.log("SheetConfig", "errorCode on search = " + response.getErrorCode());
-                    callback.onError();
-                } else if (lastMessage == null) {
-                    LogUtils.log("SheetConfig", "no hits returned: " + response);
-                    callback.onResult(EC_NO_MESSAGES_FOUND);
-                } else {
-                    long timestamp = SnowflakeUtils.timestampForMessage(lastMessage);
-
-                    synchronized (lastMessageCache) {
-                        lastMessageCache.put(searchKey, SearchResult.create(timestamp));
-                    }
-
-                    LogUtils.log("SheetConfig", "last msg: cgid=" + channelOrGuildId + ", uid=" + authorId + ", ts=" + new Date(timestamp));
-
-                    callback.onResult(timestamp);
-                }
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                throwable.printStackTrace();
+                executor.schedule(() -> searchForLastMessage(searchKey, isGuild, callback), retryAfter, TimeUnit.SECONDS);
+            } else if (response.getErrorCode() != null) {
+                LogUtils.log("SheetConfig", "errorCode on search = " + response.getErrorCode());
                 callback.onError();
+            } else if (lastMessage == null) {
+                LogUtils.log("SheetConfig", "no hits returned: " + response);
+                callback.onResult(EC_NO_MESSAGES_FOUND);
+            } else {
+                long timestamp = SnowflakeUtils.timestampForMessage(lastMessage);
+
+                synchronized (lastMessageCache) {
+                    lastMessageCache.put(searchKey, SearchResult.create(timestamp));
+                }
+
+                LogUtils.log("SheetConfig", "last msg: cgid=" + channelOrGuildId + ", uid=" + authorId + ", ts=" + new Date(timestamp));
+
+                callback.onResult(timestamp);
             }
-        }, new Action0() {
-            @Override
-            public void call() {}
-        });
+        }, throwable -> {
+            LogUtils.logException(TAG, throwable);
+            callback.onError();
+        }, () -> {});
 
         StoreUtils.getSearchFetcher()
                 .makeQuery(target, null, query)

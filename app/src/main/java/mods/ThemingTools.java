@@ -52,6 +52,8 @@ import mods.view.DoubleClickListener;
 @SuppressWarnings("unused")
 public class ThemingTools {
 
+    private static final String TAG = ThemingTools.class.getSimpleName();
+
     private static Typeface typeface;
 
     public static void init(Activity activity, boolean relaunch) {
@@ -80,7 +82,7 @@ public class ThemingTools {
                     try {
                         typeface = Typeface.createFromFile(path);
                     } catch (Exception e) {
-                        LogUtils.logException(e);
+                        LogUtils.logException(TAG, e);
                         ToastUtil.toast("Failed to set font, custom font has been disabled.\n\nTry setting it again.");
                         Prefs.removeValues(PreferenceKeys.CUSTOM_FONT_TYPE, PreferenceKeys.CUSTOM_FONT_PATH);
                     }
@@ -117,7 +119,7 @@ public class ThemingTools {
         try {
             value = StoreStream.Companion.getUserSettingsSystem().getTheme();
         } catch (Throwable e) {
-            LogUtils.log("Bluecord", "It appears that the user settings are not ready yet, falling back to shared prefs", e);
+            LogUtils.log(TAG, "It appears that the user settings are not ready yet, falling back to shared prefs", e);
             value = StringUtils.nullToEmpty(Prefs.getString(PreferenceKeys.DISCORD_THEME_KEY, ""));
         }
 
@@ -147,22 +149,19 @@ public class ThemingTools {
                 c roundingParams = builder.r;
 
                 if (roundingParams != null /* && roundingParams.b */) {
-                    // int id = attrs.getAttributeResourceValue("http://schemas.android.com/apk/res/android", "id", 0);
-                    // if (id != 0) {
-                        roundingParams.b = false;
+                    roundingParams.b = false;
 
-                        // round corners
-                        float[] radii = roundingParams.c;
-                        if (radii == null) {
-                            radii = new float[8];
-                            roundingParams.c = radii;
-                        }
-                        Arrays.fill(radii, dipToPx(2));
-                    // }
+                    // round corners
+                    float[] radii = roundingParams.c;
+                    if (radii == null) {
+                        radii = new float[8];
+                        roundingParams.c = radii;
+                    }
+                    Arrays.fill(radii, dipToPx(2));
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.logException(TAG, e);
         }
     }
 
@@ -288,7 +287,7 @@ public class ThemingTools {
                     if (channel != null) {
                         WidgetChatListActions.access$replyMessage(new WidgetChatListActions(), message, channel);
                     } else {
-                        LogUtils.log("Bluecord", "could not find com.discord.api.Channel from message");
+                        LogUtils.log(TAG, "could not find com.discord.api.Channel from message");
                     }
                 }
             }
@@ -431,7 +430,7 @@ public class ThemingTools {
                     pi.versionCode
             );
         } catch (Exception e) {
-            LogUtils.log("ThemingTools", "cannot locate own package?", e);
+            LogUtils.log(TAG, "cannot locate own package?", e);
 
             return "Bluecord v" + URLConstants.getVersionString() + "\n~Made with love by Blue~";
         }

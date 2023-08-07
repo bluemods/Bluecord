@@ -178,15 +178,16 @@ public class DiscordTools {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @Nullable
-    public static Fragment findFragmentByClass(Fragment fragment, Class<? extends Fragment> cls) {
+    public static <T extends Fragment> T findFragmentByClass(Fragment fragment, Class<T> cls) {
         FragmentManager fm = fragment.getParentFragmentManager();
 
         for (Fragment f : fm.getFragments()) {
             LogUtils.log("BlueFindFrag", "Found fragment: " + f.getClass().getName());
 
             if (cls.isInstance(f)) {
-                return f;
+                return (T) f;
             }
         }
         return null;

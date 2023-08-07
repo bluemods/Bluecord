@@ -19,8 +19,11 @@ import java.io.File;
 import mods.DiscordTools;
 import mods.constants.PreferenceKeys;
 import mods.preference.Prefs;
+import mods.utils.LogUtils;
 
 public class UCropUtils {
+
+    private static final String TAG = UCropUtils.class.getSimpleName();
 
     public static void cropCustomBackground(Activity activity, Uri path) {
         try {
@@ -43,7 +46,7 @@ public class UCropUtils {
             ucrop.b.putAll(builder.getOptions());
             startUCrop(activity, ucrop, REQUEST_CODE_SET_BACKGROUND_UCROP);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.log(TAG, "failed to start custom background crop activity", e);
         }
     }
 

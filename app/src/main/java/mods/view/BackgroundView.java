@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 
 import mods.DiscordTools;
 import mods.constants.Constants;
@@ -35,6 +36,8 @@ import mods.utils.ToastUtil;
 
 @Deprecated
 public class BackgroundView extends AppCompatImageView {
+
+    private static final String TAG = BackgroundView.class.getSimpleName();
 
     private boolean isUpgraded;
     private boolean needsRetry;
@@ -82,7 +85,7 @@ public class BackgroundView extends AppCompatImageView {
 
                 if (w > 0 && h > 0 && h >= w) {
                     if (lastH != h && lastW != w) {
-                        LogUtils.log("BackgroundView", String.format("w = %s, h = %s, orientation = %s, location = RecyclerView", w, h, DiscordTools.getOrientation(view.getContext())));
+                        LogUtils.log(TAG, String.format("w = %s, h = %s, orientation = %s, location = RecyclerView", w, h, DiscordTools.getOrientation(view.getContext())));
 
                         lastH = h;
                         lastW = w;
@@ -103,13 +106,13 @@ public class BackgroundView extends AppCompatImageView {
             try {
                 recycler = RefreshUtils.WIDGET_CHAT_LIST.giveMeTheRecycler();
                 if (recycler == null) {
-                    LogUtils.log("BackgroundView", "recycler not ready, requesting retry");
+                    LogUtils.log(TAG, "recycler not ready, requesting retry");
                     this.needsRetry = true;
                     return;
                 }
                 recycler.getViewTreeObserver();
             } catch (Throwable e) {
-                LogUtils.log("BackgroundView", "recycler not ready, requesting retry", e);
+                LogUtils.log(TAG, "recycler not ready, requesting retry", e);
                 this.needsRetry = true;
                 return;
             }
@@ -126,7 +129,7 @@ public class BackgroundView extends AppCompatImageView {
                             recycler.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                             // y += ((View) recycler.getParent()).findViewById(Constants.ACTION_BAR_TOOLBAR_LAYOUT).getTranslationY();
-                            // LogUtils.log("BackgroundView", String.format("h=%s, w=%s, y=%s", h, w, y));
+                            // LogUtils.log(TAG, String.format("h=%s, w=%s, y=%s", h, w, y));
 
                             setScaleType(ScaleType.FIT_XY);
                             setTranslationY(y);
@@ -142,7 +145,7 @@ public class BackgroundView extends AppCompatImageView {
                             setImage();
                         }
                     } catch (Throwable e) {
-                        LogUtils.log("BackgroundView", "failed to set backgroundView in post", e);
+                        LogUtils.log(TAG, "failed to set backgroundView in post", e);
                     }
                 }
             });
@@ -159,7 +162,7 @@ public class BackgroundView extends AppCompatImageView {
                     Bitmap bmp = this.isUpgraded ? fileToBitmapUcrop(path) : fileToBitmapLegacy(path);
                     setImageDrawable(new BitmapDrawable(getResources(), bmp));
                 } catch (Throwable e) {
-                    e.printStackTrace();
+                    LogUtils.log(TAG, "failed to set image", e);
                     Prefs.removeValues(PreferenceKeys.BACKGROUND_MODE, PreferenceKeys.BACKGROUND_PATH);
                     ToastUtil.toast("Failed to set background, custom background has been disabled.\n\nTry setting it again.");
                 }
@@ -168,62 +171,52 @@ public class BackgroundView extends AppCompatImageView {
     }
 
     private Bitmap fileToBitmapUcrop(String path) {
-        try {
-            Bitmap decoded = BitmapFactory.decodeFile(path);
+        Bitmap decoded = BitmapFactory.decodeFile(path);
 
-            if (Prefs.getBoolean(PreferenceKeys.BACKGROUND_BLUR, false)) {
-                float blurLevel = Prefs.getFloat(PreferenceKeys.BACKGROUND_BLUR_LEVEL, 12.5f);
-                if (blurLevel > 0) {
-                    return blurImage(getContext(), decoded, blurLevel);
-                }
+        if (Prefs.getBoolean(PreferenceKeys.BACKGROUND_BLUR, false)) {
+            float blurLevel = Prefs.getFloat(PreferenceKeys.BACKGROUND_BLUR_LEVEL, 12.5f);
+            if (blurLevel > 0) {
+                return blurImage(getContext(), decoded, blurLevel);
             }
-            return decoded;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return null;
+        return decoded;
     }
 
-    private Bitmap fileToBitmapLegacy(String path) {
-        try {
-            File file = new File(path);
+    private Bitmap fileToBitmapLegacy(String path) throws IOException, OutOfMemoryError {
+        File file = new File(path);
 
-            int quality = file.length() > 1024L * 1024L * 2L ? 75 : 50;
-            Bitmap decoded;
+        int quality = file.length() > 1024L * 1024L * 2L ? 75 : 50;
+        Bitmap decoded;
 
-            try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
-                Bitmap bitmap = BitmapFactory.decodeFile(path);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
-                bitmap.recycle();
+        try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
+            bitmap.recycle();
 
-                try (ByteArrayInputStream is = new ByteArrayInputStream(stream.toByteArray())) {
-                    decoded = BitmapFactory.decodeStream(is);
-                }
+            try (ByteArrayInputStream is = new ByteArrayInputStream(stream.toByteArray())) {
+                decoded = BitmapFactory.decodeStream(is);
             }
-
-            if (Prefs.getBoolean(PreferenceKeys.BACKGROUND_BLUR, false)) {
-                float blurLevel = Prefs.getFloat(PreferenceKeys.BACKGROUND_BLUR_LEVEL, 12.5f);
-                if (blurLevel > 0) {
-                    return blurImage(getContext(), decoded, blurLevel);
-                }
-            }
-            return decoded;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return null;
+
+        if (Prefs.getBoolean(PreferenceKeys.BACKGROUND_BLUR, false)) {
+            float blurLevel = Prefs.getFloat(PreferenceKeys.BACKGROUND_BLUR_LEVEL, 12.5f);
+            if (blurLevel > 0) {
+                return blurImage(getContext(), decoded, blurLevel);
+            }
+        }
+        return decoded;
     }
 
     private Bitmap blurImage(Context context, Bitmap smallBitmap, float radius) {
         if (radius < 0 || radius > 25) {
-            LogUtils.log("BackgroundView", "Not blurring, radius must be 0 < r <= 25 (currently: " + radius + ")");
+            LogUtils.log(TAG, "Not blurring, radius must be 0 < r <= 25 (currently: " + radius + ")");
             return smallBitmap;
         }
 
         try {
             smallBitmap = rgb565ToArgb888(smallBitmap);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.log(TAG, "rgb565ToArgb888 failed");
         }
 
         Bitmap bitmap = Bitmap.createBitmap(

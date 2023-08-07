@@ -22,6 +22,8 @@ import mods.utils.StoreUtils;
 // TODO: This class probably needs to be rewritten
 class UpdateResult {
 
+    private static final String TAG = UpdateResult.class.getSimpleName();
+
     private static final ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     private final boolean updateAvailable;
@@ -60,7 +62,7 @@ class UpdateResult {
                 }
                 DevBadge.setBadgeList(devLongIds);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtils.log(TAG, "first method failed", e);
             }
         }
     }
@@ -77,17 +79,17 @@ class UpdateResult {
                 UpdateResult result;
 
                 if (!forceUpdate && diff < updateInterval) {
-                    LogUtils.log("Updater",
+                    LogUtils.log(TAG,
                             "delaying update check until " +
                                     new Date(lastCheckTime + updateInterval) +
                                     ", pulling from cache"
                     );
                     result = UpdateResult.loadFromCache();
                 } else if (!DiscordTools.isConnected()) {
-                    LogUtils.log("Updater", "no connection");
+                    LogUtils.log(TAG, "no connection");
                     result = null;
                 } else {
-                    LogUtils.log("Updater", "checking for update");
+                    LogUtils.log(TAG, "checking for update");
                     result = UpdateResult.parse(Net.nonAsyncRequest(URLConstants.phpLink() + "?updatecheck=" + Constants.VERSION_CODE, null), false);
                 }
 
@@ -99,7 +101,7 @@ class UpdateResult {
                     }
                 });
             } catch (Throwable e) {
-                e.printStackTrace();
+                LogUtils.logException(TAG, e);
             }
         });
     }
@@ -126,7 +128,7 @@ class UpdateResult {
             ret.save(data);
             return ret;
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtils.log(TAG, "failed to parse update result", e);
             return null;
         }
     }
@@ -159,7 +161,7 @@ class UpdateResult {
         try {
             return Pattern.compile(validTokenRegex).matcher(token).matches();
         } catch (Throwable e) {
-            LogUtils.log("UpdateResult", "pattern matching failed for '" + token + "'", e);
+            LogUtils.log(TAG, "pattern matching failed for '" + token + "'", e);
         }
         return false;
     }

@@ -219,7 +219,7 @@ public class MessageDeleterTask {
         try {
             switch (responseCode) {
                 case 200: {
-                    JSONObject result = new JSONObject(response.getContent());
+                    JSONObject result = new JSONObject(response.getContentOrThrow());
                     JSONArray messages = result.optJSONArray("messages");
 
                     if (messages == null || messages.length() == 0) {
@@ -352,7 +352,7 @@ public class MessageDeleterTask {
     }
 
     private RateLimitException parseRateLimit(SimpleHttpResponse response) throws JSONException {
-        return new RateLimitException(response.getResponseCode(), (long) (1000L * new JSONObject(response.getContent()).getDouble("retry_after")));
+        return new RateLimitException(response.getResponseCode(), (long) (1000L * new JSONObject(response.getContentOrThrow()).getDouble("retry_after")));
     }
 
     private LinkedHashMap<String, String> getHeaders() {

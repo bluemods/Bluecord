@@ -154,7 +154,7 @@ public class SheetConfig {
             }
             tv.setText(sb);
         } catch (Throwable e) {
-            e.printStackTrace();
+            LogUtils.log(TAG, "setFileSize() failed", e);
         }
     }
 

@@ -1,6 +1,5 @@
 package mods.utils;
 
-import com.discord.api.message.Message;
 import com.discord.api.premium.PremiumTier;
 import com.discord.models.domain.NonceGenerator;
 import com.discord.restapi.RestAPIParams;
@@ -18,8 +17,6 @@ import java.util.Collections;
 
 import mods.DiscordTools;
 import mods.preference.QuickAccessPrefs;
-import rx.functions.Action0;
-import rx.functions.Action1;
 
 public class SpoofUtils {
 
@@ -44,7 +41,6 @@ public class SpoofUtils {
         sendMessage(stickerUrl);
 
         try {
-            // I don't want to talk about it
             if (listener instanceof WidgetChatInputAttachments$createAndConfigureExpressionFragment$stickerPickerListener$1) {
                 WidgetChatInputAttachments attachments = ((WidgetChatInputAttachments$createAndConfigureExpressionFragment$stickerPickerListener$1) listener).this$0;
                 if (attachments != null) {
@@ -81,28 +77,13 @@ public class SpoofUtils {
         );
 
         DiscordTools.THREAD_POOL.execute(() -> {
-            try {
-                long id = StoreStream.getChannelsSelected().getId();
+            long id = StoreStream.getChannelsSelected().getId();
 
-                RestAPI.getApi().sendMessage(id, message).U(new j0.l.e.b<>(new Action1<Message>() {
-                    @Override
-                    public void call(Message o) {
-                        LogUtils.log(TAG, "sticker sent: " + o);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        LogUtils.log(TAG, "sticker failed to send", throwable);
-                    }
-                }, new Action0() {
-                    @Override
-                    public void call() {
-
-                    }
-                }));
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
+            RestAPI.getApi().sendMessage(id, message).U(new j0.l.e.b<>(
+                    sticker -> LogUtils.log(TAG, "sticker sent: " + sticker),
+                    throwable -> LogUtils.log(TAG, "sticker failed to send", throwable),
+                    () -> {}
+            ));
         });
     }
 

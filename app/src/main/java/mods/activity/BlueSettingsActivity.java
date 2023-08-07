@@ -101,11 +101,11 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
                 Prefs.setBoolean(PreferenceKeys.BACKGROUND_UCROP_UPGRADED, true);
                 ToastUtil.customToast(this, "Background changed successfully");
                 DiscordTools.promptRestart(this);
-                return;
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtils.logException(e);
                 ToastUtil.customToast(this, "Something went wrong");
             }
+            return;
         }
 
         String path = getPathFromResult(data, resultCode);
@@ -123,7 +123,7 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
 
         if (resultCode != RESULT_OK) return null;
 
-        String[] column = new String[]{"_data"};
+        String[] column = {"_data"};
 
         try (Cursor cursor = this.getContentResolver().query(intent.getData(), column, null, null, null)) {
             cursor.moveToFirst();
@@ -137,20 +137,6 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
             }
         }
         return path;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // activity = this;
-        // Prefs.getPreferences().registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // activity = this;
-        // Prefs.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
