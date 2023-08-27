@@ -26,19 +26,21 @@ public class RefreshUtils {
 
     public static void refreshView() {
         DiscordTools.HANDLER.post(() -> {
-            if (WIDGET_CHAT_LIST == null || WIDGET_CHAT_LIST.isStateSaved() || !WIDGET_CHAT_LIST.isAdded()) {
+            WidgetChatList chatList = WIDGET_CHAT_LIST;
+
+            if (chatList == null || chatList.isStateSaved() || !chatList.isAdded()) {
                 return;
             }
             try {
-                FragmentManager manager = WIDGET_CHAT_LIST.getParentFragmentManager();
+                FragmentManager manager = chatList.getParentFragmentManager();
 
                 FragmentTransaction ft = manager.beginTransaction();
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    ft.detach(WIDGET_CHAT_LIST).commitNow();
-                    manager.beginTransaction().attach(WIDGET_CHAT_LIST).commitNow();
+                    ft.detach(chatList).commitNow();
+                    manager.beginTransaction().attach(chatList).commitNow();
                 } else {
-                    ft.detach(WIDGET_CHAT_LIST).attach(WIDGET_CHAT_LIST).commit();
+                    ft.detach(chatList).attach(chatList).commit();
                 }
                 LogUtils.log(TAG, "refreshView() - success");
             } catch (Throwable e) {
@@ -48,54 +50,51 @@ public class RefreshUtils {
     }
 
     public static void invalidateChannel(long id) {
-        if (WIDGET_CHANNELS_LIST == null) {
+        WidgetChannelsList channelsList = WIDGET_CHANNELS_LIST;
+
+        if (channelsList == null) {
             LogUtils.log(TAG, "invalidateMessage() failed (no available WIDGET_CHANNELS_LIST instance)");
             return;
         }
 
-        try {
-            WidgetChannelsListAdapter adapter = WidgetChannelsList.access$getAdapter$p(WIDGET_CHANNELS_LIST);
+        WidgetChannelsListAdapter adapter = WidgetChannelsList.access$getAdapter$p(channelsList);
+        if (adapter == null || adapter.getRecycler() == null) return;
 
-            if (adapter == null) return;
+        adapter.getRecycler().post(() -> {
+            try {
+                List<?> data = adapter.getInternalData();
 
-            adapter.getRecycler().post(() -> {
-                try {
-                    List<?> data = adapter.getInternalData();
+                if (data == null) return;
 
-                    if (data == null) return;
+                for (int i = 0; i < data.size(); i++) {
+                    Object o = data.get(i);
 
-                    for (int i = 0; i < data.size(); i++) {
-                        Object o = data.get(i);
-
-                        if (o instanceof ChannelListVocalItem) {
-                            // Stage and voice channels
-                            ChannelListVocalItem entry = (ChannelListVocalItem) o;
-                            if (StoreUtils.getId(entry.getChannel()) == id) {
-                                LogUtils.log(TAG, "invalidateChannel() vocal / stage channel " + id + " invalidated");
-                                adapter.notifyItemChanged(i);
-                                // adapter.getRecycler().postInvalidate();
-                                return;
-                            }
-                        } else if (o instanceof ChannelListItemTextChannel) {
-                            // Text channels
-                            ChannelListItemTextChannel entry = (ChannelListItemTextChannel) o;
-                            if (StoreUtils.getId(entry.getChannel()) == id) {
-                                LogUtils.log(TAG, "invalidateChannel() text channel " + id + " invalidated");
-                                adapter.notifyItemChanged(i);
-                                // adapter.getRecycler().postInvalidate();
-                                return;
-                            }
-                        } else {
-                            LogUtils.log(TAG, "invalidateChannel() unexpected class: " + (o == null ? "[NULL]" : o.getClass().getName()));
+                    if (o instanceof ChannelListVocalItem) {
+                        // Stage and voice channels
+                        ChannelListVocalItem entry = (ChannelListVocalItem) o;
+                        if (StoreUtils.getId(entry.getChannel()) == id) {
+                            LogUtils.log(TAG, "invalidateChannel() vocal / stage channel " + id + " invalidated");
+                            adapter.notifyItemChanged(i);
+                            // adapter.getRecycler().postInvalidate();
+                            return;
                         }
+                    } else if (o instanceof ChannelListItemTextChannel) {
+                        // Text channels
+                        ChannelListItemTextChannel entry = (ChannelListItemTextChannel) o;
+                        if (StoreUtils.getId(entry.getChannel()) == id) {
+                            LogUtils.log(TAG, "invalidateChannel() text channel " + id + " invalidated");
+                            adapter.notifyItemChanged(i);
+                            // adapter.getRecycler().postInvalidate();
+                            return;
+                        }
+                    } else {
+                        LogUtils.log(TAG, "invalidateChannel() unexpected class: " + (o == null ? "[NULL]" : o.getClass().getName()));
                     }
-                } catch (Throwable e) {
-                    LogUtils.log(TAG, "invalidateChannel() failure in post", e);
                 }
-            });
-        } catch (Throwable e) {
-            LogUtils.log(TAG, "invalidateChannel() failure BEFORE post", e);
-        }
+            } catch (Throwable e) {
+                LogUtils.log(TAG, "invalidateChannel() failure in post", e);
+            }
+        });
     }
 
     public static void invalidateMessage(long id) {

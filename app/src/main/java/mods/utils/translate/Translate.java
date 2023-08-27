@@ -20,6 +20,7 @@ import mods.DiscordTools;
 import mods.ThemingTools;
 import mods.constants.PreferenceKeys;
 import mods.preference.Prefs;
+import mods.utils.Callback;
 import mods.utils.LogUtils;
 import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
@@ -155,7 +156,7 @@ public class Translate {
                                     activity,
                                     choices.get(spinnerFrom.getSelectedKey()),
                                     translateText,
-                                    new ITranslateCallback() {
+                                    new Callback<String>() {
                                         @Override
                                         public void onResult(String translatedText) {
                                             activity.runOnUiThread(() -> {
