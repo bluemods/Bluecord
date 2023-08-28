@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout android:gravity="center" android:id="@id/guilds_item_avatar_wrap" android:layout_width="@dimen/avatar_size_large" android:layout_height="@dimen/avatar_size_large" android:layout_centerInParent="true">
+        <com.facebook.drawee.view.SimpleDraweeView android:key="true" android:id="@id/guilds_item_avatar" app:fadeDuration="50" style="@style/UiKit.GuildsListIcon" />
+        <TextView android:textColor="?colorHeaderPrimary" android:gravity="center" android:id="@id/guilds_item_avatar_text" android:clickable="false" android:layout_width="fill_parent" android:layout_height="fill_parent" android:singleLine="true" android:importantForAccessibility="no" style="@style/UiKit.TextView" />
+    </FrameLayout>
+    <ImageView android:id="@id/guilds_item_application_stream" android:visibility="gone" android:layout_alignTop="@id/guilds_item_avatar_wrap" android:contentDescription="@string/status_streaming" android:layout_alignEnd="@id/guilds_item_avatar_wrap" style="@style/UiKit.GuildsListApplicationStreamIcon" />
+    <ImageView android:id="@id/guilds_item_voice" android:layout_alignTop="@id/guilds_item_avatar_wrap" android:contentDescription="@string/connection_status_voice_connected" android:layout_alignEnd="@id/guilds_item_avatar_wrap" style="@style/UiKit.GuildsListVoiceIcon" />
+    <TextView android:id="@id/guilds_item_mentions" android:layout_alignBottom="@id/guilds_item_avatar_wrap" android:layout_alignEnd="@id/guilds_item_avatar_wrap" style="@style/UiKit.GuildsListMentions" />
+    <ImageView android:id="@id/guilds_item_application_status" android:visibility="gone" android:layout_alignBottom="@id/guilds_item_avatar_wrap" android:contentDescription="@string/member_verification_icon_desc" android:layout_alignEnd="@id/guilds_item_avatar_wrap" app:srcCompat="@drawable/ic_application_status_rejected" style="@style/UiKit.GuildsListApplicationStatus" />
+    <ImageView android:id="@id/guilds_item_event_status" android:visibility="gone" android:layout_alignTop="@id/guilds_item_avatar_wrap" android:contentDescription="@string/guild_event_started" android:layout_alignEnd="@id/guilds_item_avatar_wrap" style="@style/UiKit.GuildsListEventIcon" />
+</merge>

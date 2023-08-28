@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.discord.app.AppViewFlipper android:id="@id/emoji_sheet_flipper" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inAnimation="@android:anim/fade_in" android:outAnimation="@android:anim/fade_out" style="@style/UiKit.ViewGroup.Page"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout style="@style/UiKit.ViewGroup.Page.LinearLayout">
+        <LinearLayout android:layout_marginLeft="16.0dip" android:layout_marginTop="16.0dip" android:layout_marginRight="16.0dip" style="@style/UiKit.ViewGroup.LinearLayout.Horizontal">
+            <com.facebook.drawee.view.SimpleDraweeView android:key="true" android:layout_gravity="center_vertical" android:id="@id/emoji_iv" android:layout_width="48.0dip" android:layout_height="48.0dip" android:adjustViewBounds="true" android:layout_marginEnd="16.0dip" app:actualImageScaleType="fitCenter" style="@style/UiKit.ImageView" />
+            <LinearLayout android:layout_marginBottom="16.0dip" style="@style/UiKit.ViewGroup.LinearLayout">
+                <TextView android:textSize="@dimen/uikit_textsize_large" android:textColor="?colorHeaderPrimary" android:id="@id/name_tv" style="@style/UiKit.TextView.Bold" />
+                <TextView android:textColor="?colorHeaderSecondary" android:id="@id/emoji_info_tv" android:layout_marginTop="4.0dip" style="@style/UiKit.TextView" />
+            </LinearLayout>
+        </LinearLayout>
+        <FrameLayout android:id="@id/button_container" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="16.0dip" android:layout_marginRight="16.0dip" android:layout_marginBottom="16.0dip" android:layout_marginHorizontal="16.0dip">
+            <com.google.android.material.button.MaterialButton android:id="@id/join_btn" android:text="@string/nuf_join_server_button" style="@style/UiKit.Material.Button" />
+            <com.google.android.material.button.MaterialButton android:gravity="center" android:id="@id/premium_btn" android:text="@string/emoji_popout_premium_cta" app:icon="@drawable/ic_nitro_badge_white" app:iconGravity="textStart" app:iconSize="@dimen/uikit_textsize_large" app:iconTint="@color/white" style="@style/UiKit.Material.Button.Green" />
+        </FrameLayout>
+        <FrameLayout android:id="@id/favorite_container" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="16.0dip" android:layout_marginRight="16.0dip" android:layout_marginHorizontal="16.0dip">
+            <View android:layout_gravity="top" android:background="?colorBackgroundAccent" style="@style/UiKit.Divider" />
+            <com.google.android.material.button.MaterialButton android:id="@id/favorite_add_button" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:layout_marginBottom="16.0dip" android:text="@string/emoji_add_to_favorites" style="@style/UiKit.Material.Button" />
+            <com.google.android.material.button.MaterialButton android:id="@id/favorite_remove_button" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:layout_marginBottom="16.0dip" android:text="@string/emoji_remove_from_favorites" style="@style/UiKit.Material.Button.Red" />
+        </FrameLayout>
+		<FrameLayout android:visibility="visible" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="16.0dip" android:layout_marginRight="16.0dip">
+            <View android:layout_gravity="top" android:background="?colorBackgroundAccent" style="@style/UiKit.Divider" />
+			<com.google.android.material.button.MaterialButton android:id="@android:id/copy" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:layout_marginBottom="16.0dip" android:text="Copy Emote" style="@style/UiKit.Material.Button.Green" />
+        </FrameLayout>
+        <LinearLayout android:id="@id/guild_container" android:visibility="gone" android:layout_marginLeft="16.0dip" android:layout_marginRight="16.0dip" android:layout_marginBottom="16.0dip" android:layout_marginHorizontal="16.0dip" style="@style/UiKit.ViewGroup.LinearLayout">
+            <View android:id="@id/divider" android:background="?colorBackgroundAccent" style="@style/UiKit.Divider" />
+            <TextView android:textSize="@dimen/uikit_textsize_small" android:textColor="?colorHeaderSecondary" android:id="@id/bottom_header_tv" android:layout_marginTop="16.0dip" android:text="@string/emoji_popout_unjoined_guild_emoji_description" android:textAllCaps="true" style="@style/UiKit.TextView.Bold" />
+            <LinearLayout android:layout_marginTop="8.0dip" style="@style/UiKit.ViewGroup.LinearLayout.Horizontal">
+                <FrameLayout android:layout_gravity="center_vertical" android:id="@id/guildAvatarWrap" android:layout_width="32.0dip" android:layout_height="32.0dip" android:layout_marginEnd="16.0dip">
+                    <com.facebook.drawee.view.SimpleDraweeView android:id="@id/guild_iv" android:layout_width="fill_parent" android:layout_height="fill_parent" android:adjustViewBounds="true" app:actualImageScaleType="fitCenter" app:roundWithOverlayColor="?colorBackgroundPrimary" app:roundedCornerRadius="@dimen/guild_icon_radius" style="@style/UiKit.ImageView" />
+                    <TextView android:textSize="@dimen/uikit_textsize_small" android:textColor="?colorHeaderPrimary" android:gravity="center" android:id="@id/guildAvatarText" android:layout_width="fill_parent" android:layout_height="fill_parent" android:singleLine="true" android:importantForAccessibility="no" style="@style/UiKit.TextView" />
+                </FrameLayout>
+                <LinearLayout style="@style/UiKit.ViewGroup.LinearLayout">
+                    <TextView android:textSize="@dimen/uikit_textsize_large" android:textColor="?colorHeaderPrimary" android:id="@id/guild_name_tv" android:drawablePadding="8.0dip" style="@style/UiKit.TextView.Bold" />
+                    <TextView android:textColor="?colorHeaderSecondary" android:id="@id/guild_info_tv" android:layout_marginTop="4.0dip" style="@style/UiKit.TextView" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <ProgressBar android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="16.0dip" />
+</com.discord.app.AppViewFlipper>

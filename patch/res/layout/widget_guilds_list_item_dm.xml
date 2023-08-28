@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.facebook.drawee.view.SimpleDraweeView android:key="true" android:id="@id/guilds_item_dm_avatar" android:background="?selectableItemBackgroundBorderless" style="@style/UiKit.GuildsListIcon" />
+    <TextView android:id="@id/guilds_item_dm_count" android:layout_alignBottom="@id/guilds_item_dm_avatar" android:layout_alignEnd="@id/guilds_item_dm_avatar" style="@style/UiKit.GuildsListMentions" />
+</merge>

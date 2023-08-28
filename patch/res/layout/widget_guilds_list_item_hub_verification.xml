@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_gravity="center" android:layout_width="fill_parent" android:layout_marginBottom="@dimen/guild_item_spacing" style="@style/UiKit.GuildsListIcon"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.facebook.drawee.view.SimpleDraweeView android:key="true" android:background="?selectableItemBackgroundBorderless" android:layout_width="fill_parent" android:layout_height="fill_parent" app:placeholderImage="?colorBackgroundSecondary" app:roundAsCircle="true" />
+    <ImageView android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_hub_24dp" android:contentDescription="@string/hub_email_connection_sidebar_header" app:tint="@color/status_green_600" />
+    <com.discord.tooltips.SparkleView android:layout_gravity="center" android:id="@id/guild_item_sparkle" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+</FrameLayout>

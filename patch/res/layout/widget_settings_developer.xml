@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout style="@style/UiKit.ViewGroup.Page"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.appbar.AppBarLayout style="@style/AppTheme.AppBarLayout.Flat">
+        <androidx.appcompat.widget.Toolbar style="@style/AppTheme.Toolbar" />
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.core.widget.NestedScrollView style="@style/UiKit.ViewGroup.NestedScrollView.AppBarScrollingViewBehavior">
+        <LinearLayout android:paddingBottom="@dimen/list_bottom_padding" style="@style/UiKit.ViewGroup.LinearLayout">
+            <com.discord.views.CheckedSetting android:id="@id/settings_developer_screenshot_bug_reporting" app:cs_subtext="Enables ability to send a bug report to Discord after you take a screenshot" app:cs_text="Screenshot To Report Bug" app:cs_view_type="switchview" style="@style/UiKit.CheckedSetting.Themed" />
+            <TextView android:text="Experiments" style="@style/UiKit.Settings.Item.Header" />
+            <TextView android:text="Not seeing your experiment? Add it to ExperimentRegistry.kt" android:layout_marginStart="16.0dip" style="@style/UiKit.TextView.Subtext" />
+            <androidx.recyclerview.widget.RecyclerView android:id="@id/developer_settings_experiments" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" style="@style/UiKit.ViewGroup.RecyclerView" />
+            <TextView android:text="Notice cache" style="@style/UiKit.Settings.Item.Header" />
+            <com.google.android.material.card.MaterialCardView android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="8.0dip" app:cardBackgroundColor="?colorBackgroundSecondary" app:cardElevation="@dimen/app_elevation" style="@style/Widget.MaterialComponents.CardView">
+                <androidx.recyclerview.widget.RecyclerView android:id="@id/developer_settings_notices" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" style="@style/UiKit.ViewGroup.RecyclerView" />
+            </com.google.android.material.card.MaterialCardView>
+            <TextView android:visibility="gone" android:text="Crashes" style="@style/UiKit.Settings.Item.Header" />
+            <com.google.android.material.button.MaterialButton android:visibility="gone" android:id="@id/developer_settings_crash_kotlin" android:layout_marginLeft="8.0dip" android:layout_marginRight="8.0dip" android:text="Unhandled UI Thread Exception" style="@style/UiKit.Material.Button" />
+            <com.google.android.material.button.MaterialButton android:visibility="gone" android:id="@id/developer_settings_crash_discord_nonfatal" android:layout_marginLeft="8.0dip" android:layout_marginRight="8.0dip" android:text="Non-fatal Exception" style="@style/UiKit.Material.Button" />
+            <com.google.android.material.button.MaterialButton android:visibility="gone" android:id="@id/developer_settings_crash_discord_jnibridge" android:layout_marginLeft="8.0dip" android:layout_marginRight="8.0dip" android:text="libdiscord Crash" style="@style/UiKit.Material.Button" />
+            <TextView android:id="@id/textView" android:text="Actions" style="@style/UiKit.Settings.Item.Header" />
+            <com.google.android.material.button.MaterialButton android:id="@id/developer_settings_simulate_gateway_reconnect" android:layout_marginLeft="8.0dip" android:layout_marginRight="8.0dip" android:text="Simulate Gateway Reconnect" style="@style/UiKit.Material.Button" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

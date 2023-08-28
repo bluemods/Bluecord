@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen android:title="Bluecord Mods" android:key="" xmlns:android="http://schemas.android.com/apk/res/android">
+    <mods.preference.Tab android:title="Update + Developer Info" />
+    <mods.preference.Tab android:title="Chat" />
+    <mods.preference.Tab android:title="Theme" />
+    <mods.preference.Restart android:title="Restart Bluecord" android:key="r" android:summary="Use this to restart the app if the mods do not take effect" />
+    <mods.preference.AccountSwitcher android:title="Account Switcher" android:key="a" android:summary="Quickly switch between multiple accounts" />
+	<SwitchPreference android:title="Revert Blurple Color" android:key="remove.discord.rebrand.v2" android:summary="If enabled, Bluecord will use the old Discord colors before the rebrand\n\n*Restart required*" android:defaultValue="false" />
+	<SwitchPreference android:title="Save Settings" android:key="persist.prefs" android:summary="If enabled, all settings changed here and throughout Discord will save on log out" android:defaultValue="true" />
+    <mods.preference.EmptyPreference android:title="Bluecord made with love by Blue\nhttps://bluesmods.com" />
+</PreferenceScreen>

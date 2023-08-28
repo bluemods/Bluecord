@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:padding="8.0dip" android:layout_height="wrap_content" android:layout_marginBottom="4.0dip" style="@style/UiKit.ViewGroup.RelativeLayout"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.facebook.drawee.view.SimpleDraweeView android:id="@id/channels_list_item_private_avatar" android:layout_centerVertical="true" android:importantForAccessibility="no" android:layout_marginStart="8.0dip" android:layout_marginEnd="16.0dip" app:placeholderImage="?colorPrimaryCircle" style="@style/Avatar.Standard" />
+    <com.discord.views.StatusView android:id="@id/channel_list_item_private_status" android:layout_width="12.0dip" android:layout_height="wrap_content" android:layout_alignBottom="@id/channels_list_item_private_avatar" android:translationX="2.0dip" android:translationY="2.0dip" android:layout_alignEnd="@id/channels_list_item_private_avatar" app:sv_background_color="?colorBackgroundSecondary" app:sv_border_width="2.0dip" app:sv_corner_radius="2.0dip" />
+    <LinearLayout android:layout_centerVertical="true" android:layout_alignWithParentIfMissing="true" android:layout_marginEnd="16.0dip" android:layout_toStartOf="@id/channels_list_item_private_mentions" android:layout_toEndOf="@id/channels_list_item_private_avatar" style="@style/UiKit.ViewGroup.LinearLayout">
+        <LinearLayout android:id="@android:id/text1" android:orientation="horizontal" style="@style/UiKit.ViewGroup.LinearLayout">
+            <TextView android:textSize="@dimen/uikit_textsize_large" android:textColor="?colorChannelDefault" android:id="@id/channels_list_item_private_name" android:singleLine="true" style="@style/UiKit.TextView.Semibold" />
+            <TextView android:textSize="9.5sp" android:textColor="@color/white" android:layout_gravity="center" android:id="@id/channels_list_item_private_tag" android:background="@drawable/drawable_tag_brand" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/system_dm_tag_system" android:singleLine="true" android:paddingStart="3.0dip" android:paddingEnd="3.0dip" android:layout_marginStart="6.0dip" app:drawableStartCompat="@drawable/ic_verified_10dp" style="@style/UiKit.TextView" />
+        </LinearLayout>
+        <com.discord.utilities.view.text.SimpleDraweeSpanTextView android:id="@id/channels_list_item_private_desc" android:singleLine="true" style="@style/UiKit.TextView.Subtext" />
+    </LinearLayout>
+    <TextView android:id="@id/channels_list_item_private_mentions" android:background="?drawable_overlay_mentions" android:visibility="gone" android:minWidth="16.0dip" android:layout_centerVertical="true" android:layout_marginEnd="16.0dip" android:layout_alignParentEnd="true" style="@style/Icon.Mentions.Large" />
+</RelativeLayout>

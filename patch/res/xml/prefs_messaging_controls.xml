@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen android:title="Chat Mods" android:key=""
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <mods.preference.EmptyPreference android:title="Messaging Controls" />
+	<SwitchPreference android:title="Anti Spam (DM)" android:key="anti.spam.v1" android:summary="(BETA) Automatically blocks users who send messages too quickly in PMs, and sends a notification of the block." />
+    <mods.preference.EmptyPreference android:title="Bluecord made with love by Blue\nhttps://bluesmods.com" />
+</PreferenceScreen>

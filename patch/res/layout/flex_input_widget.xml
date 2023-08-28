@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@id/container" android:background="?colorBackgroundPrimary" android:animateLayoutChanges="false" style="@style/UiKit.ViewGroup.LinearLayout"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout android:id="@android:id/widget_frame" android:background="?theme_chat_input" android:scrollbars="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentLeft="true" android:layout_alignParentRight="true" android:layout_alignParentBottom="true">
+        <ListView android:id="@android:id/list" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    </FrameLayout>
+	<LinearLayout android:gravity="center_vertical" android:id="@id/attachment_preview_container" android:visibility="gone" style="@style/UiKit.ViewGroup.LinearLayout.Horizontal">
+        <androidx.recyclerview.widget.RecyclerView android:orientation="horizontal" android:id="@id/attachment_preview_list" android:clipToPadding="false" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" app:layoutManager="LinearLayoutManager" />
+        <androidx.appcompat.widget.AppCompatImageButton android:id="@id/attachment_clear_btn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_clear_24dp" android:contentDescription="@string/clear_attachments" android:elevation="4.0dip" style="@style/FlexInput.Input.Button" />
+    </LinearLayout>
+    <RelativeLayout android:animateLayoutChanges="true" style="@style/UiKit.ViewGroup">
+        <LinearLayout android:id="@id/left_btns_container" android:layout_width="wrap_content" android:layout_marginLeft="5.0dip" android:layout_marginTop="8.0dip" android:layout_marginBottom="8.0dip" android:layout_alignParentLeft="true" android:layout_centerVertical="true" style="@style/UiKit.ViewGroup.LinearLayout.Horizontal">
+            <androidx.appcompat.widget.AppCompatImageButton android:layout_gravity="center_vertical" android:id="@id/expand_btn" android:padding="8.0dip" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_carot_right_24dp" android:contentDescription="@string/expand_buttons" app:tint="?colorInteractiveNormal" style="@style/FlexInput.Input" />
+            <androidx.appcompat.widget.AppCompatImageButton android:id="@id/gallery_btn" android:background="@drawable/drawable_circle_black" android:padding="8.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="6.0dip" android:layout_marginRight="8.0dip" android:src="@drawable/ic_add_24dp" android:contentDescription="@string/attachment_media" android:backgroundTint="?colorBackgroundSecondaryAlt" app:tint="?colorInteractiveNormal" style="@style/FlexInput.Input" />
+            <androidx.appcompat.widget.AppCompatImageButton android:id="@id/gift_btn" android:background="@drawable/drawable_circle_black" android:padding="8.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginRight="8.0dip" android:src="@drawable/ic_gift_24dp" android:contentDescription="@string/premium_gifting_purchase_gift" android:backgroundTint="?colorBackgroundSecondaryAlt" app:tint="?colorInteractiveNormal" style="@style/FlexInput.Input" />
+        </LinearLayout>
+        <LinearLayout android:id="@id/main_input_container" android:background="@drawable/drawable_flex_input_bg" android:paddingLeft="12.0dip" android:paddingRight="4.0dip" android:layout_marginTop="8.0dip" android:layout_marginRight="8.0dip" android:layout_marginBottom="8.0dip" android:layout_toLeftOf="@id/send_btn_container" android:layout_toRightOf="@id/left_btns_container" android:layout_centerVertical="true" android:animateLayoutChanges="true" style="@style/UiKit.ViewGroup.LinearLayout.Horizontal">
+            <com.lytefast.flexinput.widget.FlexEditText android:textSize="@dimen/uikit_textsize_medium" android:textColor="?colorTextNormal" android:textColorHint="?colorTextMuted" android:layout_gravity="center_vertical" android:id="@id/text_input" android:background="@color/transparent" android:paddingTop="4.0dip" android:paddingBottom="4.0dip" android:focusableInTouchMode="true" android:scrollbars="vertical" android:layout_width="0.0dip" android:minHeight="40.0dip" android:maxLines="5" android:layout_weight="1.0" android:lineSpacingMultiplier="1.0" android:inputType="textCapSentences|textMultiLine" android:imeOptions="flagNoExtractUi" style="@style/UiKit.TextView" />
+			<TextView
+				android:visibility="gone"
+				android:id="@id/blue_id_char_count"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="right|bottom"
+				android:layout_alignParentRight="true"
+				android:layout_centerVertical="true"
+				android:textSize="10.0sp" 
+				android:textColor="?colorTextNormal"
+				android:text="0/2048"
+				style="@style/UiKit.TextView"
+			/>
+			<FrameLayout android:layout_gravity="center_vertical" android:id="@id/expression_btn_container" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatImageButton android:id="@id/expression_btn" android:background="@null" android:padding="8.0dip" android:visibility="gone" android:src="@drawable/ic_emoji_24dp" android:contentDescription="@string/emoji" app:tint="?colorInteractiveNormal" style="@style/UiKit.ImageButton" />
+                <ImageView android:layout_gravity="bottom|center|right" android:id="@id/expression_btn_badge" android:visibility="gone" android:layout_width="7.0dip" android:layout_height="7.0dip" android:layout_marginRight="11.0dip" android:layout_marginBottom="11.0dip" android:src="@drawable/drawable_circle_red" android:importantForAccessibility="no" app:tint="@color/status_red_500" />
+            </FrameLayout>
+        </LinearLayout>
+        <FrameLayout android:id="@id/send_btn_container" android:background="@drawable/drawable_circle_black" android:visibility="gone" android:clipToPadding="false" android:layout_width="40.0dip" android:layout_height="40.0dip" android:layout_marginLeft="8.0dip" android:layout_marginTop="8.0dip" android:layout_marginRight="12.0dip" android:layout_marginBottom="8.0dip" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:contentDescription="@string/send_message" android:animateLayoutChanges="true" android:backgroundTint="?chat_send_btn_bg">
+            <ImageView android:layout_gravity="center" android:id="@id/send_btn_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_send_24dp" android:importantForAccessibility="no" app:tint="?chat_send_btn" />
+        </FrameLayout>
+        <TextView android:gravity="center" android:id="@id/cannot_send_text" android:background="?colorBackgroundSecondary" android:paddingLeft="12.0dip" android:paddingTop="24.0dip" android:paddingRight="12.0dip" android:paddingBottom="24.0dip" android:focusable="true" android:visibility="gone" android:clickable="true" android:layout_height="wrap_content" android:text="@string/no_send_messages_permission_placeholder" android:layout_alignParentStart="true" android:layout_alignParentEnd="true" style="@style/UiKit.TextView" />
+    </RelativeLayout>
+    <FrameLayout android:id="@id/expression_tray_container" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="@dimen/default_keyboard_height" />
+    <FrameLayout android:id="@id/default_window_insets_handler" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+</LinearLayout>

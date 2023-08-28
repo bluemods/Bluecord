@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout style="@style/UiKit.ViewGroup.Page"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.google.android.material.appbar.AppBarLayout android:background="?toolbarColor" style="@style/AppTheme.AppBarLayout">
+        <com.google.android.material.appbar.CollapsingToolbarLayout app:titleEnabled="false" style="@style/AppTheme.CollapsingToolbarLayout">
+            <com.discord.widgets.user.profile.UserProfileHeaderView android:id="@id/user_settings_profile_header_view" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="?actionBarSize" app:layout_collapseMode="parallax" app:user_profile_header_background_color="?toolbarColor" />
+            <androidx.appcompat.widget.Toolbar app:layout_collapseMode="pin" app:navigationContentDescription="@string/back" style="@style/AppTheme.Toolbar" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+    <androidx.core.widget.NestedScrollView style="@style/UiKit.ViewGroup.NestedScrollView.AppBarScrollingViewBehavior">
+        <androidx.appcompat.widget.LinearLayoutCompat style="@style/UiKit.ViewGroup.LinearLayout">
+            <LinearLayout android:id="@id/notification_upsell" android:background="@color/brand" android:paddingLeft="16.0dip" android:paddingTop="4.0dip" android:paddingRight="16.0dip" android:paddingBottom="4.0dip" style="@style/UiKit.ViewGroup.LinearLayout.Horizontal">
+                <TextView android:textColor="@color/white" android:ellipsize="end" android:layout_gravity="center_vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/user_setting_notification_not_enabled_prompt" android:maxLines="2" android:layout_weight="1.0" android:layout_marginEnd="8.0dip" style="@style/UiKit.TextView.Medium" />
+                <com.google.android.material.button.MaterialButton android:textSize="@dimen/uikit_textsize_small" android:id="@id/notification_upsell_enable" android:layout_width="wrap_content" android:layout_height="40.0dip" android:text="@string/enable" style="@style/UiKit.Material.Button.White.Outline" />
+                <androidx.appcompat.widget.AppCompatImageView android:layout_gravity="center_vertical" android:id="@id/notification_upsell_dismiss" android:src="?ic_close_24dp" android:layout_marginStart="16.0dip" app:tint="@color/white" style="@style/UiKit.ImageView.Clickable" />
+            </LinearLayout>
+            <TextView android:id="@id/user_settings_header" android:text="@string/user_settings" style="@style/UiKit.Settings.Item.Header" />
+            <LinearLayout android:gravity="center_vertical" android:id="@id/set_status_container" android:background="?selectableItemBackground" style="@style/UiKit.ViewGroup.LinearLayout.Horizontal">
+                <TextView android:background="@color/transparent" android:layout_width="0.0dip" android:text="@string/set_status" android:layout_weight="1.0" app:drawableStartCompat="@drawable/ic_status_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+                <com.discord.views.StatusView android:id="@id/settings_status_view" android:layout_width="16.0dip" android:layout_height="wrap_content" android:layout_marginStart="16.0dip" app:sv_background_color="?colorPrimary" app:sv_border_width="2.0dip" app:sv_corner_radius="4.0dip" />
+                <TextView android:id="@id/settings_presence_text" android:background="@color/transparent" android:layout_width="wrap_content" android:layout_marginEnd="8.0dip" style="@style/UiKit.Settings.Item" />
+            </LinearLayout>
+            <TextView android:id="@id/account" android:text="@string/user_settings_my_account" app:drawableStartCompat="@drawable/ic_my_account_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@android:id/text1" android:textColor="?colorControlBrandForeground" android:clickable="true" android:text="Bluecord Mods" android:drawableStart="@drawable/ic_behavior_24dp" app:drawableTint="?colorControlBrandForeground" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/profile" android:text="@string/user_settings_user_profile" app:drawableStartCompat="@drawable/ic_edit_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/privacy" android:text="@string/privacy_and_safety" app:drawableStartCompat="@drawable/ic_privacy_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/authorized_apps" android:text="@string/authorized_apps" app:drawableStartCompat="@drawable/ic_authed_apps_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/connections" android:text="@string/connections" app:drawableStartCompat="@drawable/ic_phonelink_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/settings_billing" android:visibility="gone" android:text="@string/billing" app:drawableStartCompat="@drawable/ic_billing_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/qr_scanner" android:text="@string/user_settings_scan_qr_code" app:drawableStartCompat="@drawable/ic_qr_code_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <LinearLayout android:id="@id/nitro_settings_container" style="@style/UiKit.ViewGroup.LinearLayout">
+                <View style="@style/UiKit.Settings.Divider" />
+                <TextView android:id="@id/nitro_header" android:text="@string/premium_settings_generic" style="@style/UiKit.Settings.Item.Header" />
+                <TextView android:textColor="?colorControlBrandForeground" android:id="@id/settings_nitro" app:drawableStartCompat="@drawable/ic_nitro_rep" app:drawableTint="?colorControlBrandForeground" style="@style/UiKit.Settings.Item.Icon" />
+                <TextView android:id="@id/nitro_boosting" android:text="@string/premium_guild_subscription_title" app:drawableStartCompat="@drawable/ic_settings_boost_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+                <TextView android:id="@id/role_subscriptions" android:text="@string/guild_role_subscription_settings_title" app:drawableStartCompat="@drawable/ic_settings_role_subscriptions_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+                <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/nitroGiftingContainer" android:background="?selectableItemBackground" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:id="@id/nitro_gifting" android:background="@null" android:layout_width="0.0dip" android:text="@string/premium_gifting_title" android:layout_weight="1.0" app:drawableStartCompat="@drawable/ic_gift_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+                    <TextView android:textSize="@dimen/uikit_textsize_small" android:id="@id/nitroGiftingBadge" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:includeFontPadding="false" android:paddingStart="4.0dip" android:paddingEnd="4.0dip" android:layout_marginEnd="20.0dip" style="@style/UiKit.TextView.Semibold" />
+                </LinearLayout>
+            </LinearLayout>
+            <View style="@style/UiKit.Settings.Divider" />
+            <TextView android:id="@id/app_settings_header" android:text="@string/app_settings" style="@style/UiKit.Settings.Item.Header" />
+            <TextView android:id="@id/voice" android:text="@string/voice_and_video" app:drawableStartCompat="@drawable/ic_voice_settings_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/notifications" android:text="@string/notifications" app:drawableStartCompat="@drawable/ic_notification_settings_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/text_images_settings" android:text="@string/text_and_images" app:drawableStartCompat="@drawable/ic_text_image_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/appearance" android:text="@string/appearance" app:drawableStartCompat="@drawable/ic_theme_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/accessibility" android:text="@string/accessibility" app:drawableStartCompat="@drawable/ic_accessibility_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/behavior" android:text="@string/form_label_mobile_notifications_behavior" app:drawableStartCompat="@drawable/ic_behavior_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/language" android:text="@string/language" app:drawableStartCompat="@drawable/ic_locale_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/activity_status" android:text="@string/activity_status" app:drawableStartCompat="@drawable/ic_activity_status_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <View android:id="@id/developer_options_divider" android:visibility="gone" style="@style/UiKit.Settings.Divider" />
+            <TextView android:id="@id/developer_options_header" android:visibility="gone" android:text="@string/developer_options" style="@style/UiKit.Settings.Item.Header" />
+            <TextView android:id="@id/developer_options" android:visibility="gone" android:text="@string/developer_options" app:drawableStartCompat="@drawable/ic_security_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <View style="@style/UiKit.Settings.Divider" />
+            <TextView android:id="@id/app_info_header" style="@style/UiKit.Settings.Item.Header" />
+            <TextView android:id="@id/changelog" android:text="@string/change_log" app:drawableStartCompat="@drawable/ic_info_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/support" android:text="@string/support" app:drawableStartCompat="@drawable/ic_help_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/upload_debug_logs" android:text="@string/upload_debug_logs" app:drawableStartCompat="@drawable/ic_info_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+            <TextView android:id="@id/acknowledgements" android:text="@string/acknowledgements" app:drawableStartCompat="@drawable/ic_info_24dp" app:drawableTint="?colorInteractiveNormal" style="@style/UiKit.Settings.Item.Icon" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

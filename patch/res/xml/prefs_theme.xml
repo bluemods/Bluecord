@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen android:title="Theme Mods" android:key=""
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<mods.preference.EmptyPreference android:title="Chat Background" />
+	<mods.preference.BackgroundModePreference android:title="Enable Custom Background" android:summary="Allows you to set a custom background" />
+    
+	<mods.preference.Background android:key="blue.bgPath" android:enabled="true" android:title="Choose Chat Background Image" />
+	<mods.preference.BackgroundBlurPreference android:key="blue.bg.blur" android:title="Blur Custom Background" android:summary="Blurs the background, improving text legibility" />
+    <mods.preference.ColorPicker android:key="blue.bgColor" android:enabled="true" android:title="Background Color" android:summary="Select the color of the chat background" android:defaultValue="#ff000000" />
+    
+	<mods.preference.EmptyPreference android:title="Theme" />
+    <mods.preference.CustomFont android:title="Custom Font" android:summary="Set the font inside the conversation screen" />
+    <mods.preference.SimpleDialogPreference android:title="Custom Font Size" android:dialogTitle="Custom Font Size" android:dialogMessage="Looking to change the font size of text messages? Discord already has this built in!\n\nGo back out to User Settings > Appearance > Chat Font Scaling and customize it there!" />
+	<SwitchPreference android:title="Square Pictures" android:key="square.pics" android:summary="If enabled, guild and profile icons will be squares" />
+    <SwitchPreference android:title="Marquee Names" android:key="marquee.names" android:summary="If enabled, channel names and usernames will scroll if they are too long to display" />
+    <SwitchPreference android:title="High Quality Icons" android:key="resize.icons" android:summary="If enabled, guild and profile icons will appear in higher quality (do not use on low end phones)" />
+    <SwitchPreference android:title="Remove Nitro Gift Button" android:key="remove.gift.button" android:summary="If enabled, it will remove the Nitro Gift button from the message tray" />
+    <SwitchPreference android:title="Remove Call Button" android:key="remove.call.button" android:summary="If enabled, it will remove the voice and video call options to prevent accidental outgoing calls" />
+    <SwitchPreference android:title="Remove Invite Button" android:key="remove.invite.button" android:summary="If enabled, it will remove the invite button from the channel list to prevent accidental clicks" />
+    <SwitchPreference android:title="Remove Animated Icons" android:key="remove.anime.icons.v2" android:summary="If enabled, guild and profile icons will no longer animate\nWARNING: this replaces animated profile pictures everywhere, even when viewing profiles directly" />
+    <mods.preference.EmptyPreference android:title="Colors" />
+	<ListPreference android:entries="@array/text_color_modes" android:title="Text Color Mode" android:key="text.color.mode" android:summary="Allows you to customize text colors for messages (read explanation)" android:defaultValue="Default" android:entryValues="@array/text_color_modes" />
+    <mods.preference.SimpleDialogPreference android:title="Text Color Mode Explanation" android:dialogTitle="Text Color Mode" android:dialogMessage="Custom Colors - allows you to set custom colors for your text messages (incoming and outgoing)\n\nMatch Role Color - text messages will always match the role color of the sender\n\nDefault - normal behavior, no color modifications" />
+	<mods.preference.ColorPicker android:enabled="true" android:title="Incoming Text Color" android:key="incoming.text.color" android:summary="Select the message text color representing other people" android:defaultValue="#ffffffff" />
+	<mods.preference.ColorPicker android:enabled="true" android:title="Outgoing Text Color" android:key="outgoing.text.color" android:summary="Select the color of your message text" android:defaultValue="#ffffffff" />
+	<mods.preference.ColorPicker android:enabled="true" android:title="Deleted Message Color" android:key="deleted.message.color" android:summary="Select the color of deleted messages\n(Note that Anti Message Delete must be enabled)" android:defaultValue="#ffe00404" />
+	<!-- <mods.preference.ColorPicker android:enabled="true" android:title="Edited Message Color" android:key="edited.message.color" android:summary="Select the color of edited messages" android:defaultValue="#ffe00404" /> -->
+	<SwitchPreference android:title="Custom Message Name Colors" android:key="enable.author.colors" android:summary="If enabled, the name color of the message author can be customized" />
+	<mods.preference.ColorPicker android:enabled="true" android:title="Incoming Name Color" android:key="incoming.author.color" android:summary="Select the name color representing other people" android:defaultValue="#ffffffff" />
+	<mods.preference.ColorPicker android:enabled="true" android:title="Outgoing Name Color" android:key="outgoing.author.color" android:summary="Select the name color of your message" android:defaultValue="#ffffffff" />
+    <mods.preference.RainbowTextPreference android:title="Rainbow Colors" android:summary="This allows you to animate text and typing box colors.\nNOTE: This will override your other color settings if enabled" />
+    <mods.preference.EmptyPreference android:title="Bluecord made with love by Blue\nhttps://bluesmods.com" />
+</PreferenceScreen>

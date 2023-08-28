@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="?auth_landing_ptrn" style="@style/UiKit.ViewGroup.Page"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.discord.app.AppViewFlipper android:id="@id/auth_landing_switch_flipper" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="16.0dip" android:layout_above="@id/auth_bottom_container" android:layout_marginStart="16.0dip" android:layout_marginEnd="16.0dip">
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <ImageView android:id="@id/auth_landing_logo" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="24.0dip" android:layout_marginBottom="24.0dip" android:src="@drawable/bluecord_logo_big" android:scaleType="center" android:layout_alignParentTop="true" android:contentDescription="@string/discord" style="@style/UiKit.ImageView" />
+            <com.discord.views.ScreenTitleView android:id="@id/auth_landing_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="24.0dip" android:layout_alignParentBottom="true" android:layout_centerInParent="true" android:layout_marginStart="16.0dip" android:layout_marginEnd="16.0dip" app:stv_subtitle="{BLUECORD_VERSION}" app:stv_title="Welcome To Bluecord" />
+        </RelativeLayout>
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <ImageView android:layout_width="175.0dip" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:src="@drawable/bluecord_logo_big" android:layout_centerHorizontal="true" android:contentDescription="@string/discord" style="@style/UiKit.ImageView" />
+            <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_centerInParent="true">
+                <com.discord.views.ScreenTitleView android:layout_gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="16.0dip" android:layout_marginStart="16.0dip" android:layout_marginEnd="16.0dip" app:stv_subtitle="{BLUECORD_VERSION}" app:stv_title="Welcome To Bluecord" />
+                <com.discord.widgets.auth.AuthInviteInfoView android:id="@id/auth_landing_invite_info" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RelativeLayout>
+    </com.discord.app.AppViewFlipper>
+    <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@id/auth_bottom_container" android:paddingBottom="16.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:paddingStart="16.0dip" android:paddingEnd="16.0dip">
+        <com.google.android.material.button.MaterialButton android:id="@android:id/secondaryProgress" android:text="Restore Account Backup" android:backgroundTint="?colorButtonSecondary" style="@style/UiKit.AuthButton.Material" />
+		<com.google.android.material.button.MaterialButton android:id="@android:id/primary" android:text="Login With Token" android:backgroundTint="?colorButtonSecondary" style="@style/UiKit.AuthButton.Material" />
+        <com.google.android.material.button.MaterialButton android:id="@id/auth_landing_register" android:text="@string/register" style="@style/UiKit.AuthButton.Material" />
+        <com.google.android.material.button.MaterialButton android:id="@id/auth_landing_login" android:text="@string/login" android:backgroundTint="?colorButtonSecondary" style="@style/UiKit.AuthButton.Material" />
+    </LinearLayout>
+</RelativeLayout>

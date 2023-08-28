@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="actions_intent_join_server">
+        <item>join a server</item>
+        <item>join server</item>
+        <item>join a server with code $inviteCode</item>
+        <item>join a server with link $inviteCode</item>
+        <item>join server with code $inviteCode</item>
+        <item>join server with link $inviteCode</item>
+        <item>join a server $inviteCode</item>
+        <item>join server $inviteCode</item>
+    </string-array>
+    <string-array name="actions_intent_select_channel">
+        <item>select a channel</item>
+        <item>select channel</item>
+        <item>go to a channel</item>
+        <item>open a channel</item>
+        <item>open channel</item>
+        <item>go to channel</item>
+        <item>find a channel</item>
+        <item>select channel $channelName</item>
+        <item>go to channel $channelName</item>
+        <item>select channel $channelName in $serverName</item>
+        <item>go to channel $channelName in $serverName</item>
+        <item>open channel $channelName</item>
+        <item>open channel $channelName in $serverName</item>
+        <item>open channel with name $channelName</item>
+        <item>open channel with name $channelName in $serverName</item>
+    </string-array>
+    <string-array name="actions_intent_select_server">
+        <item>select a server</item>
+        <item>select server</item>
+        <item>open a server</item>
+        <item>open server</item>
+        <item>go to server</item>
+        <item>find a server</item>
+        <item>open server $serverName</item>
+        <item>open server with name $serverName</item>
+        <item>select server with $serverName</item>
+    </string-array>
+    <string-array name="actions_intent_select_user">
+        <item>select a direct message</item>
+        <item>select direct message</item>
+        <item>send direct message</item>
+        <item>send a direct message</item>
+        <item>open DM with $userName</item>
+        <item>open direct message with $userName</item>
+        <item>send a dm to $userName</item>
+    </string-array>
+    <array name="color_picker_palette">
+        <item>#ff17ac86</item>
+        <item>#ff25c059</item>
+        <item>#ff277ecd</item>
+        <item>#ff843da4</item>
+        <item>#ffda004e</item>
+        <item>#ffe4b400</item>
+        <item>#ffd6680e</item>
+        <item>#ffd7342a</item>
+        <item>#ff7e9091</item>
+        <item>#ff4c6876</item>
+        <item>#ff116d56</item>
+        <item>#ff1a7939</item>
+        <item>#ff195080</item>
+        <item>#ff5b2076</item>
+        <item>#ff970045</item>
+        <item>#ffae6800</item>
+        <item>#ff923200</item>
+        <item>#ff831f18</item>
+        <item>#ff818689</item>
+    </array>
+    <string-array name="exo_playback_speeds">
+        <item>0.25x</item>
+        <item>0.5x</item>
+        <item>0.75x</item>
+        <item>@string/exo_controls_playback_speed_normal</item>
+        <item>1.25x</item>
+        <item>1.5x</item>
+        <item>2x</item>
+    </string-array>
+    <integer-array name="exo_speed_multiplied_by_100">
+        <item>25</item>
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+        <item>125</item>
+        <item>150</item>
+        <item>200</item>
+    </integer-array>
+	<string-array name="delete_modes">
+        <item>Block Delete</item>
+        <item>Block Delete + Log</item>
+        <item>Off</item>    
+    </string-array>
+	<string-array name="edit_modes">
+        <item>Show Edit</item>
+        <item>Show Edit + Log</item>
+        <item>Off</item>
+    </string-array>
+    <string-array name="emote_modes">
+        <item>Nitro Spoof</item>
+        <item>Nitro Spoof (Bigger Emotes)</item>
+        <item>Nitro Spoof (Full Size)</item>
+        <item>Old Nitro Spoof</item>
+        <item>Hide Locked Emotes</item>
+        <item>Off</item>
+	</string-array>
+    <string-array name="text_color_modes">
+        <item>Custom Colors</item>
+        <item>Match Role Color</item>
+        <item>Default</item>
+    </string-array>
+    <string-array name="time_modes">
+        <item>mm/dd/yy hh:mm:ss AM/PM</item>
+        <item>dd/mm/yy hh:mm:ss AM/PM</item>
+        <item>mm/dd/yy hh:mm:ss (24h)</item>
+        <item>dd/mm/yy hh:mm:ss (24h)</item>
+    </string-array>
+    <string-array name="time_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+	<string-array name="age_modes">
+        <item>Days + Hours</item>
+        <item>Exact Timestamp</item>
+        <item>Off</item>
+    </string-array>
+	<string-array name="age_values">
+        <item>Days since creation</item>
+        <item>Exact creation time</item>
+        <item>Off</item>
+    </string-array>
+	<string-array name="show_user_values">
+        <item>Always</item>
+        <item>When Nickname Is Set</item>
+        <item>Off</item>
+    </string-array>
+</resources>

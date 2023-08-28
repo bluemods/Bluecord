@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView android:background="?primary_630" style="@style/UiKit.ViewGroup.ScrollView.Page"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout android:paddingBottom="8.0dip" style="@style/UiKit.ViewGroup.LinearLayout">
+        <androidx.constraintlayout.widget.ConstraintLayout style="@style/UiKit.Sheet.Header">
+            <androidx.constraintlayout.widget.Guideline style="@style/UiKit.Sheet.Guideline" />
+            <FrameLayout style="@style/UiKit.Sheet.Header.Icon">
+                <com.facebook.drawee.view.SimpleDraweeView android:id="@id/channels_list_item_text_actions_icon" style="@style/Avatar.Large" />
+            </FrameLayout>
+            <TextView android:id="@id/channels_list_item_text_actions_title" style="@style/UiKit.Sheet.Header.Title" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View style="@style/UiKit.Settings.Divider" />
+        <TextView android:id="@id/dm_action_profile" android:text="@string/profile" app:drawableStartCompat="?ic_account" style="@style/UiKit.Settings.Item.Icon" />
+        <TextView android:id="@id/text_action_mark_as_read" android:text="@string/mark_as_read" app:drawableStartCompat="?ic_visibility" style="@style/UiKit.Settings.Item.Icon" />
+        <TextView android:id="@id/text_action_mute" app:drawableStartCompat="?ic_channel_mute" style="@style/UiKit.Settings.Item.Icon" />
+        <TextView android:id="@id/text_action_thread_browser" android:text="@string/threads" app:drawableStartCompat="?ic_thread" style="@style/UiKit.Settings.Item.Icon" />
+        <TextView android:id="@id/action_channel_settings" app:drawableStartCompat="?ic_settings" style="@style/UiKit.Settings.Item.Icon" />
+        <TextView android:id="@id/action_channel_notifications" android:text="@string/notification_settings" app:drawableStartCompat="?ic_notifications_a60" style="@style/UiKit.Settings.Item.Icon" />
+        <TextView android:id="@id/action_invite" android:text="@string/instant_invite" app:drawableStartCompat="?ic_person_add" style="@style/UiKit.Settings.Item.Icon" />
+        <View android:id="@id/developer_divider" style="@style/UiKit.Settings.Divider" />
+        <TextView android:id="@android:id/button1" android:text="" android:visibility="gone" app:drawableStartCompat="?ic_copy" style="@style/UiKit.Settings.Item.Icon" />
+        <TextView android:id="@id/action_copy_id" android:text="@string/copy_id" app:drawableStartCompat="?ic_copy" style="@style/UiKit.Settings.Item.Icon" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
