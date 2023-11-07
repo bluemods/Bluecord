@@ -3,7 +3,7 @@ package mods.utils;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import mods.DiscordTools;
 import mods.net.Net;
@@ -50,7 +50,7 @@ public class TokenChecker extends AsyncTask<Void, Void, TokenChecker.Result> {
         if (!DiscordTools.isConnected()) {
             return Result.INVALID_NO_CONNECTION;
         }
-        LinkedHashMap<String, String> headers = ReactNativeSpoof.makeHeaderMap(this.token);
+        Map<String, String> headers = ReactNativeSpoof.makeHeaderMap(this.token);
         SimpleHttpResponse response = Net.getOrPostWithResult(TEST_URL, null, headers);
 
         int code = response.getResponseCode();

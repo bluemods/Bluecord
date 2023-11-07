@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.OutputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -28,9 +27,9 @@ public class Net extends AsyncTask<Void, Void, String> {
     @NotNull
     private final String postData;
     @Nullable
-    private final LinkedHashMap<String, String> headers;
+    private final Map<String, String> headers;
 
-    private Net(@NotNull String url, @NotNull String postData, @Nullable LinkedHashMap<String, String> headers) {
+    private Net(@NotNull String url, @NotNull String postData, @Nullable Map<String, String> headers) {
         super();
         this.url = url;
         this.postData = postData;
@@ -43,7 +42,7 @@ public class Net extends AsyncTask<Void, Void, String> {
     }
 
     @Nullable
-    public static String useAsyncIfNeeded(String url, String data, @Nullable LinkedHashMap<String, String> headers) {
+    public static String useAsyncIfNeeded(String url, String data, @Nullable Map<String, String> headers) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             LogUtils.log(TAG, "Thread is main for " + url + ", using async");
             return asyncRequest(url, data, headers);
@@ -59,7 +58,7 @@ public class Net extends AsyncTask<Void, Void, String> {
     }
 
     @Nullable
-    public static String asyncRequest(String url, String data, @Nullable LinkedHashMap<String, String> headers) {
+    public static String asyncRequest(String url, String data, @Nullable Map<String, String> headers) {
         try {
             return new Net(url, data, headers).execute().get(5, TimeUnit.SECONDS);
         } catch (Exception e) {
@@ -74,7 +73,7 @@ public class Net extends AsyncTask<Void, Void, String> {
     }
 
     @Nullable
-    public static String nonAsyncRequest(String url, String data, @Nullable LinkedHashMap<String, String> headers) {
+    public static String nonAsyncRequest(String url, String data, @Nullable Map<String, String> headers) {
         return getOrPost(url, data, headers);
     }
 
@@ -84,12 +83,12 @@ public class Net extends AsyncTask<Void, Void, String> {
     }
 
     @Nullable
-    public static String getOrPost(String url, @Nullable String postData, @Nullable LinkedHashMap<String, String> headers) {
+    public static String getOrPost(String url, @Nullable String postData, @Nullable Map<String, String> headers) {
         return getOrPostWithResult(url, postData, headers).getContent();
     }
 
     @NotNull
-    public static SimpleHttpResponse getOrPostWithResult(String url, @Nullable String postData, @Nullable LinkedHashMap<String, String> headers) {
+    public static SimpleHttpResponse getOrPostWithResult(String url, @Nullable String postData, @Nullable Map<String, String> headers) {
         final boolean isPost = postData != null;
 
         HttpsURLConnection conn;
@@ -131,7 +130,7 @@ public class Net extends AsyncTask<Void, Void, String> {
     }
 
     @NotNull
-    public static SimpleHttpResponse delete(String url, @Nullable LinkedHashMap<String, String> headers) {
+    public static SimpleHttpResponse delete(String url, @Nullable Map<String, String> headers) {
         HttpsURLConnection conn;
         try {
             conn = (HttpsURLConnection) new URL(url).openConnection();

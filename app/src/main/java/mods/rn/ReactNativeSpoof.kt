@@ -59,7 +59,7 @@ object ReactNativeSpoof {
     fun webSocketCapabilities(): Long = WSS_CAPABILITIES
 
     @JvmStatic
-    fun makeHeaderMap(authToken: String?): LinkedHashMap<String, String> {
+    fun makeHeaderMap(authToken: String?): Map<String, String> {
         val ret = LinkedHashMap<String, String>()
         if (authToken?.isNotEmpty() == true) {
             ret["authorization"] = authToken
@@ -98,7 +98,7 @@ object ReactNativeSpoof {
     }
 
     private val superProperties: Map<String, Any> by lazy {
-        HashMap<String, Any>().apply {
+        LinkedHashMap<String, Any>().apply {
             put("os", "Android")
             put("browser", "Discord Android")
             put("device", deviceName)

@@ -5,16 +5,13 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
-import com.discord.utilities.analytics.AnalyticSuperProperties;
-import com.discord.utilities.rest.RestAPI;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,7 +25,6 @@ import mods.utils.Assertions;
 import mods.utils.LogUtils;
 import mods.utils.Notifications;
 import mods.utils.StoreUtils;
-import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
 
 public class MessageDeleterTask {
@@ -132,7 +128,7 @@ public class MessageDeleterTask {
                     break;
                 }
                 default: {
-                    throw new IllegalStateException("missing branch");
+                    throw new AssertionError("unknown state");
                 }
             }
         } catch (RateLimitException e) {
@@ -213,7 +209,7 @@ public class MessageDeleterTask {
         builder.appendQueryParameter("sort_order", "desc");
 
         final String requestUrl = builder.build().toString();
-        final LinkedHashMap<String, String> headers = getHeaders();
+        final Map<String, String> headers = getHeaders();
 
         SimpleHttpResponse response = Net.getOrPostWithResult(requestUrl, null, headers);
         final int responseCode = response.getResponseCode();
@@ -357,7 +353,7 @@ public class MessageDeleterTask {
         return new RateLimitException(response.getResponseCode(), (long) (1000L * new JSONObject(response.getContentOrThrow()).getDouble("retry_after")));
     }
 
-    private LinkedHashMap<String, String> getHeaders() {
+    private Map<String, String> getHeaders() {
         return ReactNativeSpoof.makeHeaderMap(StoreUtils.getAuthToken());
     }
 }
