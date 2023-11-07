@@ -1,5 +1,7 @@
 package mods.constants;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  *  Contains most of the preference keys that correspond to the toggles / settings
  *  settable in the Bluecord Mods screen.
@@ -101,6 +103,7 @@ public final class PreferenceKeys {
     public static final String DISABLE_PROXIMITY_SENSOR = "blue.disable.proximity";
     public static final String DELETE_DISCLAIMER_ACCEPTED = "blue.delete.disclaimer";
     public static final String SHOW_TEXT_CHAR_COUNT = "blue.show.char.count";
+    public static final String RN_DEVICE_VENDOR_ID = "blue.device.vendor.id";
 
     // Dead preference keys that should NOT be reused
 

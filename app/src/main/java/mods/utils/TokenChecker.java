@@ -3,14 +3,12 @@ package mods.utils;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.discord.utilities.analytics.AnalyticSuperProperties;
-import com.discord.utilities.rest.RestAPI;
-
 import java.util.LinkedHashMap;
 
 import mods.DiscordTools;
 import mods.net.Net;
 import mods.net.SimpleHttpResponse;
+import mods.rn.ReactNativeSpoof;
 
 public class TokenChecker extends AsyncTask<Void, Void, TokenChecker.Result> {
 
@@ -51,25 +49,16 @@ public class TokenChecker extends AsyncTask<Void, Void, TokenChecker.Result> {
     protected TokenChecker.Result doInBackground(Void... voids) {
         if (!DiscordTools.isConnected()) {
             return Result.INVALID_NO_CONNECTION;
-        } else {
-            LinkedHashMap<String, String> headers = new LinkedHashMap<>();
-            headers.put("Accept-Language", RestAPI.AppHeadersProvider.INSTANCE.getAcceptLanguages());
-            headers.put("Authorization", this.token);
-            headers.put("Connection", "Keep-Alive");
-            headers.put("User-Agent", RestAPI.AppHeadersProvider.INSTANCE.getUserAgent());
-            headers.put("X-Discord-Locale", RestAPI.AppHeadersProvider.INSTANCE.getLocale());
-            headers.put("X-Fingerprint", RestAPI.AppHeadersProvider.INSTANCE.getFingerprint());
-            headers.put("X-Super-Properties", AnalyticSuperProperties.INSTANCE.getSuperPropertiesStringBase64());
-
-            SimpleHttpResponse response = Net.getOrPostWithResult(TEST_URL, null, headers);
-
-            int code = response.getResponseCode();
-
-            return code == 200 || code == 204
-                    ? Result.OK
-                    : code == SimpleHttpResponse.CODE_FAILED
-                    ? Result.INVALID_NO_CONNECTION
-                    : Result.INVALID_NOT_AUTHORIZED;
         }
+        LinkedHashMap<String, String> headers = ReactNativeSpoof.makeHeaderMap(this.token);
+        SimpleHttpResponse response = Net.getOrPostWithResult(TEST_URL, null, headers);
+
+        int code = response.getResponseCode();
+
+        return code == 200 || code == 204
+                ? Result.OK
+                : code == SimpleHttpResponse.CODE_FAILED
+                ? Result.INVALID_NO_CONNECTION
+                : Result.INVALID_NOT_AUTHORIZED;
     }
 }

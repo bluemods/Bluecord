@@ -23,10 +23,12 @@ import mods.DiscordTools;
 import mods.constants.Constants;
 import mods.net.Net;
 import mods.net.SimpleHttpResponse;
+import mods.rn.ReactNativeSpoof;
 import mods.utils.Assertions;
 import mods.utils.LogUtils;
 import mods.utils.Notifications;
 import mods.utils.StoreUtils;
+import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
 
 public class MessageDeleterTask {
@@ -356,13 +358,6 @@ public class MessageDeleterTask {
     }
 
     private LinkedHashMap<String, String> getHeaders() {
-        LinkedHashMap<String, String> ret = new LinkedHashMap<>();
-        ret.put("Authorization", StoreUtils.getAuthToken());
-        ret.put("Connection", "Keep-Alive");
-        ret.put("Host", "discord.com");
-        ret.put("User-Agent", RestAPI.AppHeadersProvider.INSTANCE.getUserAgent());
-        ret.put("X-Discord-Locale", RestAPI.AppHeadersProvider.INSTANCE.getLocale());
-        ret.put("X-Super-Properties", AnalyticSuperProperties.INSTANCE.getSuperPropertiesStringBase64());
-        return ret;
+        return ReactNativeSpoof.makeHeaderMap(StoreUtils.getAuthToken());
     }
 }

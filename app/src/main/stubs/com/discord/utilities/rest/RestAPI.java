@@ -74,7 +74,7 @@ public class RestAPI {
         public RestAPI getApi() { return null; }
     }
 
-    public static final class AppHeadersProvider  {
+    public static final class AppHeadersProvider {
         public static final AppHeadersProvider INSTANCE = new AppHeadersProvider();
 
         private AppHeadersProvider() {
