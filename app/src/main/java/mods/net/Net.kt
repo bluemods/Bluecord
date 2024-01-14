@@ -66,6 +66,23 @@ object Net {
     @JvmStatic
     @JvmOverloads
     @Throws(IOException::class)
+    fun doPostAsync(url: String, data: String, headers: Map<String, String> = emptyMap(), onSuccess: (Response) -> Unit, onError: (IOException) -> Unit) {
+        val request = RequestBuilder()
+            .url(url)
+            .post(RequestBody.create(data.toByteArray(), null))
+            .headers(headers)
+            .build()
+        client.newCall(request)
+            .enqueue({
+                ThreadUtils.runOnUiThread { onSuccess.invoke(it.second) }
+            }, {
+                ThreadUtils.runOnUiThread { onError.invoke(it.second) }
+            })
+    }
+
+    @JvmStatic
+    @JvmOverloads
+    @Throws(IOException::class)
     fun delete(url: String, data: String? = null, headers: Map<String, String> = emptyMap()): Response {
         val request = RequestBuilder().url(url)
             .post(RequestBody.create(data?.toByteArray() ?: byteArrayOf(), null))

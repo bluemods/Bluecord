@@ -1,95 +1,104 @@
-package mods.preference;
+@file:Suppress("DEPRECATION")
+package mods.preference
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.preference.Preference;
-import android.text.InputType;
-import android.util.AttributeSet;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.annotation.SuppressLint
+import android.content.Context
+import android.preference.Preference
+import android.preference.Preference.OnPreferenceClickListener
+import android.text.InputType
+import android.util.AttributeSet
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import mods.DiscordTools
+import mods.constants.URLConstants
+import mods.extensions.json
+import mods.net.Net
+import mods.utils.SimpleLoadingSpinner
+import mods.utils.StoreUtils
+import mods.utils.StringUtils
+import mods.utils.ToastUtil
+import org.json.JSONObject
 
-import com.discord.models.user.MeUser;
+class FeatureRequest @SuppressLint("SetTextI18n") constructor(
+    context: Context?,
+    attrs: AttributeSet?
+) : Preference(context, attrs) {
+    init {
+        onPreferenceClickListener = OnPreferenceClickListener { preference: Preference ->
+            val root = ScrollView(preference.context)
+            root.isFillViewport = true
 
-import org.json.JSONException;
-import org.json.JSONObject;
+            val layout = LinearLayout(context)
+            layout.orientation = LinearLayout.VERTICAL
 
-import mods.DiscordTools;
-import mods.constants.URLConstants;
-import mods.net.Net;
-import mods.utils.LogUtils;
-import mods.utils.StoreUtils;
-import mods.utils.StringUtils;
-import mods.utils.ToastUtil;
+            val input = EditText(preference.context)
+            input.hint = "Write a suggestion..."
+            input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            layout.addView(input)
 
-public class FeatureRequest extends Preference {
+            val cb = CheckBox(preference.context)
+            cb.text = "Include Username"
+            cb.isChecked = true
+            layout.addView(cb)
 
-    private static final String TAG = FeatureRequest.class.getSimpleName();
+            root.addView(layout)
 
-    private static final String ERROR_MESSAGE = "Error submitting your request.\n\nThe request was copied to your clipboard. Please check your Internet connection and try again";
+            DiscordTools.newBuilder(preference.context)
+                .setTitle("Feature Request")
+                .setView(root)
+                .setNegativeButton("Discard", null)
+                .setPositiveButton("Send") { _, _ ->
+                    val feedbackText = input.text.toString().trim()
+                    val sendUsername = cb.isChecked
 
-    @SuppressLint("SetTextI18n")
-    public FeatureRequest(Context context, AttributeSet attrs) {
-        super(context, attrs);
+                    if (feedbackText.isEmpty()) {
+                        ToastUtil.customToast(
+                            DiscordTools.getActivity(context),
+                            "Please write something!"
+                        )
+                    } else {
+                        sendFeedback(feedbackText, sendUsername)
+                    }
+                }
+                .showSafely()
+            true
+        }
+    }
 
-        setOnPreferenceClickListener(preference -> {
+    private fun sendFeedback(feedbackText: String, sendUsername: Boolean) {
+        val payload = JSONObject().apply {
+            put("text", feedbackText)
+            if (sendUsername) {
+                put("from", StringUtils.getUsernameWithDiscriminator(StoreUtils.getSelf()))
+            }
+        }.toString()
 
-            ScrollView root = new ScrollView(preference.getContext());
-            root.setFillViewport(true);
+        val spinner = SimpleLoadingSpinner(context).apply {
+            show("Sending feedback...")
+        }
 
-            LinearLayout layout = new LinearLayout(context);
-            layout.setOrientation(LinearLayout.VERTICAL);
+        Net.doPostAsync(
+            url = URLConstants.phpLink() + "?feature_v2",
+            data = payload,
+            onSuccess = {
+                spinner.hide()
+                val msg = it.json().getString("message")
+                DiscordTools.basicAlert(context, "Success", msg)
+            },
+            onError = {
+                spinner.hide()
+                DiscordTools.copyToClipboard(feedbackText)
+                DiscordTools.basicAlert(context, "Error", ERROR_MESSAGE)
+            }
+        )
+    }
 
-            EditText input = new EditText(preference.getContext());
-            input.setHint("Write a suggestion...");
-            input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-            layout.addView(input);
-
-            CheckBox cb = new CheckBox(preference.getContext());
-            cb.setText("Include Username");
-            cb.setChecked(true);
-            layout.addView(cb);
-
-            root.addView(layout);
-
-            DiscordTools.newBuilder(preference.getContext())
-                    .setTitle("Feature Request")
-                    .setView(root)
-                    .setNegativeButton("Discard", null)
-                    .setPositiveButton("Send", (dialogInterface, i) -> {
-                        StringBuilder sb = new StringBuilder(input.getText().toString().trim());
-
-                        if (cb.isChecked()) {
-                            MeUser self = StoreUtils.getSelf();
-
-                            String name = "\n\n" + "From: " + StringUtils.getUsernameWithDiscriminator(self);
-
-                            sb.append(name);
-                        }
-
-                        String text = sb.toString();
-
-                        if (text.isEmpty()) {
-                            ToastUtil.customToast(DiscordTools.getActivity(context), "Please write something!");
-                        } else {
-                            String result = Net.doPost(URLConstants.phpLink() + "?feature", text);
-                            if (result == null) {
-                                DiscordTools.copyToClipboard(text);
-                                DiscordTools.basicAlert(preference.getContext(), "Error", ERROR_MESSAGE);
-                            } else {
-                                try {
-                                    String msg = new JSONObject(result).getString("message");
-                                    DiscordTools.basicAlert(preference.getContext(), "Success", msg);
-                                } catch (JSONException e) {
-                                    LogUtils.log(TAG, "failed to parse JSON", e);
-                                    DiscordTools.basicAlert(preference.getContext(), "Error", ERROR_MESSAGE);
-                                }
-                            }
-                        }
-                    })
-                    .showSafely();
-            return true;
-        });
+    companion object {
+        private val TAG = FeatureRequest::class.java.simpleName
+        private const val ERROR_MESSAGE = "Error submitting your request.\n\n" +
+                "The request was copied to your clipboard. " +
+                "Please check your Internet connection and try again"
     }
 }
