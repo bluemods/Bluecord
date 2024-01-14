@@ -16,15 +16,14 @@ import java.nio.charset.StandardCharsets;
 import mods.constants.URLConstants;
 import mods.net.Net;
 import mods.utils.LogUtils;
-import mods.utils.StoreUtils;
 
 @SuppressWarnings("unused")
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private static final String TAG = CrashHandler.class.getSimpleName();
 
-    private static Thread.UncaughtExceptionHandler handler;
-    private boolean hasRun = false;
+    private static volatile Thread.UncaughtExceptionHandler handler;
+    private static volatile boolean hasRun = false;
 
     private CrashHandler() {}
 
@@ -88,7 +87,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
         try {
             json.put("v", VERSION_CODE);
-            json.put("ts", StoreUtils.getServerSyncedTime());
+            json.put("ts", System.currentTimeMillis());
             json.put("sdk", Build.VERSION.SDK_INT);
             json.put("kbFree", Runtime.getRuntime().freeMemory() / 1024L);
             json.put("trace", trace);

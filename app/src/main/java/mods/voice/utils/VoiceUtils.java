@@ -16,9 +16,13 @@ public class VoiceUtils {
     public static boolean isAudioMessage(MessageAttachment attachment) {
         LogUtils.log(TAG, "attachment=" + attachment);
 
-        if (attachment == null) return false;
+        if (attachment == null) {
+            return false;
+        }
         final String fileName = attachment.filename;
-        if (fileName == null) return false;
+        if (fileName == null) {
+            return false;
+        }
 
         for (String extension : FILE_EXTENSIONS) {
             if (fileName.endsWith(extension)) {
@@ -29,11 +33,14 @@ public class VoiceUtils {
     }
 
     public static boolean isAudioMessage(Message message) {
-        LogUtils.log(TAG, "message=" + message);
-        if (message == null || !message.hasAttachments()) return false;
-
+        // LogUtils.log(TAG, "message=" + message);
+        if (message == null || !message.hasAttachments()) {
+            return false;
+        }
         for (MessageAttachment attachment : message.getAttachments()) {
-            if (isAudioMessage(attachment)) return true;
+            if (isAudioMessage(attachment)) {
+                return true;
+            }
         }
         return false;
     }

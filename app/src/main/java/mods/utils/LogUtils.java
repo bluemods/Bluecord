@@ -2,6 +2,9 @@ package mods.utils;
 
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
+
 public final class LogUtils {
 
     private static final String BASE_TAG_NAME = "[Bluecord]";
@@ -41,5 +44,9 @@ public final class LogUtils {
 
     public static void logException(String tag, Throwable t) {
         log(tag, "failed", t);
+    }
+
+    public static void logGatewaySocketData(ByteArrayOutputStream stream) {
+        log("WSS", new String(stream.toByteArray(), StandardCharsets.UTF_8));
     }
 }

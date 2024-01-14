@@ -41,6 +41,7 @@ import mods.constants.URLConstants;
 import mods.net.Urban;
 import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
+import mods.rn.RNInteractionFix;
 import mods.utils.Alerts;
 import mods.utils.AuthenticationUtils;
 import mods.utils.PatternUtils;
@@ -75,11 +76,11 @@ public class MediaTray {
         this.mFragment = fragment;
         this.mediaTrayView = view;
         this.height = mediaTrayView.getHeight();
-        this.prefix = Prefs.getString("commands.prefix", "!");
+        this.prefix = Prefs.getString(PreferenceKeys.COMMAND_PREFIX, "!");
 
         if (this.prefix.equals("/")) {
             this.prefix = "!";
-            Prefs.setString("commands.prefix", "!");
+            Prefs.setString(PreferenceKeys.COMMAND_PREFIX, "!");
             DiscordTools.basicAlert(
                     fragment.getContext(),
                     "Commands",
@@ -276,111 +277,112 @@ public class MediaTray {
     public String commands(String text) {
         shouldAddSpoiler.set(false);
 
-        if (text.startsWith(prefix)) {
-            String original = text;
-            text = text.substring(prefix.length());
+        if (!text.startsWith(prefix)) {
+            return text;
+        }
+        String original = text;
+        text = text.substring(prefix.length());
 
-            if (text.equals("add")) {
-                addCommand();
-                text = "";
-            } else if (text.equals("delete")) {
-                deleteCommand();
-                text = "";
-            } else if (text.startsWith("ud ")) {
-                Urban.getDefinition(mFragment.getActivity(), text.substring(3).trim());
-                text = "";
-            } else if (text.startsWith("tr ")) {
-                Translate.showTranslateDialog(mFragment.getActivity(), text.substring(3).trim());
-                text = "";
-            // } else if (text.equals("read")) {
-            //     MarkRead.sendRequest();
+        if (text.equals("add")) {
+            addCommand();
+            text = "";
+        } else if (text.equals("delete")) {
+            deleteCommand();
+            text = "";
+        } else if (text.startsWith("ud ")) {
+            Urban.getDefinition(mFragment.getActivity(), text.substring(3).trim());
+            text = "";
+        } else if (text.startsWith("tr ")) {
+            Translate.showTranslateDialog(mFragment.getActivity(), text.substring(3).trim());
+            text = "";
+        // } else if (text.equals("read")) {
+        //     MarkRead.sendRequest();
 
-            } else if (text.startsWith("purge ")) {
-                final int limit = StringUtils.getIntSafe(text.substring(6).trim());
+        } else if (text.startsWith("purge ")) {
+            final int limit = StringUtils.getIntSafe(text.substring(6).trim());
 
-                Alerts.showDeleteDisclaimer(mFragment.getContext(), () -> {
-                    Long channelId = StoreUtils.getCurrentChannelId();
+            Alerts.showDeleteDisclaimer(mFragment.getContext(), () -> {
+                Long channelId = StoreUtils.getCurrentChannelId();
 
-                    if (limit < 1 || limit > MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND) {
-                        // TODO: consider removing the upper bound limit?
-                        ToastUtil.toast("Use a number between 1-" + MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND);
-                    } else if (channelId == null) {
-                        ToastUtil.toast("Could not locate the current channel. Restart Bluecord and retry.");
-                    } else if (!DiscordTools.isConnected()) {
-                        ToastUtil.toast("You don't appear to be connected to the Internet. Check your connection and retry.");
-                    } else {
-                        long authorId = StoreUtils.getSelf().getId();
-                        Long guildId = StoreUtils.getCurrentGuildId();
-                        MessageDeleterTask.start(channelId, authorId, guildId, limit);
-                    }
+                if (limit < 1 || limit > MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND) {
+                    // TODO: consider removing the upper bound limit?
+                    ToastUtil.toast("Use a number between 1-" + MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND);
+                } else if (channelId == null) {
+                    ToastUtil.toast("Could not locate the current channel. Restart Bluecord and retry.");
+                } else if (!DiscordTools.isConnected()) {
+                    ToastUtil.toast("You don't appear to be connected to the Internet. Check your connection and retry.");
+                } else {
+                    long authorId = StoreUtils.getSelf().getId();
+                    Long guildId = StoreUtils.getCurrentGuildId();
+                    MessageDeleterTask.start(channelId, authorId, guildId, limit);
+                }
+            });
+            text = "";
+        }
+
+        else if (text.startsWith("b "))       text = "```\n" + text.substring(2) + "\n```";
+        else if (text.startsWith("bold "))    text = "**"    + text.substring(2) + "**";
+        else if (text.equals("blank"))        text = "\u200b";
+        else if (text.startsWith("i "))       text = "*"     + text.substring(2) + "*";
+        else if (text.startsWith("u "))       text = "__"    + text.substring(2) + "__";
+        else if (text.startsWith("s "))       text = "~~"    + text.substring(2) + "~~";
+        else if (text.startsWith("mock "))    text = StringUtils.mock(text.substring(5));
+        else if (text.startsWith("upper "))   text = text.substring(6).trim().toUpperCase(Locale.ROOT);
+        else if (text.startsWith("lower "))   text = text.substring(6).trim().toLowerCase(Locale.ROOT);
+        else if (text.startsWith("reverse ")) text = new StringBuilder(text.substring(8).trim()).reverse().toString();
+        else if (text.startsWith("uwu "))     text = text.substring(4).replace(" ", " ᵘʷᵘ ");
+        else if (text.startsWith("owo "))     text = text.substring(4)
+                .replace("l", "w")
+                .replace("L", "W")
+                .replace("o", "u")
+                .replace("O", "U")
+                .replace("r", "w")
+                .replace("R", "W")
+                .trim();
+
+        else if (text.startsWith("spoiler")) {
+            text = text.substring(7).trim();
+            text = StringUtils.isEmpty(text) ? "" : "||" + text + "||";
+            shouldAddSpoiler.set(true);
+        }
+
+        else if (text.equals("update")) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(URLConstants.getBaseUrl()));
+            ((Context) mFragment.requireActivity()).startActivity(intent);
+        }
+        else if (text.equals("bluecord")) {
+            FragmentActivity activity = mFragment.getActivity();
+            if (activity != null) {
+                activity.runOnUiThread(() -> {
+                    DiscordTools.basicAlert(
+                            mFragment.requireActivity(),
+                            "Bluecord",
+                            "The reason I started this project was that there were no other Discord mods available for Android where you can customize all the mods to your liking with a settings UI. " +
+                                    "The goal of this mod is to bring you all the mods you like, " +
+                                    "but in a form factor that's customizable and easy to install and use with no coding or reversing required. " +
+                                    "Hope you enjoy!\n\n" +
+                                    "~Blue"
+                    );
                 });
                 text = "";
             }
-
-            else if (text.startsWith("b "))       text = "```\n" + text.substring(2) + "\n```";
-            else if (text.startsWith("bold "))    text = "**"    + text.substring(2) + "**";
-            else if (text.equals("blank"))        text = "\u200b";
-            else if (text.startsWith("i "))       text = "*"     + text.substring(2) + "*";
-            else if (text.startsWith("u "))       text = "__"    + text.substring(2) + "__";
-            else if (text.startsWith("s "))       text = "~~"    + text.substring(2) + "~~";
-            else if (text.startsWith("mock "))    text = StringUtils.mock(text.substring(5));
-            else if (text.startsWith("upper "))   text = text.substring(6).trim().toUpperCase(Locale.ROOT);
-            else if (text.startsWith("lower "))   text = text.substring(6).trim().toLowerCase(Locale.ROOT);
-            else if (text.startsWith("reverse ")) text = new StringBuilder(text.substring(8).trim()).reverse().toString();
-            else if (text.startsWith("uwu "))     text = text.substring(4).replace(" ", " ᵘʷᵘ ");
-            else if (text.startsWith("owo "))     text = text.substring(4)
-                    .replace("l", "w")
-                    .replace("L", "W")
-                    .replace("o", "u")
-                    .replace("O", "U")
-                    .replace("r", "w")
-                    .replace("R", "W")
-                    .trim();
-
-            else if (text.startsWith("spoiler")) {
-                text = text.substring(7).trim();
-                text = StringUtils.isEmpty(text) ? "" : "||" + text + "||";
-                shouldAddSpoiler.set(true);
-            }
-
-            else if (text.equals("update")) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(URLConstants.getBaseUrl()));
-                ((Context) mFragment.requireActivity()).startActivity(intent);
-            }
-            else if (text.equals("bluecord")) {
-                FragmentActivity activity = mFragment.getActivity();
-                if (activity != null) {
-                    activity.runOnUiThread(() -> {
-                        DiscordTools.basicAlert(
-                                mFragment.requireActivity(),
-                                "Bluecord",
-                                "The reason I started this project was that there were no other Discord mods available for Android where you can customize all the mods to your liking with a settings UI. " +
-                                        "The goal of this mod is to bring you all the mods you like, " +
-                                        "but in a form factor that's customizable and easy to install and use with no coding or reversing required. " +
-                                        "Hope you enjoy!\n\n" +
-                                        "~Blue"
-                        );
-                    });
-                    text = "";
-                }
-            }
-            else if (text.startsWith("prefix ")) {
-                String prefix = text.substring(7);
-                if (this.prefix.equals(prefix)) {
-                    ToastUtil.toast("Prefix is the same!");
-                } else if (prefix.equals("@") || prefix.equals("#") || prefix.equals("/") || prefix.length() != 1) {
-                    ToastUtil.toast("Prefix must be 1 character long and must not be a @, # or /");
-                } else {
-                    this.prefix = prefix;
-                    Prefs.setString("commands.prefix", prefix);
-                    ToastUtil.toast("Prefix changed to " + prefix);
-                    text = "";
-                }
-            } else {
-                text = customComs(original);
-            }
-            text = text.trim();
         }
+        else if (text.startsWith("prefix ")) {
+            String prefix = text.substring(7);
+            if (this.prefix.equals(prefix)) {
+                ToastUtil.toast("Prefix is the same!");
+            } else if (prefix.equals("@") || prefix.equals("#") || prefix.equals("/") || prefix.length() != 1) {
+                ToastUtil.toast("Prefix must be 1 character long and must not be a @, # or /");
+            } else {
+                this.prefix = prefix;
+                Prefs.setString(PreferenceKeys.COMMAND_PREFIX, prefix);
+                ToastUtil.toast("Prefix changed to " + prefix);
+                text = "";
+            }
+        } else {
+            text = customComs(original);
+        }
+        text = text.trim();
         return text;
     }
 

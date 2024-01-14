@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CompletableFuture;
 
 import mods.DiscordTools;
 import mods.constants.Constants;
@@ -183,6 +184,9 @@ public class MessageDeleterTask {
 
     // Add variations of up to 33% to simulate human behavior
     private long addJitter(long ms) {
+        if (ms <= 10) {
+            return 0;
+        }
         return ms + random.nextInt((int) (ms / 3));
     }
 
@@ -211,6 +215,7 @@ public class MessageDeleterTask {
         final String requestUrl = builder.build().toString();
         final Map<String, String> headers = getHeaders();
 
+        CompletableFuture<String> future = new CompletableFuture<>();
         SimpleHttpResponse response = Net.getOrPostWithResult(requestUrl, null, headers);
         final int responseCode = response.getResponseCode();
 

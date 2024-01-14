@@ -47,6 +47,11 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        encoding 'utf-8'
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 }
 
@@ -57,7 +62,6 @@ dependencies {
     implementation "androidx.preference:preference:1.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
-    // implementation "androidx.recyclerview:recyclerview:1.2.1"
-    // implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    // implementation 'com.facebook.fresco:fresco:2.6.0'
+    // Java 9 backport
+    // implementation 'net.sourceforge.streamsupport:android-retrofuture:1.7.4'
 }

@@ -104,6 +104,7 @@ public final class PreferenceKeys {
     public static final String DELETE_DISCLAIMER_ACCEPTED = "blue.delete.disclaimer";
     public static final String SHOW_TEXT_CHAR_COUNT = "blue.show.char.count";
     public static final String RN_DEVICE_VENDOR_ID = "blue.device.vendor.id";
+    public static final String COMMAND_PREFIX = "commands.prefix";
 
     // Dead preference keys that should NOT be reused
 
