@@ -27,7 +27,6 @@ object Net {
 
     @JvmStatic
     @JvmOverloads
-    @Throws(IOException::class)
     fun doGetAsync(url: String, headers: Map<String, String> = emptyMap(), onSuccess: (Response) -> Unit, onError: (IOException) -> Unit) {
         val request = RequestBuilder()
             .get(url)
@@ -66,7 +65,6 @@ object Net {
 
     @JvmStatic
     @JvmOverloads
-    @Throws(IOException::class)
     fun doPostAsync(url: String, data: String, headers: Map<String, String> = emptyMap(), onSuccess: (Response) -> Unit, onError: (IOException) -> Unit) {
         val request = RequestBuilder()
             .url(url)
