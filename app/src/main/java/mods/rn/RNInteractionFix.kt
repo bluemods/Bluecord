@@ -194,7 +194,7 @@ object RNInteractionFix {
                                     user.keys().asSequence().first { it.toLongOrNull() != null }
                                 put("id", permKey.toLong())
                                 put("permission", user.optBoolean(permKey, true))
-                                put("type", ApplicationCommandPermissionType.USER.name)
+                                put("type", ApplicationCommandPermissionType.USER.ordinal)
                             })
                         }
                         command.put("permissions", permissionsArray)
@@ -266,12 +266,13 @@ object RNInteractionFix {
         command: RestAPIParams.ApplicationCommand,
         commandJson: JSONObject
     ) {
+        val type = 1
         val json = JSONObject(GSON.m(command))
         val data = json.getJSONObject("data").apply {
-            put("type", 1)
+            put("type", type)
             put("application_command", JSONObject().apply {
                 put("id", commandJson.optString("id", null))
-                put("type", commandJson.optInt("type", 1))
+                put("type", commandJson.optInt("type", type))
                 put("application_id", commandJson.optString("application_id", null))
                 put("version", commandJson.optString("version", null))
                 put("name", commandJson.optString("name", null))
