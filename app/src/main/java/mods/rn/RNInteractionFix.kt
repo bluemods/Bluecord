@@ -4,7 +4,6 @@ import com.discord.api.commands.ApplicationCommandPermissionType
 import com.discord.api.commands.GuildApplicationCommands
 import com.discord.restapi.RequiredHeadersInterceptor
 import com.discord.restapi.RestAPIParams
-import com.discord.stores.StoreStream
 import com.discord.utilities.rest.RestAPI
 import com.google.gson.Gson
 import j0.n.c
@@ -12,9 +11,9 @@ import mods.extensions.OkHttpClientBuilder
 import mods.extensions.RequestBuilder
 import mods.extensions.addInterceptor
 import mods.extensions.build
-import mods.extensions.code
 import mods.extensions.enqueue
 import mods.extensions.get
+import mods.extensions.isSuccessful
 import mods.extensions.newCall
 import mods.extensions.post
 import mods.extensions.setHeader
@@ -23,13 +22,11 @@ import mods.extensions.url
 import mods.utils.LogUtils
 import mods.utils.SnowflakeUtils
 import mods.utils.StoreUtils
-import mods.utils.ThreadUtils
 import okhttp3.RequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import rx.Observable
 import rx.subjects.BehaviorSubject
-import java.io.ByteArrayOutputStream
 import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
@@ -109,7 +106,7 @@ object RNInteractionFix {
         val url = "https://discord.com/api/v9/guilds/$guildId/application-command-index"
 
         client.newCall(RequestBuilder().get(url).build()).enqueue({ (_, response) ->
-            if (response.code !in 200..299) {
+            if (!response.isSuccessful) {
                 synchronized(guildCache) {
                     guildCache.remove(guildId)
                 }

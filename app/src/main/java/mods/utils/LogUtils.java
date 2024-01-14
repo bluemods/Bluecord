@@ -47,6 +47,6 @@ public final class LogUtils {
     }
 
     public static void logGatewaySocketData(ByteArrayOutputStream stream) {
-        log("WSS", new String(stream.toByteArray(), StandardCharsets.UTF_8));
+        // log("WSS", new String(stream.toByteArray(), StandardCharsets.UTF_8));
     }
 }
