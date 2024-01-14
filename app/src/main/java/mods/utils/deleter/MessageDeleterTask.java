@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.CompletableFuture;
 
 import mods.DiscordTools;
 import mods.constants.Constants;
@@ -215,7 +214,6 @@ public class MessageDeleterTask {
         final String requestUrl = builder.build().toString();
         final Map<String, String> headers = getHeaders();
 
-        CompletableFuture<String> future = new CompletableFuture<>();
         SimpleHttpResponse response = Net.getOrPostWithResult(requestUrl, null, headers);
         final int responseCode = response.getResponseCode();
 
