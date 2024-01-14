@@ -1,6 +1,9 @@
 package com.discord.restapi;
 
+import com.discord.api.commands.ApplicationCommandData;
 import com.discord.api.message.allowedmentions.MessageAllowedMentions;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -86,4 +89,14 @@ public class RestAPIParams {
         }
     }
 
+    public static class ApplicationCommand {
+        @NotNull
+        public String getApplicationId() {
+            return "";
+        }
+
+        public ApplicationCommandData getData() {
+            return new ApplicationCommandData();
+        }
+    }
 }

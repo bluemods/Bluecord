@@ -1,6 +1,21 @@
 package com.discord.restapi;
 
-public class RequiredHeadersInterceptor {
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.Response;
+
+public class RequiredHeadersInterceptor implements Interceptor {
+
+    public RequiredHeadersInterceptor(HeadersProvider provider) {
+
+    }
+
+    @Override
+    public Response intercept(Chain chain) throws IOException {
+        return null;
+    }
+
     public interface HeadersProvider {
         String getAcceptLanguages();
 

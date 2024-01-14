@@ -1,5 +1,13 @@
 package com.discord.stores;
 
+import com.discord.api.commands.Application;
+import com.discord.api.commands.GuildApplicationCommands;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
 public class StoreStream {
 
     public static final Companion Companion = new Companion();
@@ -42,6 +50,20 @@ public class StoreStream {
         return new StoreReadStates();
     }
 
+    public void handleGuildApplicationCommands(GuildApplicationCommands commands) {}
+
+    public static void access$handleGuildApplicationCommands(@NotNull StoreStream storeStream, @Nullable GuildApplicationCommands guildAppCommands) {
+
+    }
+
+    public void handleGuildApplicationsUpdate(List<Application> list) {
+
+    }
+
+    public StoreApplicationCommands getApplicationCommands$app_productionGoogleRelease() {
+        return new StoreApplicationCommands();
+    }
+
     public static class Companion {
         public StoreMessagesLoader getMessagesLoader() {
             return new StoreMessagesLoader();
@@ -53,6 +75,10 @@ public class StoreStream {
 
         public final StoreCalls getCalls() {
             return null;
+        }
+
+        public static StoreStream access$getCollector$p(StoreStream.Companion companion) {
+            return new StoreStream();
         }
     }
 }

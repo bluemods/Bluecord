@@ -21,6 +21,8 @@ import com.discord.utilities.rx.ObservableExtensionsKt;
 import com.discord.utilities.search.network.SearchFetcher;
 import com.discord.utilities.time.ClockFactory;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -259,5 +261,11 @@ public class StoreUtils {
                 LogUtils.log(TAG, "failed to decline call", e);
             }
         });
+    }
+
+    @NotNull
+    @SuppressWarnings("all")
+    public static StoreStream getStoreStream() {
+        return StoreStream.Companion.access$getCollector$p(StoreStream.Companion);
     }
 }

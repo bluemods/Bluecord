@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.discord.api.channel.Channel;
 import com.discord.api.message.Message;
 import com.discord.models.domain.ModelSearchResponse;
+import com.discord.restapi.RequiredHeadersInterceptor;
 import com.discord.restapi.RestAPIParams;
 
 import java.util.List;
@@ -74,38 +75,38 @@ public class RestAPI {
         public RestAPI getApi() { return null; }
     }
 
-    public static final class AppHeadersProvider {
+    public static final class AppHeadersProvider implements RequiredHeadersInterceptor.HeadersProvider {
         public static final AppHeadersProvider INSTANCE = new AppHeadersProvider();
 
         private AppHeadersProvider() {
         }
 
-        // @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
+        @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
         public String getAcceptLanguages() {
             return "";
         }
 
-        // @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
+        @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
         public String getAuthToken() {
             return "";
         }
 
-        // @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
+        @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
         public String getFingerprint() {
             return "";
         }
 
-        // @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
+        @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
         public String getLocale() {
             return "";
         }
 
-        // @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
+        @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
         public String getSpotifyToken() {
             return "";
         }
 
-        // @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
+        @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
         public String getUserAgent() {
             return "";
         }
