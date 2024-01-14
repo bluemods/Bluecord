@@ -1,46 +1,54 @@
-package mods.preference;
+@file:Suppress("DEPRECATION")
+package mods.preference
 
-import android.content.Context;
-import android.preference.Preference;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.util.AttributeSet;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.content.Context
+import android.preference.Preference
+import android.preference.Preference.OnPreferenceClickListener
+import android.text.Html
+import android.text.method.LinkMovementMethod
+import android.util.AttributeSet
+import android.widget.ScrollView
+import android.widget.TextView
+import mods.DiscordTools
+import mods.constants.URLConstants
+import mods.extensions.string
+import mods.net.Net
+import mods.utils.ToastUtil
 
-import mods.DiscordTools;
-import mods.constants.URLConstants;
-import mods.net.Net;
+class URIPreference(
+    context: Context?,
+    attrs: AttributeSet
+) : Preference(context, attrs) {
 
-public class URIPreference extends Preference {
+    init {
+        val url = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "key")
+        val title = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "title")
 
-    public URIPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        @Suppress("DEPRECATION")
+        onPreferenceClickListener = OnPreferenceClickListener {
+            Net.doGetAsync(URLConstants.phpLink() + "?" + url, onSuccess = {
+                showDialog(title, it.string())
+            }, onError = {
+                ToastUtil.toast("Failed to load, check your Internet and retry.")
+            })
+            true
+        }
+    }
 
-        final String url = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "key");
-        final String title = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "title");
+    private fun showDialog(title: String, text: String) {
+        val rootView = ScrollView(context)
+        val tv = TextView(context)
+        tv.text = Html.fromHtml(text.replace("\n", "<br>"))
+        tv.setPadding(20, 20, 20, 20)
+        tv.textSize = 16f
+        tv.movementMethod = LinkMovementMethod.getInstance()
+        rootView.addView(tv)
 
-        setOnPreferenceClickListener(preference -> {
-            String data = Net.asyncRequest(URLConstants.phpLink() + "?" + url, null);
-
-            ScrollView rootView = new ScrollView(preference.getContext());
-
-            TextView tv = new TextView(preference.getContext());
-            tv.setText(Html.fromHtml(data == null ? "Check your internet connection, and try again." : data.replace("\n", "<br>")));
-            tv.setPadding(20, 20, 20, 20);
-            tv.setTextSize(16);
-            tv.setMovementMethod(LinkMovementMethod.getInstance());
-
-            rootView.addView(tv);
-
-            DiscordTools.newBuilder(preference.getContext())
-                    .setTitle(title)
-                    .setView(rootView)
-                    .setPositiveButton("Dismiss", null)
-                    .create()
-                    .show();
-
-            return true;
-        });
+        DiscordTools.newBuilder(context)
+            .setTitle(title)
+            .setView(rootView)
+            .setPositiveButton("Dismiss", null)
+            .create()
+            .show()
     }
 }

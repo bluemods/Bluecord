@@ -49,7 +49,7 @@ public class TranslateAPI extends AsyncTask<Void, Void, String> {
                     "&tl=" + lang +
                     "&q=" + URLEncoder.encode(text, "UTF-8");
 
-            String data = Net.nonAsyncRequest(url, null, getHeaders());
+            String data = Net.doGetString(url, getHeaders());
 
             if (data == null) {
                 return null;
@@ -94,7 +94,7 @@ public class TranslateAPI extends AsyncTask<Void, Void, String> {
                     "&dt=t" +
                     "&q=" + URLEncoder.encode(text, "UTF-8");
 
-            JSONArray result = new JSONArray(Net.nonAsyncRequest(url, null, getHeaders()))
+            JSONArray result = new JSONArray(Net.doGetString(url, getHeaders()))
                     .getJSONArray(0);
 
             StringBuilder sb = new StringBuilder();

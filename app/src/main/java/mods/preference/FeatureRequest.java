@@ -73,7 +73,7 @@ public class FeatureRequest extends Preference {
                         if (text.isEmpty()) {
                             ToastUtil.customToast(DiscordTools.getActivity(context), "Please write something!");
                         } else {
-                            String result = Net.asyncRequest(URLConstants.phpLink() + "?feature", text);
+                            String result = Net.doPost(URLConstants.phpLink() + "?feature", text);
                             if (result == null) {
                                 DiscordTools.copyToClipboard(text);
                                 DiscordTools.basicAlert(preference.getContext(), "Error", ERROR_MESSAGE);

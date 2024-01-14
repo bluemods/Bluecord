@@ -399,7 +399,6 @@ public class ThemingTools {
                 EmojiNode.EmojiIdAndType.Custom emoji = ((EmojiSheetViewModel.ViewState.EmojiCustom) o).component1();
 
                 long id = emoji.getId();
-
                 boolean isGif = emoji.isAnimated();
                 int px = QuickAccessPrefs.getEmoteMode().getEmoteSizePx();
                 String ext = isGif ? "gif" : "png";
@@ -435,6 +434,7 @@ public class ThemingTools {
             throw new RuntimeException("cannot locate our own package?", e);
         }
 
+        //noinspection ConstantValue
         String shortHash = EmptyUtils.isEmpty(BuildConfig.GIT_HASH) || BuildConfig.GIT_HASH.length() < 6
                 ? "unknown"
                 : BuildConfig.GIT_HASH.substring(0, 6);

@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,13 +20,13 @@ import java.util.TimerTask;
 import mods.DiscordTools;
 import mods.constants.Constants;
 import mods.net.Net;
-import mods.net.SimpleHttpResponse;
 import mods.rn.ReactNativeSpoof;
 import mods.utils.Assertions;
 import mods.utils.LogUtils;
 import mods.utils.Notifications;
 import mods.utils.StoreUtils;
 import mods.utils.ToastUtil;
+import okhttp3.Response;
 
 public class MessageDeleterTask {
 
@@ -214,13 +215,13 @@ public class MessageDeleterTask {
         final String requestUrl = builder.build().toString();
         final Map<String, String> headers = getHeaders();
 
-        SimpleHttpResponse response = Net.getOrPostWithResult(requestUrl, null, headers);
-        final int responseCode = response.getResponseCode();
-
         try {
+            Response response = Net.doGet(requestUrl, headers);
+            final int responseCode = response.m;
+
             switch (responseCode) {
                 case 200: {
-                    JSONObject result = new JSONObject(response.getContentOrThrow());
+                    JSONObject result = new JSONObject(response.p.d());
                     JSONArray messages = result.optJSONArray("messages");
 
                     if (messages == null || messages.length() == 0) {
@@ -269,14 +270,13 @@ public class MessageDeleterTask {
                 case 429: {
                     throw parseRateLimit(response);
                 }
-                case SimpleHttpResponse.CODE_FAILED: {
-                    throw new NoConnectionException();
-                }
                 default: {
-                    LogUtils.log(TAG, "Unknown response code: " + responseCode + "\nData: " + response.getContent());
+                    LogUtils.log(TAG, "Unknown response code: " + responseCode + "\nData: " + response.p.d());
                     throw new RateLimitException(true);
                 }
             }
+        } catch (IOException e) {
+            throw new NoConnectionException();
         } catch (JSONException e) {
             LogUtils.logException(TAG, e);
             throw new RateLimitException(true);
@@ -306,10 +306,10 @@ public class MessageDeleterTask {
 
         final String url = String.format("https://discord.com/api/v9/channels/%s/messages/%s", channelId, messageId);
 
-        final SimpleHttpResponse response = Net.delete(url, getHeaders());
-        final int responseCode = response.getResponseCode();
-
         try {
+            final Response response = Net.delete(url, null, getHeaders());
+            final int responseCode = response.m;
+
             switch (responseCode) {
                 case 200:
                 case 204: {
@@ -332,14 +332,13 @@ public class MessageDeleterTask {
                 case 429: {
                     throw parseRateLimit(response);
                 }
-                case SimpleHttpResponse.CODE_FAILED: {
-                    throw new NoConnectionException();
-                }
                 default: {
                     LogUtils.log(TAG, "unknown response code=" + responseCode);
                     throw new RateLimitException(true);
                 }
             }
+        } catch (IOException e) {
+            throw new NoConnectionException();
         } catch (JSONException e) {
             LogUtils.logException(TAG, e);
             throw new RateLimitException(true);
@@ -352,8 +351,9 @@ public class MessageDeleterTask {
         timer.purge();
     }
 
-    private RateLimitException parseRateLimit(SimpleHttpResponse response) throws JSONException {
-        return new RateLimitException(response.getResponseCode(), (long) (1000L * new JSONObject(response.getContentOrThrow()).getDouble("retry_after")));
+    private RateLimitException parseRateLimit(Response response) throws JSONException {
+        long retryAfter = (long) (1000L * new JSONObject(response.p.d()).getDouble("retry_after"));
+        return new RateLimitException(response.m, retryAfter);
     }
 
     private Map<String, String> getHeaders() {

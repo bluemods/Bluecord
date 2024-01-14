@@ -11,6 +11,7 @@ import okhttp3.Request;
 /** OkHttpClient */
 public class x {
 
+    public x() {}
     public x(a builder) {}
 
     /** newCall */

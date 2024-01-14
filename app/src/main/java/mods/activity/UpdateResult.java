@@ -90,7 +90,7 @@ class UpdateResult {
                     result = null;
                 } else {
                     LogUtils.log(TAG, "checking for update");
-                    result = UpdateResult.parse(Net.nonAsyncRequest(URLConstants.phpLink() + "?updatecheck=" + Constants.VERSION_CODE, null), false);
+                    result = UpdateResult.parse(Net.doGetString(URLConstants.phpLink() + "?updatecheck=" + Constants.VERSION_CODE), false);
                 }
 
                 DiscordTools.HANDLER.post(() -> {

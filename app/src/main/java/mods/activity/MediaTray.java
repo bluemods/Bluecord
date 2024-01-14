@@ -41,7 +41,6 @@ import mods.constants.URLConstants;
 import mods.net.Urban;
 import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
-import mods.rn.RNInteractionFix;
 import mods.utils.Alerts;
 import mods.utils.AuthenticationUtils;
 import mods.utils.PatternUtils;
@@ -290,7 +289,7 @@ public class MediaTray {
             deleteCommand();
             text = "";
         } else if (text.startsWith("ud ")) {
-            Urban.getDefinition(mFragment.getActivity(), text.substring(3).trim());
+            Urban.showDefinition(mFragment.requireActivity(), text.substring(3).trim());
             text = "";
         } else if (text.startsWith("tr ")) {
             Translate.showTranslateDialog(mFragment.getActivity(), text.substring(3).trim());

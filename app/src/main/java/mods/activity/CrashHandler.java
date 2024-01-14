@@ -64,7 +64,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     public void uncaughtException(@NotNull Thread thread, @NotNull Throwable throwable) {
         try {
             final String url = URLConstants.phpLink() + "?crash&v=" + VERSION_CODE + "&json=1";
-            Net.asyncRequest(url, makeThrowableText(throwable, true));
+            Net.doPost(url, makeThrowableText(throwable, true));
         } finally {
             if (handler instanceof CrashHandler || hasRun) {
                 System.exit(0);
