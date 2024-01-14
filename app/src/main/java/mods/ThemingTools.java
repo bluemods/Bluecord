@@ -4,16 +4,23 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.text.InputFilter;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.URLSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.discord.BuildConfig;
 import com.discord.api.channel.Channel;
 import com.discord.api.message.reaction.MessageReactionUpdate;
 import com.discord.models.domain.emoji.Emoji;
@@ -41,6 +48,7 @@ import mods.preference.EmoteMode;
 import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
 import mods.utils.AuthenticationUtils;
+import mods.utils.EmptyUtils;
 import mods.utils.LogUtils;
 import mods.utils.StoreUtils;
 import mods.utils.StringUtils;
@@ -417,23 +425,36 @@ public class ThemingTools {
         });
     }
 
-    public static String getCredits() {
+    public static void setCreditsText(TextView tv) {
+        PackageInfo pi;
         try {
-            PackageInfo pi = DiscordTools.getContext()
+            pi = DiscordTools.getContext()
                     .getPackageManager()
                     .getPackageInfo(DiscordTools.getContext().getPackageName(), 0);
-
-            return String.format(
-                    "Bluecord v%s\nBased on Discord %s (%s)\n~Made with love by Blue~",
-                    URLConstants.getVersionString(),
-                    pi.versionName,
-                    pi.versionCode
-            );
-        } catch (Exception e) {
-            LogUtils.log(TAG, "cannot locate own package?", e);
-
-            return "Bluecord v" + URLConstants.getVersionString() + "\n~Made with love by Blue~";
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException("cannot locate our own package?", e);
         }
+
+        String shortHash = EmptyUtils.isEmpty(BuildConfig.GIT_HASH) || BuildConfig.GIT_HASH.length() < 6
+                ? "unknown"
+                : BuildConfig.GIT_HASH.substring(0, 6);
+
+        SpannableStringBuilder sb = new SpannableStringBuilder();
+        sb.append("Bluecord ");
+        int pos = sb.length();
+        sb.append("v").append(URLConstants.getVersionString());
+        // sb.setSpan(new StyleSpan(Typeface.BOLD), pos, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sb.append(" (commit ");
+        pos = sb.length();
+        sb.append(shortHash);
+        sb.setSpan(new URLSpan(URLConstants.GIT_REPO_URL + "/tree/" + shortHash), pos, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sb.append(')');
+
+        sb.append(String.format("\nBased on Discord %s (%s)\n~Made with love by Blue~", pi.versionName, pi.versionCode));
+        sb.setSpan(new RelativeSizeSpan(0.85f), 0, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        tv.setText(sb);
+        tv.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     public static String getDateFormat() {

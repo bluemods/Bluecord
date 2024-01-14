@@ -905,12 +905,8 @@
 
     invoke-static {v0, v1}, Ld0/z/d/m;->checkNotNullExpressionValue(Ljava/lang/Object;Ljava/lang/String;)V
 
-	invoke-static {}, Lmods/ThemingTools;->getCredits()Ljava/lang/String;
+	invoke-static {v0}, Lmods/ThemingTools;->setCreditsText(Landroid/widget/TextView;)V
 	
-    move-result-object v1
-
-    invoke-virtual {v0, v1}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
-
     .line 12
     iget-object v0, p1, Lcom/discord/databinding/WidgetSettingsBinding;->B:Landroid/widget/TextView;
 

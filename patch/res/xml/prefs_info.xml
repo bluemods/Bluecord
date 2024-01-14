@@ -9,10 +9,10 @@
     <Preference android:title="Official Website">
         <intent android:action="android.intent.action.VIEW" android:data="https://bluesmods.com" />
     </Preference>
-    <mods.preference.OpenLink android:title="Official Discord Server" android:summary="Check here for updates to the project!" android:key="discord_server" android:defaultValue="https://discord.gg/VPcCqEuFFS" />
+    <mods.preference.OpenLink android:title="Official Discord Server" android:summary="Check here for updates to the project!" android:key="discord_server" />
     <Preference android:title="Official YouTube Channel" android:summary="Check here for new videos!">
         <intent android:action="android.intent.action.VIEW" android:data="https://www.youtube.com/channel/UCXc1YJqHqwi8psfYynTFLGA" />
     </Preference>
-    <!-- <mods.preference.URIPreference android:title="Licenses" android:key="license" /> -->
+    <mods.preference.OpenLink android:title="Source Code" android:summary="View the source code of Bluecord on GitHub" android:key="bluecord_source" />
     <mods.preference.EmptyPreference android:title="Bluecord made with love by Blue\nhttps://bluesmods.com" />
 </PreferenceScreen>

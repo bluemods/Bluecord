@@ -16,6 +16,16 @@ android {
         exclude 'META-INF/*.kotlin_module'
     }
 
+
+    def getGitHash = { ->
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-parse', 'HEAD'
+            standardOutput = stdout
+        }
+        return "\"" + stdout.toString().trim() + "\""
+    }
+
     defaultConfig {
         applicationId "com.bluecord"
         minSdkVersion 21
@@ -26,6 +36,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "GIT_HASH", getGitHash()
     }
 
     buildTypes {

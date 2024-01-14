@@ -4,6 +4,8 @@ import mods.DiscordTools;
 
 public final class URLConstants {
 
+    public static final String GIT_REPO_URL = "https://github.com/bluemods/Bluecord";
+
     private static final boolean IS_BETA =
             DiscordTools.getContext()
                     .getPackageName()
