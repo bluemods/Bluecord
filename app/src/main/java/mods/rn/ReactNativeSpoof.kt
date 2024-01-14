@@ -67,10 +67,11 @@ object ReactNativeSpoof {
         }
         ret["User-Agent"] = USER_AGENT
         ret["x-discord-locale"] = systemLocale
+        ret["x-discord-timezone"] = deviceTimezone
 
         // TODO RN version doesn't include x-fingerprint, but I'm not sure if safe to remove yet
         val fingerprint = AppHeadersProvider.INSTANCE.fingerprint
-        if (fingerprint.isNotEmpty()) {
+        if (fingerprint?.isNotEmpty() == true) {
             ret["x-fingerprint"] = fingerprint
         }
 

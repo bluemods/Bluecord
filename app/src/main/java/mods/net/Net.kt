@@ -85,7 +85,7 @@ object Net {
     fun delete(url: String, data: String? = null, headers: Map<String, String> = emptyMap()): Response {
         val request = RequestBuilder()
             .url(url)
-            .post(RequestBody.create(data?.toByteArray() ?: byteArrayOf(), null))
+            .delete(RequestBody.create(data?.toByteArray() ?: byteArrayOf(), null))
             .headers(headers)
             .build()
         return client.newCall(request).execute()

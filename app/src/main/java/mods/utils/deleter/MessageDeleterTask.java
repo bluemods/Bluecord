@@ -245,8 +245,13 @@ public class MessageDeleterTask {
                                 long messageId = Long.parseLong(message.getString("id"));
                                 long channelId = Long.parseLong(message.getString("channel_id"));
 
-                                // long authorId = Long.parseLong(message.getJSONObject("author").getString("id"));
+                                long authorId = Long.parseLong(message.getJSONObject("author").getString("id"));
                                 // String content = message.getString("content");
+
+                                if (!isGuild && authorId != StoreUtils.getSelf().getId()) {
+                                    // We can't delete other people's messages in DMs
+                                    continue;
+                                }
 
                                 final MessageIdHolder holder = new MessageIdHolder(channelId, messageId);
 

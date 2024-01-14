@@ -1,6 +1,7 @@
 package com.discord.utilities.rest;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.discord.api.channel.Channel;
 import com.discord.api.message.Message;
@@ -92,6 +93,7 @@ public class RestAPI {
         }
 
         @Override // com.discord.restapi.RequiredHeadersInterceptor.HeadersProvider
+        @Nullable
         public String getFingerprint() {
             return "";
         }

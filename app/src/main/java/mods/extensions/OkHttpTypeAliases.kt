@@ -38,8 +38,25 @@ fun RequestBuilder.get(url: String): RequestBuilder = apply {
     c("GET", null)
 }
 
+fun RequestBuilder.head(url: String): RequestBuilder = apply {
+    url(url)
+    c("HEAD", null)
+}
+
 fun RequestBuilder.post(body: RequestBody): RequestBuilder = apply {
     c("POST", body)
+}
+
+fun RequestBuilder.put(body: RequestBody): RequestBuilder = apply {
+    c("PUT", body)
+}
+
+fun RequestBuilder.patch(body: RequestBody): RequestBuilder = apply {
+    c("PATCH", body)
+}
+
+fun RequestBuilder.delete(body: RequestBody): RequestBuilder = apply {
+    c("DELETE", body)
 }
 
 fun RequestBuilder.method(method: String, body: RequestBody?): RequestBuilder = c(method, body)
