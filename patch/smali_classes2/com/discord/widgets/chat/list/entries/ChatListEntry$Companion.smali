@@ -641,11 +641,11 @@
 
     check-cast v7, Lcom/discord/api/message/attachment/MessageAttachment;
 
-	invoke-static {v7}, Lmods/voice/utils/VoiceUtils;->isAudioMessage(Lcom/discord/api/message/attachment/MessageAttachment;)Z
+	# invoke-static {v7}, Lmods/voice/utils/VoiceUtils;->isAudioMessage(Lcom/discord/api/message/attachment/MessageAttachment;)Z
 	
-	move-result v10
+	# move-result v10
 	
-	if-nez v10, :cond_100
+	# if-nez v10, :cond_100
 
     .line 16
     new-instance v10, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;
@@ -678,9 +678,9 @@
     .line 18
     invoke-direct/range {v1 .. v11}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;-><init>(IJLcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;Lcom/discord/api/message/attachment/MessageAttachment;ZZZZ)V
 	
-	goto :goto_101
+	# goto :goto_101
 	
-	:cond_100
+	# :cond_100
 	
     .line 69420
     new-instance v10, Lmods/voice/VoiceMessageEntry;

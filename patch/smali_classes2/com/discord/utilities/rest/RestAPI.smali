@@ -11447,7 +11447,6 @@
 
     iget-object v0, p0, Lcom/discord/utilities/rest/RestAPI;->_api:Lcom/discord/restapi/RestAPIInterface;
 
-    # Patched here
     invoke-static {p1}, Lmods/rn/RNInteractionFix;->patchSendApplicationCommand(Lcom/discord/restapi/RestAPIParams$ApplicationCommand;)Lrx/Observable;
 
     move-result-object p1
