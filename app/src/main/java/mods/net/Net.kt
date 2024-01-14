@@ -51,7 +51,8 @@ object Net {
     @JvmOverloads
     fun doPost(url: String, data: String, headers: Map<String, String> = emptyMap()): String? {
         return runCatching {
-            val request = RequestBuilder().url(url)
+            val request = RequestBuilder()
+                .url(url)
                 .post(RequestBody.create(data.toByteArray(), null))
                 .headers(headers)
                 .build()
@@ -84,7 +85,8 @@ object Net {
     @JvmOverloads
     @Throws(IOException::class)
     fun delete(url: String, data: String? = null, headers: Map<String, String> = emptyMap()): Response {
-        val request = RequestBuilder().url(url)
+        val request = RequestBuilder()
+            .url(url)
             .post(RequestBody.create(data?.toByteArray() ?: byteArrayOf(), null))
             .headers(headers)
             .build()

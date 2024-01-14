@@ -13,9 +13,10 @@ import mods.DiscordTools
 import mods.constants.URLConstants
 import mods.extensions.string
 import mods.net.Net
+import mods.utils.SimpleLoadingSpinner
 import mods.utils.ToastUtil
 
-class URIPreference(
+class HtmlDialogPreference(
     context: Context?,
     attrs: AttributeSet
 ) : Preference(context, attrs) {
@@ -26,9 +27,15 @@ class URIPreference(
 
         @Suppress("DEPRECATION")
         onPreferenceClickListener = OnPreferenceClickListener {
+            val spinner = SimpleLoadingSpinner(context).apply {
+                show("Loading...")
+            }
+
             Net.doGetAsync(URLConstants.phpLink() + "?" + url, onSuccess = {
+                spinner.hide()
                 showDialog(title, it.string())
             }, onError = {
+                spinner.hide()
                 ToastUtil.toast("Failed to load, check your Internet and retry.")
             })
             true
