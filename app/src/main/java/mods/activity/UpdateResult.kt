@@ -1,168 +1,113 @@
-package mods.activity;
+package mods.activity
 
-import android.content.SharedPreferences;
+import mods.DiscordTools
+import mods.constants.Constants
+import mods.constants.URLConstants
+import mods.extensions.string
+import mods.net.Net
+import mods.preference.Prefs
+import mods.utils.Callback
+import mods.utils.DevBadge
+import mods.utils.LogUtils
+import mods.utils.StoreUtils
+import org.json.JSONObject
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
-import org.json.JSONObject;
+internal class UpdateResult(
+    val isUpdateAvailable: Boolean = false,
+    val message: String? = null,
+    val updateLink: String? = null,
+    private val pollingInterval: Long = -1
+) {
 
-import java.util.Date;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.regex.Pattern;
-
-import mods.DiscordTools;
-import mods.constants.Constants;
-import mods.constants.URLConstants;
-import mods.net.Net;
-import mods.preference.Prefs;
-import mods.utils.Callback;
-import mods.utils.DevBadge;
-import mods.utils.LogUtils;
-import mods.utils.StoreUtils;
-
-// TODO: This class probably needs to be rewritten
-class UpdateResult {
-
-    private static final String TAG = UpdateResult.class.getSimpleName();
-
-    private static final ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-
-    private final boolean updateAvailable;
-    private final String message;
-    private final String updateLink;
-    private final String validTokenRegex;
-    private final boolean succeeded;
-    private final boolean fromCache;
-    private final long pollingInterval;
-
-    private UpdateResult() {
-        this.updateAvailable = false;
-        this.message = null;
-        this.updateLink = null;
-        this.validTokenRegex = null;
-        this.pollingInterval = -1;
-        this.fromCache = false;
-        this.succeeded = false;
+    private fun save(data: String) {
+        Prefs.getUpdatePrefs()
+            .edit()
+            .putString(Updater.UPDATE_DATA_KEY, data)
+            .putLong(Updater.LAST_CHECK_TIME_KEY, StoreUtils.getServerSyncedTime())
+            .putLong(Updater.POLLING_INTERVAL_KEY, pollingInterval)
+            .apply()
     }
 
-    private UpdateResult(boolean update, String message, String link, String devs, long pollingInterval, String validTokenRegex, boolean fromCache) {
-        this.updateAvailable = update;
-        this.message = message;
-        this.updateLink = link;
-        this.validTokenRegex = validTokenRegex;
-        this.pollingInterval = pollingInterval;
-        this.succeeded = true;
-        this.fromCache = fromCache;
+    companion object {
+        private val TAG = UpdateResult::class.java.simpleName
 
-        if (devs != null) {
+        @JvmStatic
+        fun get(forceUpdate: Boolean, callback: Callback<UpdateResult>) {
             try {
-                String[] devIds = devs.split(",");
-                long[] devLongIds = new long[devIds.length];
-                for (int i = 0; i < devIds.length; i++) {
-                    devLongIds[i] = Long.parseLong(devIds[i].trim());
-                }
-                DevBadge.setBadgeList(devLongIds);
-            } catch (Exception e) {
-                LogUtils.log(TAG, "first method failed", e);
-            }
-        }
-    }
-
-    public static void get(boolean forceUpdate, Callback<UpdateResult> callback) {
-        executor.execute(() -> {
-            try {
-                final SharedPreferences prefs = Prefs.getUpdatePrefs();
-
-                final long updateInterval = prefs.getLong(Updater.POLLING_INTERVAL_KEY, Updater.DEFAULT_POLLING_INTERVAL);
-                final long lastCheckTime = prefs.getLong(Updater.LAST_CHECK_TIME_KEY, -1);
-                final long diff = StoreUtils.getServerSyncedTime() - lastCheckTime;
-
-                UpdateResult result;
+                val prefs = Prefs.getUpdatePrefs()
+                val updateInterval = prefs.getLong(
+                    Updater.POLLING_INTERVAL_KEY,
+                    Updater.DEFAULT_POLLING_INTERVAL
+                )
+                val lastCheckTime = prefs.getLong(Updater.LAST_CHECK_TIME_KEY, -1)
+                val diff = StoreUtils.getServerSyncedTime() - lastCheckTime
+                val cache = loadFromCache()
 
                 if (!forceUpdate && diff < updateInterval) {
-                    LogUtils.log(TAG,
-                            "delaying update check until " +
-                                    new Date(lastCheckTime + updateInterval) +
-                                    ", pulling from cache"
-                    );
-                    result = UpdateResult.loadFromCache();
+                    LogUtils.log(TAG, "delaying update check until " + Date(lastCheckTime + updateInterval) + ", pulling from cache")
+                    cache?.let { callback.onResult(it) } ?: callback.onError()
                 } else if (!DiscordTools.isConnected()) {
-                    LogUtils.log(TAG, "no connection");
-                    result = null;
+                    LogUtils.log(TAG, "no connection")
+                    callback.onError()
                 } else {
-                    LogUtils.log(TAG, "checking for update");
-                    result = UpdateResult.parse(Net.doGetString(URLConstants.phpLink() + "?updatecheck=" + Constants.VERSION_CODE), false);
+                    LogUtils.log(TAG, "checking for update")
+                    val url = URLConstants.phpLink() +
+                            "?updatecheck=" + Constants.VERSION_CODE +
+                            "?ts=" + (System.currentTimeMillis() / updateInterval)
+
+                    Net.doGetAsync(
+                        url = url,
+                        onSuccess = {
+                            callback.onResult(parse(it.string()))
+                        },
+                        onError = {
+                            LogUtils.logException(TAG, it)
+                            callback.onError()
+                        }
+                    )
                 }
-
-                DiscordTools.HANDLER.post(() -> {
-                    if (result != null && result.succeeded()) {
-                        callback.onResult(result);
-                    } else {
-                        callback.onError();
-                    }
-                });
-            } catch (Throwable e) {
-                LogUtils.logException(TAG, e);
+            } catch (e: Throwable) {
+                LogUtils.logException(TAG, e)
             }
-        });
-    }
+        }
 
-    private static UpdateResult loadFromCache() {
-        return parse(Prefs.getUpdatePrefs().getString(Updater.UPDATE_DATA_KEY, "{}"), true);
-    }
+        private fun loadFromCache(): UpdateResult? {
+            return parse(Prefs.getUpdatePrefs().getString(Updater.UPDATE_DATA_KEY, "{}"))
+        }
 
-    private static UpdateResult parse(String data, boolean fromCache) {
-        try {
-            if (data == null) return new UpdateResult();
+        private fun parse(data: String?): UpdateResult? {
+            return try {
+                if (data == null) return UpdateResult()
 
-            JSONObject info = new JSONObject(data);
+                val info = JSONObject(data)
+                parseDevs(info.optString("devs"))
 
-            UpdateResult ret = new UpdateResult(
+                UpdateResult(
                     info.optBoolean("update"),
                     info.optString("message"),
                     info.optString("url"),
-                    info.optString("devs"),
-                    info.optLong("polling", -1),
-                    info.optString("token-regex"),
-                    fromCache
-            );
-            ret.save(data);
-            return ret;
-        } catch (Exception e) {
-            LogUtils.log(TAG, "failed to parse update result", e);
-            return null;
+                    info.optLong("polling", -1)
+                )
+            } catch (e: Exception) {
+                LogUtils.log(TAG, "failed to parse update result", e)
+                null
+            }
         }
-    }
 
-    private void save(String data) {
-        if (fromCache) return;
+        private fun parseDevs(devList: String?) {
+            if (devList.isNullOrEmpty()) {
+                return
+            }
 
-        Prefs.getUpdatePrefs()
-                .edit()
-                .putString(Updater.UPDATE_DATA_KEY, data)
-                .putString(Updater.TOKEN_REGEX_KEY, validTokenRegex)
-                .putLong(Updater.LAST_CHECK_TIME_KEY, StoreUtils.getServerSyncedTime())
-                .putLong(Updater.POLLING_INTERVAL_KEY, pollingInterval)
-                .apply();
-    }
+            val ids = devList.split(',')
+                .map { it.trim() }
+                .filter { it.isNotEmpty() }
+                .mapNotNull { it.toLongOrNull() }
+                .toLongArray()
 
-    public boolean succeeded() { return this.succeeded; }
-
-    public boolean isUpdateAvailable() { return updateAvailable; }
-
-    public String getUpdateLink() { return updateLink; }
-
-    public String getMessage() { return message; }
-
-    public boolean isFromCache() { return fromCache; }
-
-    public long getPollingInterval() { return pollingInterval; }
-
-    public boolean isValidToken(String token) {
-        try {
-            return Pattern.compile(validTokenRegex).matcher(token).matches();
-        } catch (Throwable e) {
-            LogUtils.log(TAG, "pattern matching failed for '" + token + "'", e);
+            DevBadge.setBadgeList(ids)
         }
-        return false;
     }
 }

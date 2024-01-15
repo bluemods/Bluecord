@@ -2,6 +2,7 @@ package mods.net
 
 import mods.extensions.*
 import mods.utils.ThreadUtils
+import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 import java.io.IOException
@@ -27,17 +28,17 @@ object Net {
 
     @JvmStatic
     @JvmOverloads
-    fun doGetAsync(url: String, headers: Map<String, String> = emptyMap(), onSuccess: (Response) -> Unit, onError: (IOException) -> Unit) {
+    fun doGetAsync(
+        url: String,
+        headers: Map<String, String> = emptyMap(),
+        onSuccess: (Response) -> Unit,
+        onError: (IOException) -> Unit
+    ) {
         val request = RequestBuilder()
             .get(url)
             .headers(headers)
             .build()
-        client.newCall(request)
-            .enqueue({
-                ThreadUtils.runOnUiThread { onSuccess.invoke(it.second) }
-            }, {
-                ThreadUtils.runOnUiThread { onError.invoke(it.second) }
-            })
+        doAsyncCall(request, onSuccess, onError)
     }
 
     @JvmStatic
@@ -65,24 +66,51 @@ object Net {
 
     @JvmStatic
     @JvmOverloads
-    fun doPostAsync(url: String, data: String, headers: Map<String, String> = emptyMap(), onSuccess: (Response) -> Unit, onError: (IOException) -> Unit) {
+    fun doPostAsync(
+        url: String,
+        data: String,
+        headers: Map<String, String> = emptyMap(),
+        onSuccess: (Response) -> Unit,
+        onError: (IOException) -> Unit
+    ) {
         val request = RequestBuilder()
             .url(url)
             .post(RequestBody.create(data.toByteArray(), null))
             .headers(headers)
             .build()
+        doAsyncCall(request, onSuccess, onError)
+    }
+
+    private fun doAsyncCall(
+        request: Request,
+        onSuccess: (Response) -> Unit,
+        onError: (IOException) -> Unit
+    ) {
         client.newCall(request)
-            .enqueue({
-                ThreadUtils.runOnUiThread { onSuccess.invoke(it.second) }
+            .enqueue({ (_, response) ->
+                ThreadUtils.runOnUiThread {
+                    runCatching {
+                        if (!response.isSuccessful) {
+                            onError.invoke(IOException("bad response code " + response.code))
+                        }
+                        onSuccess.invoke(response)
+                    }.onFailure {
+                        onError.invoke(it as? IOException ?: IOException(it))
+                    }
+                }
             }, {
-                ThreadUtils.runOnUiThread { onError.invoke(it.second) }
+                ThreadUtils.runOnUiThread { runCatching { onError.invoke(it.second) } }
             })
     }
 
     @JvmStatic
     @JvmOverloads
     @Throws(IOException::class)
-    fun delete(url: String, data: String? = null, headers: Map<String, String> = emptyMap()): Response {
+    fun delete(
+        url: String,
+        data: String? = null,
+        headers: Map<String, String> = emptyMap()
+    ): Response {
         val request = RequestBuilder()
             .url(url)
             .delete(RequestBody.create(data?.toByteArray() ?: byteArrayOf(), null))

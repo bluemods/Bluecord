@@ -25,6 +25,12 @@ class FeatureRequest @SuppressLint("SetTextI18n") constructor(
     context: Context?,
     attrs: AttributeSet?
 ) : Preference(context, attrs) {
+    companion object {
+        private const val ERROR_MESSAGE = "Error submitting your request.\n\n" +
+                "The request was copied to your clipboard. " +
+                "Please check your Internet connection and try again"
+    }
+
     init {
         onPreferenceClickListener = OnPreferenceClickListener { preference: Preference ->
             val root = ScrollView(preference.context)
@@ -93,12 +99,5 @@ class FeatureRequest @SuppressLint("SetTextI18n") constructor(
                 DiscordTools.basicAlert(context, "Error", ERROR_MESSAGE)
             }
         )
-    }
-
-    companion object {
-        private val TAG = FeatureRequest::class.java.simpleName
-        private const val ERROR_MESSAGE = "Error submitting your request.\n\n" +
-                "The request was copied to your clipboard. " +
-                "Please check your Internet connection and try again"
     }
 }

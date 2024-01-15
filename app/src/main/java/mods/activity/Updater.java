@@ -29,7 +29,7 @@ public class Updater extends Preference {
     static final String POLLING_INTERVAL_KEY = "polling_interval";
     static final String UPDATE_DATA_KEY = "raw_update_data_2";
     static final String LAST_CHECK_TIME_KEY = "last_check_time";
-    static final String TOKEN_REGEX_KEY = "valid_token_regex";
+    // static final String TOKEN_REGEX_KEY = "valid_token_regex";
     static final long DEFAULT_POLLING_INTERVAL = TimeUnit.MINUTES.toMillis(30);
 
     private static boolean hasRun = false;
@@ -64,13 +64,11 @@ public class Updater extends Preference {
         }
 
         UpdateResult.get(false, result -> {
-            if (result.succeeded() && !result.isFromCache()) {
-                if (result.isUpdateAvailable()) {
-                    ToastUtil.toast("Bluecord Update Is Available!");
-                    markUpdate(true);
-                } else {
-                    markUpdate(false);
-                }
+            if (result.isUpdateAvailable()) {
+                ToastUtil.toast("Bluecord Update Is Available!");
+                markUpdate(true);
+            } else {
+                markUpdate(false);
             }
         });
 
