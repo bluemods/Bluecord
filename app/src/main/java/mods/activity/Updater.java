@@ -63,7 +63,7 @@ public class Updater extends Preference {
             }
         }
 
-        UpdateResult.get(false, result -> {
+        UpdateResult.check(false, result -> {
             if (result.isUpdateAvailable()) {
                 ToastUtil.toast("Bluecord Update Is Available!");
                 markUpdate(true);
@@ -83,7 +83,7 @@ public class Updater extends Preference {
         SimpleLoadingSpinner spinner = new SimpleLoadingSpinner(context);
         spinner.show("Bluecord", "Checking for update...");
 
-        UpdateResult.get(true, new Callback<UpdateResult>() {
+        UpdateResult.check(true, new Callback<UpdateResult>() {
             @Override
             public void onResult(UpdateResult result) {
                 spinner.hide();

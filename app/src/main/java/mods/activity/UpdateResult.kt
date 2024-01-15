@@ -30,7 +30,7 @@ class UpdateResult(
         )
 
         @JvmStatic
-        fun get(forceUpdate: Boolean, callback: Callback<UpdateResult>) {
+        fun check(forceUpdate: Boolean, callback: Callback<UpdateResult>) {
             try {
                 val prefs = Prefs.getUpdatePrefs()
                 val updateInterval = getPollingInterval()
@@ -39,7 +39,7 @@ class UpdateResult(
                 val cache = loadFromCache()
 
                 if (!forceUpdate && diff < updateInterval) {
-                    val msg = "delaying update check until " + Date(lastCheckTime + updateInterval) + ", pulling from cache"
+                    val msg = "delaying update check until " + Date(lastCheckTime + updateInterval)
                     LogUtils.log(TAG, msg)
                     cache?.let { callback.onResult(it) } ?: callback.onError()
                     return
