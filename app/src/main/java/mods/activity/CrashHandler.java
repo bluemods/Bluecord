@@ -31,7 +31,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     /**
      * call in onCreate() method of Application in manifest
      */
-    public static void setup() {
+    public static synchronized void setup() {
         try {
             if (handler == null) handler = Thread.getDefaultUncaughtExceptionHandler();
 

@@ -1,57 +1,44 @@
-package mods.preference;
+package mods.preference
 
-import androidx.annotation.NonNull;
-
-import mods.constants.PreferenceKeys;
+import mods.constants.PreferenceKeys.*
 
 /**
  * Used for preferences that are frequently checked (for performance improvements)
  */
-public class QuickAccessPrefs {
+object QuickAccessPrefs {
+    @JvmStatic var isAntiSpamEnabled = false
+        private set
+    @JvmStatic var isBetterStatusIndicatorEnabled = false
+        private set
+    @JvmStatic var isShowHiddenChannelsEnabled = false
+        private set
+    @JvmStatic var isAttachmentFileSizeEnabled = false
+        private set
+    @JvmStatic var isNitroStickerEnabled = false
+        private set
+    @JvmStatic var isEditTimestampEnabled = false
+        private set
+    @JvmStatic var isTextCharCountEnabled = false
+        private set
+    @JvmStatic var emoteMode: EmoteMode = EmoteMode("")
+        private set
+    @JvmStatic var tagMode: String = ""
+        private set
 
-    private static boolean antiSpamEnabled;
-    private static boolean statusIndicatorEnabled;
-    private static boolean showHiddenChannels;
-    private static boolean attachmentFileSizeEnabled;
-    private static boolean nitroStickerEnabled;
-    private static boolean editTimestampsEnabled;
-    private static boolean textCharCountEnabled;
-    private static EmoteMode emoteMode;
-    private static String tagMode;
-
-    static {
-        reload();
+    init {
+        reload()
     }
 
-    public static void reload() {
-        antiSpamEnabled = Prefs.getBoolean(PreferenceKeys.ANTI_SPAM, false);
-        statusIndicatorEnabled = Prefs.getBoolean(PreferenceKeys.BETTER_STATUS_INDICATOR, false);
-        showHiddenChannels = Prefs.getBoolean(PreferenceKeys.REVEAL_HIDDEN_CHANNELS, false);
-        attachmentFileSizeEnabled = Prefs.getBoolean(PreferenceKeys.SHOW_FILE_SIZES, false);
-        nitroStickerEnabled = Prefs.getBoolean(PreferenceKeys.STICKER_SPOOF, false);
-        editTimestampsEnabled = Prefs.getBoolean(PreferenceKeys.SHOW_EDIT_TIMESTAMP, false);
-        textCharCountEnabled = Prefs.getBoolean(PreferenceKeys.SHOW_TEXT_CHAR_COUNT, false);
-
-        emoteMode = new EmoteMode(Prefs.getString(PreferenceKeys.EMOTE_MODE, "Off"));
-        tagMode = Prefs.getString(PreferenceKeys.SHOW_TAG_V2, "Off");
+    @JvmStatic
+    fun reload() {
+        isAntiSpamEnabled = Prefs.getBoolean(ANTI_SPAM, false)
+        isBetterStatusIndicatorEnabled = Prefs.getBoolean(BETTER_STATUS_INDICATOR, false)
+        isShowHiddenChannelsEnabled = Prefs.getBoolean(REVEAL_HIDDEN_CHANNELS, false)
+        isAttachmentFileSizeEnabled = Prefs.getBoolean(SHOW_FILE_SIZES, false)
+        isNitroStickerEnabled = Prefs.getBoolean(STICKER_SPOOF, false)
+        isEditTimestampEnabled = Prefs.getBoolean(SHOW_EDIT_TIMESTAMP, false)
+        isTextCharCountEnabled = Prefs.getBoolean(SHOW_TEXT_CHAR_COUNT, false)
+        emoteMode = EmoteMode(Prefs.getString(EMOTE_MODE, "Off"))
+        tagMode = Prefs.getString(SHOW_TAG_V2, "Off")
     }
-
-    public static boolean isAntiSpamEnabled() { return antiSpamEnabled; }
-
-    public static boolean isBetterStatusIndicatorEnabled() { return statusIndicatorEnabled; }
-
-    public static boolean isShowHiddenChannelsEnabled() { return showHiddenChannels; }
-
-    public static boolean isAttachmentFileSizeEnabled() { return attachmentFileSizeEnabled; }
-
-    public static boolean isNitroStickerEnabled() { return nitroStickerEnabled; }
-
-    @NonNull
-    public static EmoteMode getEmoteMode() { return emoteMode; }
-
-    public static boolean isEditTimestampEnabled() { return editTimestampsEnabled; }
-
-    public static String getTagMode() { return tagMode; }
-
-    public static boolean isTextCharCountEnabled() { return textCharCountEnabled; }
 }

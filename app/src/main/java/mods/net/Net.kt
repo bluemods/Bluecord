@@ -50,7 +50,7 @@ object Net {
 
     @JvmStatic
     @JvmOverloads
-    fun doPost(url: String, data: JSONObject, headers: Map<String, String> = emptyMap()): String? {
+    fun doPost(url: String, data: JSONObject, headers: Map<String, String> = emptyMap()): Response? {
         return runCatching {
             val request = RequestBuilder()
                 .url(url)
@@ -58,11 +58,7 @@ object Net {
                 .setHeader("Content-Type", "application/json; charset=UTF-8")
                 .headers(headers)
                 .build()
-            val response = client.newCall(request).execute()
-            if (!response.isSuccessful) {
-                throw IOException("bad response code ${response.code}")
-            }
-            return response.string()
+            return client.newCall(request).execute()
         }.getOrNull()
     }
 
