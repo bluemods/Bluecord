@@ -22,7 +22,7 @@ class OpenLink(context: Context?, attrs: AttributeSet) : Preference(context, att
             val spinner = SimpleLoadingSpinner(getContext()).apply {
                 show("Loading...")
             }
-            Net.doGetAsync(URLConstants.phpLink() + "?" + query, onSuccess = {
+            Net.doGetAsync(URLConstants.phpLink(query), onSuccess = {
                 spinner.hide()
 
                 val uri = Uri.parse(it.string())

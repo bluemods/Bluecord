@@ -22,7 +22,7 @@ class HtmlDialogPreference(
 ) : Preference(context, attrs) {
 
     init {
-        val url = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "key")
+        val query = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "key")
         val title = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "title")
 
         @Suppress("DEPRECATION")
@@ -31,7 +31,7 @@ class HtmlDialogPreference(
                 show("Loading...")
             }
 
-            Net.doGetAsync(URLConstants.phpLink() + "?" + url, onSuccess = {
+            Net.doGetAsync(URLConstants.phpLink(query), onSuccess = {
                 spinner.hide()
                 showDialog(title, it.string())
             }, onError = {

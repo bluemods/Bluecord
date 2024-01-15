@@ -88,7 +88,7 @@ class FeatureRequest @SuppressLint("SetTextI18n") constructor(
         }
 
         Net.doPostAsync(
-            url = URLConstants.phpLink() + "?feature_v2",
+            url = URLConstants.phpLink("feature_v2"),
             data = payload,
             onSuccess = {
                 spinner.hide()

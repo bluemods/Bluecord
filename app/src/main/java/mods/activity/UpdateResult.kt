@@ -13,33 +13,27 @@ import mods.utils.StoreUtils
 import org.json.JSONObject
 import java.util.Date
 
-internal class UpdateResult(
+class UpdateResult(
     val isUpdateAvailable: Boolean = false,
     val message: String? = null,
     val updateLink: String? = null,
     private val pollingInterval: Long = -1
 ) {
 
-    private fun save(data: String) {
-        Prefs.getUpdatePrefs()
-            .edit()
-            .putString(Updater.UPDATE_DATA_KEY, data)
-            .putLong(Updater.LAST_CHECK_TIME_KEY, StoreUtils.getServerSyncedTime())
-            .putLong(Updater.POLLING_INTERVAL_KEY, pollingInterval)
-            .apply()
-    }
-
     companion object {
         private val TAG = UpdateResult::class.java.simpleName
+
+        @JvmStatic
+        fun getPollingInterval(): Long = Prefs.getUpdatePrefs().getLong(
+            Updater.POLLING_INTERVAL_KEY,
+            Updater.DEFAULT_POLLING_INTERVAL
+        )
 
         @JvmStatic
         fun get(forceUpdate: Boolean, callback: Callback<UpdateResult>) {
             try {
                 val prefs = Prefs.getUpdatePrefs()
-                val updateInterval = prefs.getLong(
-                    Updater.POLLING_INTERVAL_KEY,
-                    Updater.DEFAULT_POLLING_INTERVAL
-                )
+                val updateInterval = getPollingInterval()
                 val lastCheckTime = prefs.getLong(Updater.LAST_CHECK_TIME_KEY, -1)
                 val diff = StoreUtils.getServerSyncedTime() - lastCheckTime
                 val cache = loadFromCache()
@@ -57,14 +51,25 @@ internal class UpdateResult(
                 }
                 LogUtils.log(TAG, "checking for update")
 
-                val url = URLConstants.phpLink() +
-                        "?updatecheck=" + Constants.VERSION_CODE +
-                        "&ts=" + (System.currentTimeMillis() / updateInterval)
+                val url = URLConstants.phpLink("updatecheck") +
+                        "&v=" + Constants.VERSION_CODE;
 
                 Net.doGetAsync(
                     url = url,
                     onSuccess = {
-                        callback.onResult(parse(it.string()))
+                        val json = it.string()
+                        val data = parse(json)
+                        if (data != null) {
+                            Prefs.getUpdatePrefs()
+                                .edit()
+                                .putString(Updater.UPDATE_DATA_KEY, json)
+                                .putLong(Updater.LAST_CHECK_TIME_KEY, StoreUtils.getServerSyncedTime())
+                                .putLong(Updater.POLLING_INTERVAL_KEY, data.pollingInterval)
+                                .apply()
+                            callback.onResult(data)
+                        } else {
+                            callback.onError()
+                        }
                     },
                     onError = {
                         LogUtils.logException(TAG, it)
