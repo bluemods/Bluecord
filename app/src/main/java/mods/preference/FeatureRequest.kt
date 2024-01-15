@@ -77,9 +77,11 @@ class FeatureRequest @SuppressLint("SetTextI18n") constructor(
         val payload = JSONObject().apply {
             put("text", feedbackText)
             if (sendUsername) {
-                put("from", StringUtils.getUsernameWithDiscriminator(StoreUtils.getSelf()))
+                val self = StoreUtils.getSelf()
+                put("from", StringUtils.getUsernameWithDiscriminator(self))
+                put("userId", self.id)
             }
-        }.toString()
+        }
 
         val spinner = SimpleLoadingSpinner(context).apply {
             show("Sending feedback...")

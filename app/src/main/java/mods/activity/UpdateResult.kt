@@ -12,7 +12,6 @@ import mods.utils.LogUtils
 import mods.utils.StoreUtils
 import org.json.JSONObject
 import java.util.Date
-import java.util.concurrent.TimeUnit
 
 internal class UpdateResult(
     val isUpdateAvailable: Boolean = false,
@@ -46,28 +45,32 @@ internal class UpdateResult(
                 val cache = loadFromCache()
 
                 if (!forceUpdate && diff < updateInterval) {
-                    LogUtils.log(TAG, "delaying update check until " + Date(lastCheckTime + updateInterval) + ", pulling from cache")
+                    val msg = "delaying update check until " + Date(lastCheckTime + updateInterval) + ", pulling from cache"
+                    LogUtils.log(TAG, msg)
                     cache?.let { callback.onResult(it) } ?: callback.onError()
-                } else if (!DiscordTools.isConnected()) {
+                    return
+                }
+                if (!DiscordTools.isConnected()) {
                     LogUtils.log(TAG, "no connection")
                     callback.onError()
-                } else {
-                    LogUtils.log(TAG, "checking for update")
-                    val url = URLConstants.phpLink() +
-                            "?updatecheck=" + Constants.VERSION_CODE +
-                            "?ts=" + (System.currentTimeMillis() / updateInterval)
-
-                    Net.doGetAsync(
-                        url = url,
-                        onSuccess = {
-                            callback.onResult(parse(it.string()))
-                        },
-                        onError = {
-                            LogUtils.logException(TAG, it)
-                            callback.onError()
-                        }
-                    )
+                    return
                 }
+                LogUtils.log(TAG, "checking for update")
+
+                val url = URLConstants.phpLink() +
+                        "?updatecheck=" + Constants.VERSION_CODE +
+                        "&ts=" + (System.currentTimeMillis() / updateInterval)
+
+                Net.doGetAsync(
+                    url = url,
+                    onSuccess = {
+                        callback.onResult(parse(it.string()))
+                    },
+                    onError = {
+                        LogUtils.logException(TAG, it)
+                        callback.onError()
+                    }
+                )
             } catch (e: Throwable) {
                 LogUtils.logException(TAG, e)
             }

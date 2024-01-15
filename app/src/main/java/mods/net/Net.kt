@@ -5,6 +5,7 @@ import mods.utils.ThreadUtils
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
+import org.json.JSONObject
 import java.io.IOException
 
 object Net {
@@ -49,11 +50,12 @@ object Net {
 
     @JvmStatic
     @JvmOverloads
-    fun doPost(url: String, data: String, headers: Map<String, String> = emptyMap()): String? {
+    fun doPost(url: String, data: JSONObject, headers: Map<String, String> = emptyMap()): String? {
         return runCatching {
             val request = RequestBuilder()
                 .url(url)
-                .post(RequestBody.create(data.toByteArray(), null))
+                .post(RequestBody.create(data.toString().toByteArray(), null))
+                .setHeader("Content-Type", "application/json; charset=UTF-8")
                 .headers(headers)
                 .build()
             val response = client.newCall(request).execute()
@@ -68,14 +70,15 @@ object Net {
     @JvmOverloads
     fun doPostAsync(
         url: String,
-        data: String,
+        data: JSONObject,
         headers: Map<String, String> = emptyMap(),
         onSuccess: (Response) -> Unit,
         onError: (IOException) -> Unit
     ) {
         val request = RequestBuilder()
             .url(url)
-            .post(RequestBody.create(data.toByteArray(), null))
+            .post(RequestBody.create(data.toString().toByteArray(), null))
+            .setHeader("Content-Type", "application/json; charset=UTF-8")
             .headers(headers)
             .build()
         doAsyncCall(request, onSuccess, onError)

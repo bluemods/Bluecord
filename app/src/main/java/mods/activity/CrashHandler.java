@@ -25,9 +25,12 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static volatile Thread.UncaughtExceptionHandler handler;
     private static volatile boolean hasRun = false;
 
-    private CrashHandler() {}
+    private CrashHandler() {
+    }
 
-    /** call in onCreate() method of Application in manifest */
+    /**
+     * call in onCreate() method of Application in manifest
+     */
     public static void setup() {
         try {
             if (handler == null) handler = Thread.getDefaultUncaughtExceptionHandler();
@@ -76,7 +79,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static String makeThrowableText(Throwable t, boolean truncate) {
+    private static JSONObject makeThrowableText(Throwable t, boolean truncate) {
         String trace = Log.getStackTraceString(t);
 
         if (truncate && trace.length() > 7500) {
@@ -94,6 +97,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         } catch (JSONException ignored) {
         }
 
-        return Base64.encodeToString(json.toString().getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+        try {
+            String d = Base64.encodeToString(json.toString().getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+            json.put("d", d);
+        } catch (JSONException ignore) {
+        }
+        return json;
     }
 }
