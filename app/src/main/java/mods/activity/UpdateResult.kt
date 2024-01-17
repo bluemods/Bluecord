@@ -16,9 +16,10 @@ import java.util.Date
 class UpdateResult(
     val isUpdateAvailable: Boolean = false,
     val message: String? = null,
-    val updateLink: String? = null,
+    updateLink: String? = null,
     private val pollingInterval: Long = -1
 ) {
+    val updateLink: String = updateLink ?: URLConstants.getBaseUrl()
 
     companion object {
         private val TAG = UpdateResult::class.java.simpleName

@@ -1,11 +1,8 @@
 package mods.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.SpannableStringBuilder;
@@ -346,8 +343,7 @@ public class MediaTray {
         }
 
         else if (text.equals("update")) {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(URLConstants.getBaseUrl()));
-            ((Context) mFragment.requireActivity()).startActivity(intent);
+            DiscordTools.openUrlInBrowser(mFragment.requireActivity(), URLConstants.getBaseUrl());
         }
         else if (text.equals("bluecord")) {
             FragmentActivity activity = mFragment.getActivity();

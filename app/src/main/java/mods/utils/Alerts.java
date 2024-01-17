@@ -7,8 +7,6 @@ import android.text.Html;
 
 import androidx.fragment.app.Fragment;
 
-import com.discord.utilities.time.TimeUtils;
-
 import java.util.concurrent.TimeUnit;
 
 import mods.DiscordTools;
@@ -47,7 +45,7 @@ public class Alerts {
                     try {
                         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + Constants.ORIGINAL_PACKAGE_NAME)));
                     } catch (Exception e) {
-                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + Constants.ORIGINAL_PACKAGE_NAME)));
+                        DiscordTools.openUrlInBrowser(context, "https://play.google.com/store/apps/details?id=" + Constants.ORIGINAL_PACKAGE_NAME);
                     }
                 })
                 .showSafely();

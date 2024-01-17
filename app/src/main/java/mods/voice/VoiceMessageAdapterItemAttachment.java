@@ -8,7 +8,6 @@ import com.discord.widgets.chat.list.entries.ChatListEntry;
 
 import mods.constants.Constants;
 import mods.utils.LogUtils;
-import mods.utils.ToastUtil;
 
 @SuppressWarnings("unused")
 public class VoiceMessageAdapterItemAttachment extends WidgetChatListItem implements FragmentLifecycleListener {

@@ -26,8 +26,6 @@ public class Channel {
     /** getParentId */
     public long u() { return 0; }
 
-    // TODO Add the below methods into the .smali file
-
     public void setName(String name) { this.name = name; }
     public boolean isHidden() { return this.hidden; }
     public void setHidden(boolean hidden) { this.hidden = hidden; }

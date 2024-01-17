@@ -9,9 +9,11 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,6 +25,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.discord.app.App;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -39,6 +43,7 @@ import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
 import mods.preference.Prefs;
 import mods.utils.LogUtils;
+import mods.utils.ToastUtil;
 import mods.utils.dialog.SafeDialogBuilder;
 
 @SuppressWarnings("unused")
@@ -196,5 +201,15 @@ public class DiscordTools {
     @Nullable
     public static android.app.Fragment findFragmentByTag(Context context, String tag) {
         return getActivity(context).getFragmentManager().findFragmentByTag(tag);
+    }
+
+    public static void openUrlInBrowser(@NotNull Context context, @NotNull String url) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            ToastUtil.toast("Cannot open url (you don't have a browser installed)");
+        }
     }
 }

@@ -1,7 +1,6 @@
 package mods.activity;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,10 +17,8 @@ import mods.constants.URLConstants;
 import mods.preference.Prefs;
 import mods.utils.Callback;
 import mods.utils.SimpleLoadingSpinner;
-import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
 
-// TODO: This class probably needs to be rewritten
 @SuppressWarnings("deprecation")
 public class Updater extends Preference {
 
@@ -116,17 +113,7 @@ public class Updater extends Preference {
                 .setTitle("Update Available")
                 .setMessage(result.getMessage())
                 .setNegativeButton("Dismiss", null)
-                .setPositiveButton("Download", (d, w) -> loadUrl(context, result.getUpdateLink()))
+                .setPositiveButton("Download", (d, w) -> DiscordTools.openUrlInBrowser(context, result.getUpdateLink()))
                 .showSafely();
-    }
-
-    private static void loadUrl(Context context, String url) {
-        try {
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(StringUtils.isEmpty(url) ? URLConstants.getBaseUrl() : url))
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            );
-        } catch (ActivityNotFoundException | NullPointerException e) {
-            ToastUtil.toast("Cannot open url (you don't have a browser installed)");
-        }
     }
 }
