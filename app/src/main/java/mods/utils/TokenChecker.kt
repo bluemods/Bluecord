@@ -3,7 +3,7 @@ package mods.utils
 import android.content.Context
 import mods.extensions.code
 import mods.net.Net
-import mods.rn.ReactNativeSpoof.makeHeaderMap
+import mods.rn.ReactNativeSpoof
 
 object TokenChecker {
     private const val TEST_URL = "https://discord.com/api/v9/users/@me/affinities/users"
@@ -19,7 +19,7 @@ object TokenChecker {
         val spinner = SimpleLoadingSpinner(context).apply {
             show("Bluecord", "Checking if token is valid...")
         }
-        Net.doGetAsync(TEST_URL, makeHeaderMap(token), {
+        Net.doGetAsync(TEST_URL, ReactNativeSpoof.makeHeaderMap(token), {
             spinner.hide()
             val result = when (it.code) {
                 200, 204 -> Result.OK
