@@ -678,7 +678,7 @@
     invoke-direct/range {v1 .. v11}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;-><init>(IJLcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;Lcom/discord/api/message/attachment/MessageAttachment;ZZZZ)V
 
     # END TODO voice messages
-	# goto :goto_101
+	goto :goto_101
 	# :cond_100
 
     .line 69420
