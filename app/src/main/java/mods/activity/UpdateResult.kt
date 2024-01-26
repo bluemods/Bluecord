@@ -53,7 +53,7 @@ class UpdateResult(
                 LogUtils.log(TAG, "checking for update")
 
                 val url = URLConstants.phpLink("updatecheck") +
-                        "&v=" + Constants.VERSION_CODE;
+                        "&v=" + Constants.VERSION_CODE
 
                 Net.doGetAsync(
                     url = url,

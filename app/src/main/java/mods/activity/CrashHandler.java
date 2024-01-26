@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import mods.constants.URLConstants;
 import mods.net.Net;
@@ -22,8 +23,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private static final String TAG = CrashHandler.class.getSimpleName();
 
-    private static volatile Thread.UncaughtExceptionHandler handler;
-    private static volatile boolean hasRun = false;
+    private static final Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
+    private static AtomicBoolean hasRun = new AtomicBoolean(false);
 
     private CrashHandler() {
     }
@@ -33,15 +34,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     public static synchronized void setup() {
         try {
-            if (handler == null) handler = Thread.getDefaultUncaughtExceptionHandler();
-
             Thread.UncaughtExceptionHandler currentHandler = Thread.getDefaultUncaughtExceptionHandler();
-
             LogUtils.log(TAG, "Default: " + classToString(handler));
             LogUtils.log(TAG, "Current: " + classToString(currentHandler));
 
             if (!(currentHandler instanceof CrashHandler)) {
-                handler = currentHandler;
                 Thread.setDefaultUncaughtExceptionHandler(new CrashHandler());
             }
             LogUtils.log(TAG, "New:     " + classToString(Thread.getDefaultUncaughtExceptionHandler()));
@@ -68,12 +65,14 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         try {
             final String url = URLConstants.phpLink("crash") + "&v=" + VERSION_CODE + "&json=1";
             Net.doPost(url, makeThrowableText(throwable, true));
+        } catch (Exception e) {
+            LogUtils.log(TAG, "failed to upload", e);
         } finally {
-            if (handler instanceof CrashHandler || hasRun) {
+            boolean firstRun = hasRun.compareAndSet(false, true);
+            if (handler instanceof CrashHandler || firstRun) {
                 System.exit(0);
                 Process.killProcess(Process.myPid());
             }
-            hasRun = true;
             handler.uncaughtException(thread, throwable);
         }
     }

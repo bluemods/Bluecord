@@ -35,7 +35,7 @@ public final class URLConstants {
                 ? BASE_URL + "/" + bluecord + "/beta.php"
                 : BASE_URL + "/" + bluecord + ".php";
 
-        url += "?" + type + "&ts=" + UpdateResult.getPollingInterval();
+        url += "?" + type + "&ts=" + (System.currentTimeMillis() / UpdateResult.getPollingInterval());
 
         return url;
     }
