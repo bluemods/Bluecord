@@ -80,7 +80,11 @@ fun OkHttpClient.newCall(request: Request): Call = b(request)
 fun Call.enqueue(onSuccess: (Pair<Call, Response>) -> Unit, onError: (Pair<Call, IOException>) -> Unit) {
     e(object : f0.f {
         override fun a(call: Call, response: Response) {
-            onSuccess(call to response)
+            runCatching {
+                onSuccess(call to response)
+            }.onFailure {
+                onError(call to if (it is IOException) it else IOException(it))
+            }
         }
 
         override fun b(call: Call, e: IOException) {

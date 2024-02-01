@@ -24,7 +24,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static final String TAG = CrashHandler.class.getSimpleName();
 
     private static final Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
-    private static AtomicBoolean hasRun = new AtomicBoolean(false);
+    private static final AtomicBoolean hasRun = new AtomicBoolean(false);
+
+    public static final CrashHandler crashHandler = new CrashHandler();
 
     private CrashHandler() {
     }
@@ -32,14 +34,14 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     /**
      * call in onCreate() method of Application in manifest
      */
-    public static synchronized void setup() {
+    public static void setup() {
         try {
             Thread.UncaughtExceptionHandler currentHandler = Thread.getDefaultUncaughtExceptionHandler();
             LogUtils.log(TAG, "Default: " + classToString(handler));
             LogUtils.log(TAG, "Current: " + classToString(currentHandler));
 
             if (!(currentHandler instanceof CrashHandler)) {
-                Thread.setDefaultUncaughtExceptionHandler(new CrashHandler());
+                Thread.setDefaultUncaughtExceptionHandler(crashHandler);
             }
             LogUtils.log(TAG, "New:     " + classToString(Thread.getDefaultUncaughtExceptionHandler()));
 
@@ -65,7 +67,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         try {
             final String url = URLConstants.phpLink("crash") + "&v=" + VERSION_CODE + "&json=1";
             Net.doPost(url, makeThrowableText(throwable, true));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LogUtils.log(TAG, "failed to upload", e);
         } finally {
             boolean firstRun = hasRun.compareAndSet(false, true);

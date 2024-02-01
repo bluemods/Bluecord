@@ -14,6 +14,7 @@ import mods.extensions.build
 import mods.extensions.enqueue
 import mods.extensions.get
 import mods.extensions.isSuccessful
+import mods.extensions.json
 import mods.extensions.newCall
 import mods.extensions.post
 import mods.extensions.setHeader
@@ -114,8 +115,8 @@ object RNInteractionFix {
             }
 
             val json = JSONObject(response.string())
-            val applications = json.getJSONArray("applications")
-            val applicationCommands = json.getJSONArray("application_commands")
+            val applications = json.optJSONArray("applications") ?: JSONArray()
+            val applicationCommands = json.optJSONArray("application_commands") ?: JSONArray()
             val version = json.optString("version").toLongOrNull() ?: System.currentTimeMillis()
 
             // Transform it so the fields can be read in reflectively by Gson
@@ -232,6 +233,11 @@ object RNInteractionFix {
         client.newCall(
             RequestBuilder().get(url).build()
         ).enqueue({ (_, response) ->
+            if (!response.isSuccessful) {
+                val message = runCatching { response.json().getString("message") }.getOrNull() ?: "unknown error"
+                observable.onError(Exception("HTTP request failed: $message"))
+                return@enqueue
+            }
             val array = JSONArray(response.string())
             for (i in 0 until array.length()) {
                 val tmp = array.getJSONObject(i)

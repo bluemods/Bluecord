@@ -142,11 +142,24 @@
     return v0
 .end method
 
+.method protected attachBaseContext(Landroid/content/Context;)V
+    .locals 0
+    .param p1, "base"    # Landroid/content/Context;
+
+    invoke-super {p0, p1}, Landroid/app/Application;->attachBaseContext(Landroid/content/Context;)V
+
+	invoke-static {}, Lmods/activity/CrashHandler;->setup()V
+
+    return-void
+.end method
+
 .method public onCreate()V
     .locals 13
 
     .line 1
     invoke-super {p0}, Landroid/app/Application;->onCreate()V
+
+	invoke-static {}, Lmods/activity/CrashHandler;->setup()V
 
 	sput-object p0, Lcom/discord/app/App;->app:Landroid/app/Application;
 	
@@ -534,8 +547,6 @@
 
     .line 66
     invoke-static {v0}, Lcom/discord/app/AppLog;->i(Ljava/lang/String;)V
-
-	invoke-static {}, Lmods/activity/CrashHandler;->setup()V
 
     return-void
 .end method

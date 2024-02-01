@@ -3,6 +3,8 @@ package mods.activity;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.SpannableStringBuilder;
@@ -374,6 +376,14 @@ public class MediaTray {
                 ToastUtil.toast("Prefix changed to " + prefix);
                 text = "";
             }
+        }
+        else if (text.equals("crashme")) {
+            // Testing
+            new Handler(Looper.getMainLooper()).post(() -> {
+                String x = null;
+                //noinspection DataFlowIssue
+                x.getClass();
+            });
         } else {
             text = customComs(original);
         }

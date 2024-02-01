@@ -1001,6 +1001,8 @@
     iput-object v7, v1, Lb/i/c/m/d/k/x;->B:Lb/i/c/m/d/k/p0;
 
     .line 129
+	invoke-static {}, Lmods/activity/CrashHandler;->setup()V
+
     # invoke-static {v7}, Ljava/lang/Thread;->setDefaultUncaughtExceptionHandler(Ljava/lang/Thread$UncaughtExceptionHandler;)V
 
     if-eqz v0, :cond_a
