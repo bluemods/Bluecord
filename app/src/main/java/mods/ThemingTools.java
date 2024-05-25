@@ -435,9 +435,9 @@ public class ThemingTools {
         }
 
         //noinspection ConstantValue
-        String shortHash = EmptyUtils.isEmpty(BuildConfig.GIT_HASH) || BuildConfig.GIT_HASH.length() < 6
+        String shortHash = EmptyUtils.isEmpty(BuildConfig.COMMIT_HASH) || BuildConfig.COMMIT_HASH.length() < 6
                 ? "unknown"
-                : BuildConfig.GIT_HASH.substring(0, 6);
+                : BuildConfig.COMMIT_HASH.substring(0, 6);
 
         SpannableStringBuilder sb = new SpannableStringBuilder();
         sb.append("Bluecord ");

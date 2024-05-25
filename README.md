@@ -1,7 +1,10 @@
 # Bluecord
 Source Code for Bluecord
 
-Here lies the full Java source code for Bluecord.
+Here lies the full source code for Bluecord.
+
+All source code to build Bluecord is fully present, and you can verify its legitimacy for yourself.
+Anyone claiming otherwise is intentionally lying to you for their own benefit (given this repo exists) and / or cannot write a single line of code if you asked them.
 
 If you enjoy the Bluecord project (of which many dozens of hours were put into), please consider starring this project. Contributions are also highly encouraged and appreciated.
 

@@ -17,7 +17,7 @@ android {
     }
 
 
-    def getGitHash = { ->
+    def commitHash = { ->
         def stdout = new ByteArrayOutputStream()
         exec {
             commandLine 'git', 'rev-parse', 'HEAD'
@@ -36,7 +36,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "GIT_HASH", getGitHash()
+        buildConfigField "String", "COMMIT_HASH", commitHash()
     }
 
     buildTypes {
