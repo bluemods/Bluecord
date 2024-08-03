@@ -36,7 +36,11 @@ public final class URLConstants {
      */
     @NotNull
     public static String apiLink(@NotNull String function) {
-        return BASE_URL + "/" + bluecord + "/api/v1/" + function;
+        String url = BASE_URL + "/" + bluecord + "/api/v1/" + function;
+        if (IS_BETA) {
+            url += "?beta=1";
+        }
+        return url;
     }
 
     public static String phpLink(@NotNull String type) {

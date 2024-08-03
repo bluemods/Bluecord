@@ -177,9 +177,6 @@ class EventSink {
                 put("release", Build.VERSION.RELEASE)
                 put("sdk", Build.VERSION.SDK_INT)
             })
-            if (URLConstants.IS_BETA) {
-                put("isBeta", true)
-            }
         }
     }
 }
