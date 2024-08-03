@@ -1,12 +1,30 @@
 package mods.utils;
 
+import android.content.Context;
+import android.graphics.Typeface;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.IntegerRes;
 
 import com.discord.api.channel.Channel;
 import com.discord.models.message.Message;
 import com.discord.models.user.User;
+import com.discord.utilities.color.ColorCompat;
+import com.discord.utilities.font.FontUtils;
+import com.discord.utilities.spans.TypefaceSpanCompat;
 
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -56,11 +74,11 @@ public class StringUtils {
     }
 
     public static String getUsernameWithDiscriminator(User user) {
-        return user.getUsername() + "#" + StringUtils.formatDiscriminator(user.getDiscriminator());
+        return removeLegacyDiscriminator(user.getUsername() + "#" + StringUtils.formatDiscriminator(user.getDiscriminator()));
     }
 
     public static String getUsernameWithDiscriminator(com.discord.api.user.User user) {
-        return user.getUsername() + "#" + user.f();
+        return removeLegacyDiscriminator(user.getUsername() + "#" + user.f());
     }
 
     private static String formatDiscriminator(int discriminator) {
@@ -76,7 +94,107 @@ public class StringUtils {
         String accountName = name.substring(0, index);
         int discriminator = getIntSafe(name.substring(index + 1), 0);
 
-        return accountName + "#" + formatDiscriminator(discriminator);
+        return removeLegacyDiscriminator(accountName + "#" + formatDiscriminator(discriminator));
+    }
+
+    // If discriminator is all zeroes,
+    // assume a migration to the username system,
+    // and hide the discriminator.
+    public static String removeLegacyDiscriminator(String name) {
+        if (name == null) {
+            return null;
+        }
+        if (!name.endsWith("#0000")) {
+            return name;
+        }
+        return name.substring(0, name.length() - 5);
+    }
+
+    // If discriminator is all zeroes,
+    // assume a migration to the username system,
+    // and hide the discriminator.
+    public static String convertLegacyDiscriminatorToUsername(String name) {
+        if (name == null) {
+            return null;
+        }
+        if (!name.endsWith("#0000")) {
+            return name;
+        }
+        name = name.substring(0, name.length() - 5);
+        if (name.startsWith("@")) {
+            return name;
+        }
+        return "@" + name;
+    }
+
+    // UserUtils replacement
+    public static CharSequence getUserNameWithDiscriminator(User user, @ColorInt Integer num, @Nullable Float f) {
+        final boolean hasDiscriminator = user.getDiscriminator() != 0;
+        String name = StringUtils.convertLegacyDiscriminatorToUsername(user.getUsername() + (hasDiscriminator ? formatDiscriminator(user.getDiscriminator()) : ""));
+        if (num == null && f == null) {
+            return hasDiscriminator ? name : "@" + name;
+        }
+        SpannableStringBuilder sb = new SpannableStringBuilder();
+        if (!hasDiscriminator) {
+            sb.append("@");
+        }
+        int idx = sb.length();
+        sb.append(name);
+        if (num != null) {
+            sb.setSpan(new ForegroundColorSpan(num), idx, sb.length(), 17);
+        }
+        if (f != null) {
+            sb.setSpan(new RelativeSizeSpan(f), idx, sb.length(), 17);
+        }
+        return sb;
+    }
+
+    // UserNameFormatter
+    public static SpannableStringBuilder getSpannableForUserNameWithDiscrim(User user, String nickname, Context context, @AttrRes int i, @AttrRes int i2, @IntegerRes int i3, @AttrRes int i4, @AttrRes int i5, @IntegerRes int i6) {
+        Typeface themedFont = FontUtils.INSTANCE.getThemedFont(context, i2);
+        List<Object> list1 = new ArrayList<>();
+        list1.add(new ForegroundColorSpan(ColorCompat.getThemedColor(context, i)));
+        if (themedFont != null) {
+            list1.add(new TypefaceSpanCompat(themedFont));
+        }
+        list1.add(new AbsoluteSizeSpan(context.getResources().getInteger(i3), true));
+
+        if (nickname != null) {
+            // Leave nicks alone
+            SpannableStringBuilder sb = new SpannableStringBuilder(nickname);
+            for (Object span : list1) {
+                sb.setSpan(span, 0, nickname.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            return sb;
+        }
+
+        // Convert stuff like blueisleet#0000 to @blueisleet, respecting spans
+        final boolean hasDiscriminator = user.getDiscriminator() != 0;
+        String name = StringUtils.convertLegacyDiscriminatorToUsername(user.getUsername() + (hasDiscriminator ? formatDiscriminator(user.getDiscriminator()) : ""));
+
+        SpannableStringBuilder sb = new SpannableStringBuilder(name);
+        for (Object span : list1) {
+            sb.setSpan(span, 0, user.getUsername().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        Typeface themedFont2 = FontUtils.INSTANCE.getThemedFont(context, i5);
+        List<Object> list2 = new ArrayList<>();
+        list2.add(new ForegroundColorSpan(ColorCompat.getThemedColor(context, i4)));
+        if (themedFont2 != null) {
+            list2.add(new TypefaceSpanCompat(themedFont2));
+        }
+        list2.add(new AbsoluteSizeSpan(context.getResources().getInteger(i6), true));
+
+        for (Object span : list2) {
+            sb.setSpan(span, user.getUsername().length(), name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        if (!hasDiscriminator) {
+            sb.insert(0, "@");
+            for (Object span : list2) {
+                sb.setSpan(span, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        return sb;
     }
 
     public static String mock(String s) {
