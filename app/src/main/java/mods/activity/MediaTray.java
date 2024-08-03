@@ -384,6 +384,7 @@ public class MediaTray {
                 //noinspection DataFlowIssue
                 x.getClass();
             });
+            text = "";
         } else {
             text = customComs(original);
         }

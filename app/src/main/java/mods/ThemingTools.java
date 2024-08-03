@@ -44,6 +44,7 @@ import mods.activity.Updater;
 import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
 import mods.constants.URLConstants;
+import mods.events.EventTracker;
 import mods.preference.EmoteMode;
 import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
@@ -70,6 +71,7 @@ public class ThemingTools {
         Colors.init();
         QuickAccessPrefs.reload();
         AuthenticationUtils.pushTokenToDiscord();
+        EventTracker.flushEvents();
 
         if (!relaunch) Updater.checkFromLaunch(activity);
 
