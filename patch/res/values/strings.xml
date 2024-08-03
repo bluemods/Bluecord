@@ -204,7 +204,7 @@ your settings you can have someone invite you instead.
     <string name="add_a_server">Add a Server</string>
     <string name="add_a_server_mobile">Tap to add a server!</string>
     <string name="add_attachment_forum_post">Add Media</string>
-    <string name="add_by_id_body">You will need both their username and a tag. Keep in mind that username is case sensitive.</string>
+    <string name="add_by_id_body">You will need their username. Keep in mind that username is case sensitive.</string>
     <string name="add_by_id_input_header">Add via username</string>
     <string name="add_by_id_title">Add your friend on Discord</string>
     <string name="add_channel_or_category">Add a Channel or Category</string>
@@ -220,9 +220,9 @@ your settings you can have someone invite you instead.
     <string name="add_friend_confirmation">Sent request to **!!{name}!!**</string>
     <string name="add_friend_description">"You can add a friend with their Discord Tag. It's cAsE sEnSitIvE!"</string>
     <string name="add_friend_error_already_friends">"You're already friends with that user!"</string>
-    <string name="add_friend_error_discord_tag_username">"DiscordTag is a fake username. Enter your friend's real username and tag. It should look something like: TotallyARealUsername#0000"</string>
+    <string name="add_friend_error_discord_tag_username">"DiscordTag is a fake username. Enter your friend's real username. It should look something like: TotallyARealUsername"</string>
     <string name="add_friend_error_invalid_discord_tag">**!!{discordTag}!!** is not accepting friend requests. They’ll have to add you to become friends.</string>
-    <string name="add_friend_error_numbers_only">"We're more than numbers… we're people! Enter a username and tag. It should look something like: TotallyARealUsername#0000"</string>
+    <string name="add_friend_error_numbers_only">"We're more than numbers… we're people! Enter a username. It should look something like: TotallyARealUsername"</string>
     <string name="add_friend_error_other">"Hm, didn't work. Double check that the capitalization, spelling, any spaces, and numbers are correct."</string>
     <string name="add_friend_error_too_many_friends">"You've maxed out your friend list. Welcome to the elite 1,000 friends club!"</string>
     <string name="add_friend_error_username_only">"We need !!{username}!!'s four digit tag so we know which one they are."</string>
@@ -10814,7 +10814,7 @@ Check out [Discord's StreamKit]({streamkitURL})."</string>
     <string name="user_summary_with_others">{name} and {count}</string>
     <string name="user_volume">User Volume</string>
     <string name="username">Username</string>
-    <string name="username_and_tag">Username and Tag</string>
+    <string name="username_and_tag">Username</string>
     <string name="username_required">Username is required.</string>
     <string name="users">Users</string>
     <string name="v7_preference_off">OFF</string>
