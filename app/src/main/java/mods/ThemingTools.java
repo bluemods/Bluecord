@@ -3,11 +3,13 @@ package mods;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.text.InputFilter;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -471,7 +473,7 @@ public class ThemingTools {
         sb.append(" (commit ");
         pos = sb.length();
         sb.append(shortHash);
-        sb.setSpan(new URLSpan(URLConstants.GIT_REPO_URL + "/tree/" + shortHash), pos, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sb.setSpan(new URLSpan(getGithubUrl(isGithubInstalled())), pos, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         sb.append(')');
 
         sb.append(String.format("\nBased on Discord %s (%s)\n~Made with love by Blue~", pi.versionName, pi.versionCode));
@@ -479,6 +481,20 @@ public class ThemingTools {
 
         tv.setText(sb);
         tv.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private static String getGithubUrl(boolean useGithubUri) {
+        if (useGithubUri) {
+            return URLConstants.GIT_REPO_URL.replace("https://", "github://") + "/tree/" + BuildConfig.COMMIT_HASH;
+        } else {
+            return URLConstants.GIT_REPO_URL + "/tree/" + BuildConfig.COMMIT_HASH;
+        }
+    }
+
+    private static boolean isGithubInstalled() {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(getGithubUrl(true)));
+        return DiscordTools.getContext().getPackageManager().queryIntentActivities(intent, 0).size() > 0;
     }
 
     public static String getDateFormat() {
