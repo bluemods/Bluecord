@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.discord.api.channel.Channel;
 import com.discord.api.message.attachment.MessageAttachment;
+import com.discord.api.user.UserProfile;
 import com.discord.app.AppBottomSheet;
 import com.discord.databinding.UserProfileHeaderViewBinding;
 import com.discord.databinding.WidgetChatListActionsBinding;
@@ -158,7 +159,7 @@ public class SheetConfig {
         }
     }
 
-    public static void addUserDetails(UserProfileHeaderView headerView, User user, GuildMember member) {
+    public static void addUserDetails(UserProfileHeaderView headerView, User user, GuildMember member, UserProfile profile) {
         final int headerViewId = headerView.getId();
 
         UserProfileHeaderViewBinding binding = UserProfileHeaderView.access$getBinding$p(headerView);
@@ -198,6 +199,15 @@ public class SheetConfig {
             if (isGuild) {
                 info.append("\nJoined server at: ").append(DiscordTools.formatDate(member.getJoinedAt().g()));
             }
+        }
+
+        if (profile != null && profile.userProfile != null && !EmptyUtils.isEmpty(profile.userProfile.getPronouns())) {
+            if (!Prefs.getBoolean(PreferenceKeys.HIDE_PRONOUNS, false)) {
+                info.append("\nPronouns: ").append(profile.userProfile.getPronouns());
+            }
+        }
+        if (profile != null && !EmptyUtils.isEmpty(profile.legacyUsername)) {
+            info.append("\nOriginally known as ").append(profile.legacyUsername);
         }
 
         if (
