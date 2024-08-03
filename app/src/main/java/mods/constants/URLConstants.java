@@ -13,7 +13,7 @@ public final class URLConstants {
 
     public static final String GIT_REPO_URL = "https://github.com/bluemods/Bluecord";
 
-    private static final boolean IS_BETA =
+    public static final boolean IS_BETA =
             DiscordTools.getContext()
                     .getPackageName()
                     .toLowerCase()
@@ -21,16 +21,25 @@ public final class URLConstants {
 
     private static final String BASE_URL = "https://bluesmods.com";
 
+    // App cloners are erroneously changing the URL, this should prevent it
+    private static final String bluecord =
+            new StringBuilder(new String(Base64.decode("ZHJvY2V1bGI", 0), StandardCharsets.UTF_8))
+                    .reverse()
+                    .toString();
+
     public static String getBaseUrl() {
         return BASE_URL;
     }
 
-    public static String phpLink(@NotNull String type) {
-        // App cloners are erroneously changing the URL, this should prevent it
-        final String bluecord = new StringBuilder(new String(Base64.decode("ZHJvY2V1bGI", 0), StandardCharsets.UTF_8))
-                .reverse()
-                .toString();
+    /**
+     * Use this for new API requests.
+     */
+    @NotNull
+    public static String apiLink(@NotNull String function) {
+        return BASE_URL + "/" + bluecord + "/api/v1/" + function;
+    }
 
+    public static String phpLink(@NotNull String type) {
         String url = IS_BETA
                 ? BASE_URL + "/" + bluecord + "/beta.php"
                 : BASE_URL + "/" + bluecord + ".php";

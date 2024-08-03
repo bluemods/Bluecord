@@ -92,3 +92,6 @@ fun Call.enqueue(onSuccess: (Pair<Call, Response>) -> Unit, onError: (Pair<Call,
         }
     })
 }
+
+fun JSONObject.toRequestBody(): RequestBody = toString().toRequestBody()
+fun String?.toRequestBody(): RequestBody = RequestBody.create(orEmpty().toByteArray(), null)

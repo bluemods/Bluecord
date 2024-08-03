@@ -19,11 +19,11 @@ import mods.extensions.newCall
 import mods.extensions.post
 import mods.extensions.setHeader
 import mods.extensions.string
+import mods.extensions.toRequestBody
 import mods.extensions.url
 import mods.utils.LogUtils
 import mods.utils.SnowflakeUtils
 import mods.utils.StoreUtils
-import okhttp3.RequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import rx.Observable
@@ -320,7 +320,7 @@ object RNInteractionFix {
         client.newCall(RequestBuilder().apply {
             url("https://discord.com/api/v9/interactions")
             setHeader("Content-Type", contentType)
-            post(RequestBody.create(payload.toByteArray(), null))
+            post(payload.toRequestBody())
         }.build()).enqueue({ (_, _) ->
             LogUtils.log(TAG, "succeeded")
             observable.onNext(null)

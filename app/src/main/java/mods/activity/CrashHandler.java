@@ -1,19 +1,18 @@
 package mods.activity;
 
-import static mods.constants.Constants.VERSION_CODE;
-
+import android.database.sqlite.SQLiteDiskIOException;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteFullException;
 import android.os.Build;
+import android.os.DeadSystemException;
 import android.os.Process;
-import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import mods.constants.URLConstants;
-import mods.net.Net;
+import mods.events.EventTracker;
+import mods.utils.CacheUtils;
 import mods.utils.LogUtils;
 
 @SuppressWarnings("unused")
@@ -22,7 +21,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private static final String TAG = CrashHandler.class.getSimpleName();
 
     private static final Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
-    private static final AtomicBoolean hasRun = new AtomicBoolean(false);
+    public static final AtomicBoolean hasRun = new AtomicBoolean(false);
 
     public static final CrashHandler crashHandler = new CrashHandler();
 
@@ -63,8 +62,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(@NotNull Thread thread, @NotNull Throwable throwable) {
         try {
-            final String url = URLConstants.phpLink("crash") + "&v=" + VERSION_CODE + "&json=1";
-            Net.doPost(url, makeThrowableText(throwable, true));
+            if (isDiskFullException(throwable)) {
+                // Disk is full, clear cache now to regain enough space to continue
+                CacheUtils.clearCache();
+            }
+            if (!canIgnoreException(throwable)) {
+                EventTracker.trackAppCrash(throwable);
+            }
         } catch (Throwable e) {
             LogUtils.log(TAG, "failed to upload", e);
         } finally {
@@ -77,24 +81,41 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private static JSONObject makeThrowableText(Throwable t, boolean truncate) {
-        String trace = Log.getStackTraceString(t);
-
-        if (truncate && trace.length() > 7500) {
-            trace = trace.substring(0, 7500) + " ...TRUNCATED";
+    private boolean canIgnoreException(Throwable throwable) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Throwable cause = throwable;
+            while (cause != null) {
+                if (throwable instanceof DeadSystemException) {
+                    return true;
+                }
+                if ("android.os.DeadSystemException".equals(throwable.getMessage())) {
+                    return true;
+                }
+                cause = cause.getCause();
+            }
         }
+        return false;
+    }
 
-        JSONObject json = new JSONObject();
-
-        try {
-            json.put("v", VERSION_CODE);
-            json.put("ts", System.currentTimeMillis());
-            json.put("sdk", Build.VERSION.SDK_INT);
-            json.put("kbFree", Runtime.getRuntime().freeMemory() / 1024L);
-            json.put("trace", trace);
-        } catch (JSONException ignored) {
+    private boolean isDiskFullException(Throwable throwable) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Throwable cause = throwable;
+            while ((cause = cause.getCause()) != null) {
+                if (throwable instanceof SQLiteFullException) {
+                    return true;
+                } else if (throwable instanceof SQLiteDiskIOException) {
+                    return true;
+                } else if (throwable instanceof SQLiteException) {
+                    String message = throwable.getMessage();
+                    if (message == null) {
+                        continue;
+                    }
+                    if (message.contains("No space left on device") || message.contains("SQLITE_IOERR_SHMSIZE") || message.contains("SQLITE_FULL")) {
+                        return true;
+                    }
+                }
+            }
         }
-        return json;
+        return false;
     }
 }

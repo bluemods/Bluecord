@@ -3,7 +3,6 @@ package mods.net
 import mods.extensions.*
 import mods.utils.ThreadUtils
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
@@ -54,7 +53,7 @@ object Net {
         return runCatching {
             val request = RequestBuilder()
                 .url(url)
-                .post(RequestBody.create(data.toString().toByteArray(), null))
+                .post(data.toRequestBody())
                 .setHeader("Content-Type", "application/json; charset=UTF-8")
                 .headers(headers)
                 .build()
@@ -73,7 +72,7 @@ object Net {
     ) {
         val request = RequestBuilder()
             .url(url)
-            .post(RequestBody.create(data.toString().toByteArray(), null))
+            .post(data.toRequestBody())
             .setHeader("Content-Type", "application/json; charset=UTF-8")
             .headers(headers)
             .build()
@@ -112,7 +111,7 @@ object Net {
     ): Response {
         val request = RequestBuilder()
             .url(url)
-            .delete(RequestBody.create(data?.toByteArray() ?: byteArrayOf(), null))
+            .delete(data.toRequestBody())
             .headers(headers)
             .build()
         return client.newCall(request).execute()

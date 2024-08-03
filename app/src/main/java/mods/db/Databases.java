@@ -19,7 +19,5 @@ public class Databases {
         }
         return db;
     }
-
-    private static void upgradeDatabase(SQLiteDatabase kikDb) throws SQLiteException {}
     */
 }

@@ -106,6 +106,8 @@ public final class PreferenceKeys {
     public static final String RN_DEVICE_VENDOR_ID = "blue.device.vendor.id";
     public static final String COMMAND_PREFIX = "commands.prefix";
 
+    public static final String EVENTS_BACK_OFF_EXPIRY = "EVENTS_BACK_OFF_EXPIRY";
+
     // Dead preference keys that should NOT be reused
 
     // public static final String DISCORD_THEME_KEY = "CACHE_KEY_THEME";
