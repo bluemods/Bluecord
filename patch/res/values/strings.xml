@@ -204,7 +204,7 @@ your settings you can have someone invite you instead.
     <string name="add_a_server">Add a Server</string>
     <string name="add_a_server_mobile">Tap to add a server!</string>
     <string name="add_attachment_forum_post">Add Media</string>
-    <string name="add_by_id_body">You will need their username. Keep in mind that username is case sensitive.</string>
+    <string name="add_by_id_body">You will need their username.</string>
     <string name="add_by_id_input_header">Add via username</string>
     <string name="add_by_id_title">Add your friend on Discord</string>
     <string name="add_channel_or_category">Add a Channel or Category</string>
@@ -3346,7 +3346,7 @@ You must grant Discord [access to your camera](onEnableClick) in order to be abl
     <string name="forum_upsell_modal_header">Your community, meet Forum Channels</string>
     <string name="fr">French</string>
     <string name="frequently_used">Frequently Used</string>
-    <string name="friend_add_instructions">Type both their username and 4-digit tag. Keep in mind that username is case sensitive.</string>
+    <string name="friend_add_instructions">Type their username.</string>
     <string name="friend_has_been_deleted">Friend has been removed.</string>
     <string name="friend_invite_accept_confirmation">You are now friends with {username}!</string>
     <string name="friend_invite_expiration">Links expire in {expirationDays} days, or {expirationUses} uses.</string>
