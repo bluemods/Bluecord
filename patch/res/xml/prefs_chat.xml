@@ -26,8 +26,8 @@
     <SwitchPreference android:title="Always Disable Reply Mentions" android:key="disable.reply.mentions" android:summary="When enabled, the mention option when replying to another message is always off by default" />
     <SwitchPreference android:title="Reveal Hidden Channels" android:key="reveal.hidden" android:summary="Hidden channels in guilds will be shown with the name and include &quot;(HIDDEN)&quot;\nNOTE: YOU CANNOT, AND NEVER WILL BE ABLE TO READ OR SEND MESSAGES IN HIDDEN CHANNELS!" />
     <SwitchPreference android:title="Reveal Spoiler Messages" android:key="reveal.spoilers" android:summary="Messages containing spoilers will automatically be revealed (including spoilers you send)" />
-    <SwitchPreference android:title="Hide Pronouns" android:key="reveal.spoilers" android:summary="Messages containing spoilers will automatically be revealed (including spoilers you send)" />
-    <SwitchPreference android:title="Exact Timestamps" android:key="blue.hide.pronouns" android:summary="Hide pronouns of users on their profile sheets" />
+    <SwitchPreference android:title="Hide Pronouns" android:key="blue.hide.pronouns" android:summary="Hide pronouns of users on their profile sheets" />
+    <SwitchPreference android:title="Exact Timestamps" android:key="exact.timestamps" android:summary="Shows exact date and time on every message" />
     <ListPreference android:entries="@array/time_modes" android:title="Timestamp Format" android:key="timestamp.format" android:summary="Choose what format to display timestamps in" android:defaultValue="0" android:entryValues="@array/time_values" />
     <mods.preference.EmptyPreference android:title="Bluecord made with love by Blue\nhttps://bluesmods.com" />
 </PreferenceScreen>
