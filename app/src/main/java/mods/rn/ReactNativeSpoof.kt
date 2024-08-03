@@ -16,7 +16,7 @@ import java.util.UUID
  * Impersonates RN client for future-proofing
  */
 object ReactNativeSpoof {
-    private const val CLIENT_BUILD_NUMBER = 211015
+    private const val CLIENT_BUILD_NUMBER = 237013
     private const val WSS_CAPABILITIES = 351L // 16383
 
     private const val USER_AGENT = "Discord-Android/$CLIENT_BUILD_NUMBER;RNA"

@@ -4,14 +4,12 @@ import static mods.constants.Constants.VERSION_CODE;
 
 import android.os.Build;
 import android.os.Process;
-import android.util.Base64;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import mods.constants.URLConstants;
@@ -96,12 +94,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             json.put("kbFree", Runtime.getRuntime().freeMemory() / 1024L);
             json.put("trace", trace);
         } catch (JSONException ignored) {
-        }
-
-        try {
-            String d = Base64.encodeToString(json.toString().getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
-            json.put("d", d);
-        } catch (JSONException ignore) {
         }
         return json;
     }
