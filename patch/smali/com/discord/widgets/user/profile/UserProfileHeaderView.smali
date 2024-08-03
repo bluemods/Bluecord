@@ -1075,7 +1075,11 @@
 .end method
 
 .method private final configurePrimaryName(Lcom/discord/widgets/user/profile/UserProfileHeaderViewModel$ViewState$Loaded;)V
-    .locals 9
+    .locals 10
+
+    invoke-virtual {p1}, Lcom/discord/widgets/user/profile/UserProfileHeaderViewModel$ViewState$Loaded;->getUserProfile()Lcom/discord/api/user/UserProfile;
+
+    move-result-object v9
 
     .line 1
     invoke-virtual {p1}, Lcom/discord/widgets/user/profile/UserProfileHeaderViewModel$ViewState$Loaded;->getUser()Lcom/discord/models/user/User;
@@ -1159,7 +1163,7 @@
     .line 12
     invoke-virtual/range {v3 .. v8}, Lcom/discord/views/UsernameView;->b(Ljava/lang/CharSequence;Ljava/lang/String;ZLjava/lang/Integer;Ljava/lang/Integer;)V
 
-	invoke-static {p0, v0, v1}, Lmods/view/SheetConfig;->addUserDetails(Lcom/discord/widgets/user/profile/UserProfileHeaderView;Lcom/discord/models/user/User;Lcom/discord/models/member/GuildMember;)V
+	invoke-static {p0, v0, v1, v9}, Lmods/view/SheetConfig;->addUserDetails(Lcom/discord/widgets/user/profile/UserProfileHeaderView;Lcom/discord/models/user/User;Lcom/discord/models/member/GuildMember;Lcom/discord/api/user/UserProfile;)V
 
     .line 13
     iget-object p1, p0, Lcom/discord/widgets/user/profile/UserProfileHeaderView;->binding:Lcom/discord/databinding/UserProfileHeaderViewBinding;

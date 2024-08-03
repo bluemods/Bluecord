@@ -107,6 +107,7 @@ public final class PreferenceKeys {
     public static final String COMMAND_PREFIX = "commands.prefix";
 
     public static final String EVENTS_BACK_OFF_EXPIRY = "EVENTS_BACK_OFF_EXPIRY";
+    public static final String HIDE_PRONOUNS = "blue.hide.pronouns";
 
     // Dead preference keys that should NOT be reused
 
