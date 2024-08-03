@@ -20,7 +20,7 @@ object ReactNativeSpoof {
     private const val WSS_CAPABILITIES = 351L // 16383
 
     private const val USER_AGENT = "Discord-Android/$CLIENT_BUILD_NUMBER;RNA"
-    private const val CLIENT_VERSION = "211.15 - rn"
+    private const val CLIENT_VERSION = "237.13 - rn"
 
     @JvmStatic
     fun userAgent(): String = USER_AGENT
