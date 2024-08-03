@@ -50,6 +50,10 @@ public class StoreStream {
         return new StoreReadStates();
     }
 
+    public static StoreExperiments getExperiments() {
+        return new StoreExperiments();
+    }
+
     public void handleGuildApplicationCommands(GuildApplicationCommands commands) {}
 
     public static void access$handleGuildApplicationCommands(@NotNull StoreStream storeStream, @Nullable GuildApplicationCommands guildAppCommands) {

@@ -28,6 +28,7 @@ import com.discord.models.domain.emoji.ModelEmojiUnicode;
 import com.discord.models.message.Message;
 import com.discord.models.user.MeUser;
 import com.discord.models.user.User;
+import com.discord.stores.StoreExperiments;
 import com.discord.stores.StoreStream;
 import com.discord.utilities.textprocessing.node.EmojiNode;
 import com.discord.widgets.chat.list.actions.WidgetChatListActions;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import b.f.g.f.a;
 import b.f.g.f.c;
@@ -72,6 +74,7 @@ public class ThemingTools {
         QuickAccessPrefs.reload();
         AuthenticationUtils.pushTokenToDiscord();
         EventTracker.flushEvents();
+        setupExperiments();
 
         if (!relaunch) Updater.checkFromLaunch(activity);
 
@@ -99,6 +102,25 @@ public class ThemingTools {
                 }
             } else {
                 typeface = Typeface.createFromAsset(activity.getAssets(), font);
+            }
+        }
+    }
+
+    private static void setupExperiments() {
+        StoreExperiments experiments = StoreStream.getExperiments();
+        Map<String, Integer> overrides = StoreExperiments.access$getExperimentOverrides$p(experiments);
+        for (String key : Arrays.asList(
+                "2020-09_threads",
+                "2021-02_view_threads",
+                "2021-07_threads_only_channel",
+                "2021-08_threads_permissions",
+                "2021-10_android_attachment_bottom_sheet",
+                "2021-11_guild_communication_disabled_users",
+                "2021-11_guild_communication_disabled_guilds",
+                "2022-03_text_in_voice"
+        )) {
+            if (!overrides.containsKey(key)) {
+                experiments.setOverride(key, 1);
             }
         }
     }
