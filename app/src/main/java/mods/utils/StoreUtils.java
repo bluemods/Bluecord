@@ -1,5 +1,7 @@
 package mods.utils;
 
+import android.content.Context;
+
 import androidx.annotation.Nullable;
 
 import com.discord.api.channel.Channel;
@@ -24,10 +26,11 @@ import com.discord.utilities.time.ClockFactory;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import mods.DiscordTools;
 import mods.compiler.annotations.DoNotTouch;
@@ -73,14 +76,17 @@ public class StoreUtils {
 
     public static void leaveGuild(long guildId) {
         try {
-            StoreLurking.postLeaveGuild$default(
+            Class<?> function0 = Class.forName("kotlin.jvm.functions.Function0");
+            Class<?> cls = Class.forName("com.discord.stores.StoreLurking");
+            Method m = cls.getMethod("postLeaveGuild$default", StoreLurking.class, long.class, function0, function0, int.class, Object.class);
+
+            m.invoke(null,
                     StoreStream.getLurking(),
                     guildId,
                     null,
                     null,
                     0x6,
-                    null
-            );
+                    null);
         } catch (Throwable e) {
             LogUtils.logException(TAG, e);
         }
@@ -90,14 +96,26 @@ public class StoreUtils {
         appSubscribe(RestAPI.Companion.getApi().deleteChannel(channelId));
     }
 
+    @SuppressWarnings("all")
     private static void appSubscribe(Observable<?> observable) {
         try {
+            Class<?> function0 = Class.forName("kotlin.jvm.functions.Function0");
+            Class<?> function1 = Class.forName("kotlin.jvm.functions.Function1");
+            Class<?> cls = Class.forName("com.discord.utilities.rx.ObservableExtensionsKt");
+            Method m = cls.getMethod("appSubscribe$default", Observable.class, Context.class, String.class, function1, function1, function1, function0, function0, int.class, Object.class);
+
+            Object proxy = Proxy.newProxyInstance(
+                    StoreUtils.class.getClassLoader(),
+                    new Class[]{function1},
+                    (o, unused, objects) -> null
+            );
+
             ObservableExtensionsKt.appSubscribe$default(
                     ObservableExtensionsKt.restSubscribeOn$default(observable, false, 1, null),
                     DiscordTools.getContext(),
                     "javaClass",
                     null,
-                    (Function1<Object, Unit>) onNext -> null,
+                    (Function1) proxy,
                     null,
                     null,
                     null,

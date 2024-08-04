@@ -11,6 +11,8 @@ import java.lang.annotation.Target;
  * This fixes issues where the patcher rewrites Kotlin
  * calls that interact with Discords APIs, which cause incorrect method signatures.
  * <br>
+ * NOTE: this can only be used on Java classes, using this on a Kotlin class will crash the application or fail to build.
+ * <br>
  * See https://github.com/bluemods/BluecordPatcher/blob/ad6b3b36ec6bca3b082fa903117d11779c221379/src/main/kotlin/com/bluesmods/bluecordpatcher/Main.kt#L183
  */
 @Target({ElementType.TYPE})
