@@ -3,7 +3,6 @@ package mods.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.discord.stores.StoreStream;
 import com.discord.utilities.fcm.NotificationClient;
 
 import java.io.File;
@@ -29,7 +28,7 @@ public class AuthenticationUtils {
 
     /**
      * Now when you log out, the token is revoked by Discord.
-     *
+     * <br>
      * To fix this, we need to pretend to log out without sending the <code>/logout</code> API request.
      * <p>
      * The issue with that is, Discord will treat the GCM (notification) push token as still being valid,
@@ -83,7 +82,7 @@ public class AuthenticationUtils {
     // After this, Discord will send notifications to this token correctly and the client will get notifications again.
     // Needed for stealth logouts.
     public static void pushTokenToDiscord() {
-        if (isAuthed() && Prefs.getBoolean(PreferenceKeys.TEMP_NEEDS_GCM_TOKEN, false) && Prefs.containsKey(PreferenceKeys.TEMP_GCM_PUSH_TOKEN)) {
+        if (StoreUtils.isAuthed() && Prefs.getBoolean(PreferenceKeys.TEMP_NEEDS_GCM_TOKEN, false) && Prefs.containsKey(PreferenceKeys.TEMP_GCM_PUSH_TOKEN)) {
             String token = Prefs.getString(PreferenceKeys.TEMP_GCM_PUSH_TOKEN, "");
             if (!EmptyUtils.isEmpty(token)) {
                 new Thread(() -> {
@@ -97,10 +96,6 @@ public class AuthenticationUtils {
                 }).start();
             }
         }
-    }
-
-    public static boolean isAuthed() {
-        return StoreStream.getAuthentication().isAuthed();
     }
 
     public static void restoreToken(Context context, String token) {

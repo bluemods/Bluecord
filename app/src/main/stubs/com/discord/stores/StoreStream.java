@@ -84,5 +84,9 @@ public class StoreStream {
         public static StoreStream access$getCollector$p(StoreStream.Companion companion) {
             return new StoreStream();
         }
+
+        public void initialize(android.app.Application application) {
+
+        }
     }
 }

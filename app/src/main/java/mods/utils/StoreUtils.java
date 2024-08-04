@@ -14,6 +14,7 @@ import com.discord.stores.StoreCalls;
 import com.discord.stores.StoreLurking;
 import com.discord.stores.StoreStream;
 import com.discord.utilities.fcm.NotificationClient;
+import com.discord.utilities.lifecycle.ApplicationProvider;
 import com.discord.utilities.permissions.PermissionUtils;
 import com.discord.utilities.premium.PremiumUtils;
 import com.discord.utilities.rest.RestAPI;
@@ -29,11 +30,13 @@ import java.util.concurrent.TimeUnit;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import mods.DiscordTools;
+import mods.compiler.annotations.DoNotTouch;
 import mods.constants.Permission;
 import mods.parser.MessageChannelTypes;
- import mods.preference.Prefs;
+import mods.preference.Prefs;
 import rx.Observable;
 
+@DoNotTouch
 @SuppressWarnings("unused")
 public class StoreUtils {
 
@@ -69,14 +72,18 @@ public class StoreUtils {
     }
 
     public static void leaveGuild(long guildId) {
-        StoreLurking.postLeaveGuild$default(
-                StoreStream.getLurking(),
-                guildId,
-                null,
-                null,
-                0x6,
-                null
-        );
+        try {
+            StoreLurking.postLeaveGuild$default(
+                    StoreStream.getLurking(),
+                    guildId,
+                    null,
+                    null,
+                    0x6,
+                    null
+            );
+        } catch (Throwable e) {
+            LogUtils.logException(TAG, e);
+        }
     }
 
     public static void leaveGroupDM(long channelId) {
@@ -267,5 +274,21 @@ public class StoreUtils {
     @SuppressWarnings("all")
     public static StoreStream getStoreStream() {
         return StoreStream.Companion.access$getCollector$p(StoreStream.Companion);
+    }
+
+    public static boolean isAuthed() {
+        try {
+            return StoreStream.getAuthentication().isAuthed();
+        } catch (Throwable e) {
+            try {
+                // Throws when called before setup completes.
+                // This happens when the app is woken up from a GCM intent or gets a push during boot.
+                // Initialize it and retry.
+                StoreStream.Companion.initialize(ApplicationProvider.INSTANCE.get());
+                return StoreStream.getAuthentication().isAuthed();
+            } catch (Throwable ignore) {
+            }
+            return false;
+        }
     }
 }
