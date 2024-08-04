@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.discord.app.App;
+import com.discord.utilities.lifecycle.ApplicationProvider;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -57,7 +58,11 @@ public class DiscordTools {
     }
 
     public static Context getContext() {
-        return App.app.getApplicationContext();
+        if (App.app != null) {
+            return App.app;
+        } else {
+            return ApplicationProvider.INSTANCE.get();
+        }
     }
 
     public static boolean disableTyping() {
