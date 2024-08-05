@@ -6,11 +6,13 @@ import androidx.annotation.Nullable;
 import com.discord.api.channel.Channel;
 import com.discord.api.message.Message;
 import com.discord.models.domain.ModelSearchResponse;
+import com.discord.restapi.PayloadJSON;
 import com.discord.restapi.RequiredHeadersInterceptor;
 import com.discord.restapi.RestAPIParams;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import rx.Observable;
 
 public class RestAPI {
@@ -31,6 +33,11 @@ public class RestAPI {
 
     @NonNull
     public Observable<Message> sendMessage(long id, RestAPIParams.Message message) {
+        return null;
+    }
+
+    @NonNull
+    public Observable<Message> sendMessage(long channelId, PayloadJSON<RestAPIParams.Message> payloadJson, MultipartBody.Part[] files) {
         return null;
     }
 

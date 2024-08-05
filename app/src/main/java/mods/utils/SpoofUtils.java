@@ -1,7 +1,9 @@
 package mods.utils;
 
 import com.discord.api.premium.PremiumTier;
+import com.discord.api.sticker.StickerFormatType;
 import com.discord.models.domain.NonceGenerator;
+import com.discord.restapi.PayloadJSON;
 import com.discord.restapi.RestAPIParams;
 import com.discord.stores.StoreStream;
 import com.discord.utilities.rest.RestAPI;
@@ -14,9 +16,14 @@ import com.discord.widgets.chat.input.sticker.StickerPickerListener;
 import com.lytefast.flexinput.fragment.FlexInputFragment;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import mods.DiscordTools;
 import mods.preference.QuickAccessPrefs;
+import mods.utils.apng.ApngToGifTranscoder;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class SpoofUtils {
 
@@ -38,13 +45,16 @@ public class SpoofUtils {
 
         LogUtils.log(TAG, "sending sticker using url " + stickerUrl);
 
-        sendMessage(stickerUrl);
-
+        if (sticker.getSticker().a() == StickerFormatType.APNG) {
+            sendGifMessage(stickerUrl);
+        } else {
+            sendTextMessage(stickerUrl);
+        }
         try {
             if (listener instanceof WidgetChatInputAttachments$createAndConfigureExpressionFragment$stickerPickerListener$1) {
                 WidgetChatInputAttachments attachments = ((WidgetChatInputAttachments$createAndConfigureExpressionFragment$stickerPickerListener$1) listener).this$0;
                 if (attachments != null) {
-                    FlexInputFragment fragment = attachments.access$getFlexInputFragment$p(attachments);
+                    FlexInputFragment fragment = WidgetChatInputAttachments.access$getFlexInputFragment$p(attachments);
                     if (fragment != null && fragment.s != null) {
                         fragment.s.hideExpressionTray();
                         LogUtils.log(TAG, "tray hidden successfully after spoof sticker send");
@@ -57,13 +67,52 @@ public class SpoofUtils {
         return true;
     }
 
+    private static void sendGifMessage(String apngUrl) {
+        ApngToGifTranscoder.transcodeApng(apngUrl).subscribe(file -> {
+            DiscordTools.THREAD_POOL.execute(() -> {
+                RestAPIParams.Message message = new RestAPIParams.Message(
+                        "\n\n",
+                        Long.toString(NonceGenerator.computeNonce(ClockFactory.get())),
+                        null,
+                        null,
+                        Collections.emptyList(),
+                        null,
+                        new RestAPIParams.Message.AllowedMentions(Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Boolean.FALSE),
+                        null,
+                        null
+                );
+
+                long id = StoreStream.getChannelsSelected().getId();
+
+                RestAPI.getApi().sendMessage(
+                        id,
+                        new PayloadJSON<>(message),
+                        new MultipartBody.Part[]{
+                                MultipartBody.Part.b(
+                                        "file0",
+                                        UUID.randomUUID().toString() + ".gif",
+                                        RequestBody.create(file, MediaType.b("image/gif"))
+                                )
+                        }
+                ).U(new j0.l.e.b<>(
+                        sticker -> LogUtils.log(TAG, "sticker sent: " + sticker),
+                        throwable -> LogUtils.log(TAG, "sticker failed to send", throwable),
+                        () -> {}
+                ));
+            });
+        }, th -> {
+            LogUtils.logException(th);
+            ToastUtil.toastShort("Failed to send animated sticker.");
+        });
+    }
+
     public static PremiumTier sudoGetPremiumTier(PremiumTier original) {
         return pseudoNitroSticker()
                 ? PremiumTier.TIER_2
                 : original;
     }
 
-    private static void sendMessage(String content) {
+    private static void sendTextMessage(String content) {
         RestAPIParams.Message message = new RestAPIParams.Message(
                 content.trim(),
                 Long.toString(NonceGenerator.computeNonce(ClockFactory.get())),

@@ -29,6 +29,7 @@ import com.discord.utilities.lifecycle.ApplicationProvider;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -116,6 +117,12 @@ public class DiscordTools {
                 .getPackageInfo(getApplication().getPackageName(), 0)
                 .applicationInfo
                 .dataDir;
+    }
+
+    public static File getTempDir() {
+        File f = new File(getApplication().getCacheDir(), "bluecord_temp");
+        f.mkdirs();
+        return f;
     }
 
     public static void copyFile(@NonNull String pathFrom, @NonNull String pathTo) throws IOException {
