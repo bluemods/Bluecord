@@ -54,6 +54,6 @@ public final class URLConstants {
     }
 
     public static String getVersionString() {
-        return Constants.VERSION_NAME + (URLConstants.IS_BETA ? " (Beta)" : "");
+        return Constants.VERSION_NAME + (URLConstants.IS_BETA ? " (Beta 4)" : "");
     }
 }
