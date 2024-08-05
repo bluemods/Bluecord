@@ -9,7 +9,7 @@ import java.io.IOException
 
 object Net {
 
-    private val client = OkHttpClient()
+    val client = OkHttpClient()
 
     @JvmStatic
     @JvmOverloads

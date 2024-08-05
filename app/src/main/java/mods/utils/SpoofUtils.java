@@ -15,12 +15,14 @@ import com.discord.widgets.chat.input.sticker.StickerItem;
 import com.discord.widgets.chat.input.sticker.StickerPickerListener;
 import com.lytefast.flexinput.fragment.FlexInputFragment;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.UUID;
 
 import mods.DiscordTools;
 import mods.preference.QuickAccessPrefs;
-import mods.utils.apng.ApngToGifTranscoder;
+import mods.promise.Promise;
+import mods.utils.apng.StickerTranscoder;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -36,17 +38,14 @@ public class SpoofUtils {
         if (!QuickAccessPrefs.isNitroStickerEnabled()) {
             return false;
         }
-        if (StringUtils.nullToEmpty(sticker.getSticker().b()).endsWith("json")) {
-            ToastUtil.toast("Sticker type is not supported");
-            return false;
-        }
-
-        String stickerUrl = "https://cdn.discordapp.com/stickers/" + sticker.getSticker().d() + sticker.getSticker().b();
+        final String stickerUrl = "https://cdn.discordapp.com/stickers/" + sticker.getSticker().d() + sticker.getSticker().b();
 
         LogUtils.log(TAG, "sending sticker using url " + stickerUrl);
 
         if (sticker.getSticker().a() == StickerFormatType.APNG) {
-            sendGifMessage(stickerUrl);
+            sendGifMessage(StickerTranscoder.transcodeApng(stickerUrl));
+        } else if (sticker.getSticker().a() == StickerFormatType.LOTTIE) {
+            sendGifMessage(StickerTranscoder.transcodeLottie(stickerUrl));
         } else {
             sendTextMessage(stickerUrl);
         }
@@ -67,8 +66,8 @@ public class SpoofUtils {
         return true;
     }
 
-    private static void sendGifMessage(String apngUrl) {
-        ApngToGifTranscoder.transcodeApng(apngUrl).subscribe(file -> {
+    private static void sendGifMessage(Promise<File> promise) {
+        promise.subscribe(file -> {
             DiscordTools.THREAD_POOL.execute(() -> {
                 RestAPIParams.Message message = new RestAPIParams.Message(
                         "\n\n",

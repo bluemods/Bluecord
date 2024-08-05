@@ -69,7 +69,7 @@ val Response.code: Int
 val Response.isSuccessful: Boolean
     get() = code in 200..299
 
-fun Response.string(): String = this.p.d()
+fun Response.string(): String = this.p.use { it.d() }
 
 fun Response.json(): JSONObject = JSONObject(string())
 
@@ -77,13 +77,16 @@ fun Response.jsonArray(): JSONArray = JSONArray(string())
 
 fun OkHttpClient.newCall(request: Request): Call = b(request)
 
-fun Call.enqueue(onSuccess: (Pair<Call, Response>) -> Unit, onError: (Pair<Call, IOException>) -> Unit) {
+fun Call.enqueue(
+    onSuccess: (Pair<Call, Response>) -> Unit,
+    onError: (Pair<Call, IOException>) -> Unit
+) {
     e(object : f0.f {
         override fun a(call: Call, response: Response) {
-            runCatching {
+            try {
                 onSuccess(call to response)
-            }.onFailure {
-                onError(call to if (it is IOException) it else IOException(it))
+            } catch (e: Throwable) {
+                onError(call to (e as? IOException ?: IOException(e)))
             }
         }
 

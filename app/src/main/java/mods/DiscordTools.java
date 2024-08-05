@@ -17,6 +17,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Display;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +47,7 @@ import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
 import mods.preference.Prefs;
 import mods.utils.LogUtils;
+import mods.utils.RefreshUtils;
 import mods.utils.ToastUtil;
 import mods.utils.dialog.SafeDialogBuilder;
 
@@ -223,5 +226,16 @@ public class DiscordTools {
         } catch (Exception e) {
             ToastUtil.toast("Cannot open url (you don't have a browser installed)");
         }
+    }
+
+    @NotNull
+    public static Display getDisplay() {
+        if (Build.VERSION.SDK_INT >= 30) {
+            try {
+                return RefreshUtils.WIDGET_CHAT_LIST.requireActivity().getDisplay();
+            } catch (Throwable ignore) {}
+        }
+        //noinspection deprecation
+        return ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
     }
 }
