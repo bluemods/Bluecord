@@ -55,7 +55,7 @@ object StickerTranscoder {
 
                         FileOutputStream(file).use { output ->
                             val encoder = AnimatedGifEncoder()
-                            encoder.setQuality(90)
+                            encoder.setQuality(20)
                             encoder.setRepeat(0)
                             encoder.setSize(width, height)
                             encoder.start(output)
@@ -87,12 +87,10 @@ object StickerTranscoder {
         ThreadUtils.runOnIOThread {
             Net.client.newCall(RequestBuilder().url(url).build()).enqueue({ (_, response) ->
                 val fileId = UUID.randomUUID().toString().replace("-", "")
-                val jsonFile = File(DiscordTools.getTempDir(), "$fileId.json")
                 val file = File(DiscordTools.getTempDir(), "$fileId.gif")
-
                 val jsonData = response.string()
-                jsonFile.writeText(jsonData)
 
+                // Lotties have a large amount of objects so this should be more lightweight
                 val initialFrame = Regex("\"ip\":(\\d+)").find(jsonData)?.groupValues?.get(1)?.toIntOrNull() ?: 0
                 val toFrame = Regex("\"op\":(\\d+)").find(jsonData)?.groupValues?.get(1)?.toIntOrNull() ?: 0
                 val frames = toFrame-initialFrame
@@ -110,7 +108,7 @@ object StickerTranscoder {
                 try {
                     FileOutputStream(file).use { output ->
                         val encoder = AnimatedGifEncoder()
-                        encoder.setQuality(50)
+                        encoder.setQuality(10)
                         encoder.setRepeat(0)
                         encoder.setSize(wh, wh)
                         encoder.start(output)

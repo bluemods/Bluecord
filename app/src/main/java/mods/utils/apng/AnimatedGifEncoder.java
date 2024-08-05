@@ -5,6 +5,8 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import androidx.annotation.IntRange;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -215,7 +217,7 @@ public class AnimatedGifEncoder {
 	   *          int greater than 0.
 	   * @return
 	   */
-	  public void setQuality(int quality) {
+	  public void setQuality(@IntRange(from = 1, to = 20) int quality) {
 	    if (quality < 1)
 	      quality = 1;
 	    sample = quality;
