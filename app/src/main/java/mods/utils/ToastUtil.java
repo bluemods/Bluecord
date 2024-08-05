@@ -33,7 +33,7 @@ public class ToastUtil {
 
         handler.post(() -> {
             try {
-                cancel();
+                cancelAll();
 
                 View view = activity.getLayoutInflater().inflate(Constants.TOAST_LAYOUT, null);
 
@@ -57,13 +57,13 @@ public class ToastUtil {
     }
 
     private static void showBasicToast(String text, int length) {
-        cancel();
+        cancelAll();
         Toast toast = Toast.makeText(DiscordTools.getApplication(), text, length);
         toast.show();
         lastToast = toast;
     }
 
-    private static void cancel() {
+    public static void cancelAll() {
         if (lastToast != null) lastToast.cancel();
     }
 }

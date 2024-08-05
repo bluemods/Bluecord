@@ -67,6 +67,7 @@ public class SpoofUtils {
     }
 
     private static void sendGifMessage(Promise<File> promise) {
+        ToastUtil.toastShort("Transcoding, please wait...");
         promise.subscribe(file -> {
             DiscordTools.THREAD_POOL.execute(() -> {
                 RestAPIParams.Message message = new RestAPIParams.Message(
@@ -96,7 +97,7 @@ public class SpoofUtils {
                 ).U(new j0.l.e.b<>(
                         sticker -> LogUtils.log(TAG, "sticker sent: " + sticker),
                         throwable -> LogUtils.log(TAG, "sticker failed to send", throwable),
-                        () -> {}
+                        ToastUtil::cancelAll
                 ));
             });
         }, th -> {
