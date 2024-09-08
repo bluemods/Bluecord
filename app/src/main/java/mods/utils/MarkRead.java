@@ -11,10 +11,8 @@ import java.util.List;
 import j0.l.a.q;
 import j0.l.e.b;
 import kotlin.jvm.functions.Function1;
-import mods.compiler.annotations.DoNotTouch;
 import rx.Observable;
 
-@DoNotTouch
 public class MarkRead {
 
     private static final String TAG = MarkRead.class.getSimpleName();
