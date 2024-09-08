@@ -49,6 +49,7 @@ import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
 import mods.constants.URLConstants;
 import mods.events.EventTracker;
+import mods.preference.CustomFont;
 import mods.preference.EmoteMode;
 import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
@@ -84,28 +85,7 @@ public class ThemingTools {
             ToastUtil.customToast(activity, "Token login was successful");
             Prefs.setBoolean(PreferenceKeys.WAS_TOKEN_LOGIN, false);
         }
-
-        String font = Prefs.getString(PreferenceKeys.CUSTOM_FONT_TYPE, "Default");
-
-        typeface = null;
-
-        if (!font.equals("Default")) {
-            if (font.equals("Custom")) {
-                String path = Prefs.getString(PreferenceKeys.CUSTOM_FONT_PATH, null);
-
-                if (path != null) {
-                    try {
-                        typeface = Typeface.createFromFile(path);
-                    } catch (Exception e) {
-                        LogUtils.logException(TAG, e);
-                        ToastUtil.toast("Failed to set font, custom font has been disabled.\n\nTry setting it again.");
-                        Prefs.removeValues(PreferenceKeys.CUSTOM_FONT_TYPE, PreferenceKeys.CUSTOM_FONT_PATH);
-                    }
-                }
-            } else {
-                typeface = Typeface.createFromAsset(activity.getAssets(), font);
-            }
-        }
+        typeface = CustomFont.load();
     }
 
     private static void setupExperiments() {

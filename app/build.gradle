@@ -16,6 +16,9 @@ android {
         exclude 'META-INF/*.kotlin_module'
     }
 
+    def buildTime = { ->
+        return "\"" + new Date().toString() + "\""
+    }
 
     def commitHash = { ->
         def stdout = new ByteArrayOutputStream()
@@ -28,14 +31,17 @@ android {
 
     defaultConfig {
         applicationId "com.bluecord"
-        minSdkVersion 21
-        //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 29
-        compileSdkVersion 31
         versionCode 1
         versionName "1.0"
 
+        minSdkVersion 21
+        //noinspection ExpiredTargetSdkVersion
+        targetSdkVersion 30
+        compileSdkVersion 34
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "BUILD_TIME", buildTime()
         buildConfigField "String", "COMMIT_HASH", commitHash()
     }
 

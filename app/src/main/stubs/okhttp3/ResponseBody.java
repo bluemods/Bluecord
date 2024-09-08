@@ -8,7 +8,7 @@ public class ResponseBody implements AutoCloseable {
         return null;
     }
 
-    public BufferedSource c() {
+    public g0.g c() {
         return null;
     }
 

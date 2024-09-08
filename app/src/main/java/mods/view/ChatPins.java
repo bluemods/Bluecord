@@ -1,6 +1,8 @@
 package mods.view;
 
 import android.annotation.SuppressLint;
+
+import mods.preference.Prefs;
 import mods.utils.LogUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,11 +34,9 @@ public class ChatPins {
     private static final List<Long> PINNED_IDS;
 
     static {
-        Set<String> set = DiscordTools.getContext()
-                .getSharedPreferences("PinnedChats", 0)
-                .getStringSet("v1", null);
+        Set<String> set = Prefs.getPinnedChatsPrefs().getStringSet("v1", null);
 
-        if (set == null || set.size() == 0) {
+        if (set == null || set.isEmpty()) {
             PINNED_IDS = new ArrayList<>();
         } else {
             PINNED_IDS = new ArrayList<>();
@@ -169,8 +169,7 @@ public class ChatPins {
             set.add(Long.toString(id));
         }
 
-        DiscordTools.getContext()
-                .getSharedPreferences("PinnedChats", 0)
+        Prefs.getPinnedChatsPrefs()
                 .edit()
                 .putStringSet("v1", set)
                 .commit();

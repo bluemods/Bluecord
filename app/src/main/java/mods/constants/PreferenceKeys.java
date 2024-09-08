@@ -45,7 +45,7 @@ public final class PreferenceKeys {
 
     public static final String REMOVE_MUTED_GUILDS = "remove.muted";
 
-    public static final String CUSTOM_FONT_TYPE = "blue.font";
+    public static final String CUSTOM_FONT = "blue.font";
     public static final String CUSTOM_FONT_PATH = "blue.fontpath";
 
     public static final String WAS_TOKEN_LOGIN  = "login.from.token";

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
-import android.os.Environment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -42,24 +41,21 @@ import com.discord.widgets.user.profile.UserProfileHeaderView;
 import com.discord.widgets.user.usersheet.WidgetUserSheetViewModel;
 import com.facebook.drawee.span.DraweeSpanStringBuilder;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Date;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import mods.DiscordTools;
 import mods.ThemingTools;
 import mods.activity.MediaTray;
 import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
+import mods.net.Net;
 import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
 import mods.utils.Callback;
 import mods.utils.EmptyUtils;
+import mods.utils.FileUtils;
 import mods.utils.LogUtils;
 import mods.utils.MarkRead;
 import mods.utils.search.SearchKey;
@@ -599,37 +595,14 @@ public class SheetConfig {
         );
     }
 
-    @SuppressWarnings({"ResultOfMethodCallIgnored"})
     private static void download(String url, String type) throws IOException {
         if (StringUtils.isEmpty(url)) return;
 
         boolean isAnimated = url.contains(".gif");
 
-        File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) +
-                "/" + (System.currentTimeMillis() / 1000) + "-" + type + (isAnimated ? ".gif" : ".png"));
-
-        if (f.exists()) f.delete();
-        f.createNewFile();
-
-        LogUtils.log(TAG, "Downloading '" + url + "'");
-
-        HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
-        conn.setConnectTimeout(30000);
-        conn.setReadTimeout(30000);
-        conn.setRequestMethod("GET");
-
-        try (BufferedInputStream is = new BufferedInputStream(conn.getInputStream())) {
-            try (FileOutputStream os = new FileOutputStream(f, false)) {
-                byte[] buffer = new byte[8192];
-                int read;
-
-                while ((read = is.read(buffer)) != -1) {
-                    os.write(buffer, 0, read);
-                }
-
-                os.flush();
-            }
-        }
+        String name = (System.currentTimeMillis() / 1000) + "-" + type + (isAnimated ? ".gif" : ".png");
+        File f = new File(FileUtils.getDownloadsDir(), name);
+        Net.downloadToFile(f, url);
     }
 
     public static String fixFormattedUrl(Uri uri) {

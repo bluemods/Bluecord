@@ -1,6 +1,7 @@
 package mods.preference;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -80,7 +81,7 @@ public class Prefs {
         return getPreferences().contains(key);
     }
 
-    public static void removeValue(String key) {
+    public static void remove(String key) {
         getPreferences().edit().remove(key).commit();
     }
 
@@ -98,7 +99,20 @@ public class Prefs {
     }
 
     public static SharedPreferences getUpdatePrefs() {
-        return DiscordTools.getContext().getSharedPreferences("update", 0);
+        return getByName("update");
+    }
+
+    public static SharedPreferences getCustomCommandPrefs() {
+        return getByName("CustomCommands");
+    }
+
+    public static SharedPreferences getPinnedChatsPrefs() {
+        return getByName("PinnedChats");
+    }
+
+    @NotNull
+    public static SharedPreferences getByName(@NotNull String name) {
+        return DiscordTools.getContext().getSharedPreferences(name, Context.MODE_PRIVATE);
     }
 
     public static SharedPreferences getDurablePrefs() {
@@ -114,12 +128,12 @@ public class Prefs {
         if (sp.contains(PreferenceKeys.BACKGROUND_ENABLED)) {
             boolean enabled = sp.getBoolean(PreferenceKeys.BACKGROUND_ENABLED, false);
             setInt(PreferenceKeys.BACKGROUND_MODE, enabled ? Background.MODE_FILE : Background.MODE_OFF);
-            removeValue(PreferenceKeys.BACKGROUND_ENABLED);
+            remove(PreferenceKeys.BACKGROUND_ENABLED);
         }
         if (sp.contains(PreferenceKeys.SHOW_TAG)) {
             boolean enabled = sp.getBoolean(PreferenceKeys.SHOW_TAG, false);
             setString(PreferenceKeys.SHOW_TAG_V2, enabled ? "When Nickname Is Set" : "Off");
-            removeValue(PreferenceKeys.SHOW_TAG);
+            remove(PreferenceKeys.SHOW_TAG);
         }
     }
 }

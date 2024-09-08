@@ -4,12 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -23,10 +20,13 @@ import mods.ThemingTools;
 import mods.anti.AntiDiscordRebrand;
 import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
+import mods.preference.CustomFont;
 import mods.preference.Prefs;
 import mods.ucrop.UCropUtils;
+import mods.utils.IntentUtils;
 import mods.utils.LogUtils;
 import mods.utils.StoragePermissionUtils;
+import mods.utils.ThreadUtils;
 import mods.utils.ToastUtil;
 
 @SuppressWarnings("unused")
@@ -37,6 +37,7 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
 
     public static final int REQUEST_CODE_PICK_BACKGROUND_FILE = 10;
     public static final int REQUEST_CODE_SET_BACKGROUND_UCROP = 7701;
+    public static final int REQUEST_CODE_PICK_FONT_FILE = 7702;
 
     private static boolean needsActivityRefresh;
     public static boolean needsFragmentRefresh;
@@ -60,7 +61,7 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
         if (needsActivityRefresh) {
             needsActivityRefresh = false;
             ThemingTools.init(activity, true);
-            new Handler(Looper.getMainLooper()).post(activity::recreate);
+            ThreadUtils.runOnUiThread(activity::recreate);
         }
     }
 
@@ -88,7 +89,11 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_SET_BACKGROUND_UCROP) {
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == REQUEST_CODE_SET_BACKGROUND_UCROP) {
             Uri output = UCropUtils.getOutput(data);
             if (output == null) {
                 ToastUtil.customToast(this, "Couldn't find the image file, please try again.");
@@ -108,35 +113,15 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
             return;
         }
 
-        String path = getPathFromResult(data, resultCode);
+        File path = IntentUtils.getPathFromResult(this, data);
 
         if (path != null) {
             if (requestCode == REQUEST_CODE_PICK_BACKGROUND_FILE) {
-                LogUtils.log("BlueSettings", "requesting ucrop");
-                UCropUtils.cropCustomBackground(this, Uri.fromFile(new File(path)));
+                UCropUtils.cropCustomBackground(this, Uri.fromFile(path));
+            } else if (requestCode == REQUEST_CODE_PICK_FONT_FILE) {
+                CustomFont.setCustomFont(path);
             }
         }
-    }
-
-    public String getPathFromResult(Intent intent, int resultCode) {
-        String path = null;
-
-        if (resultCode != RESULT_OK) return null;
-
-        String[] column = {"_data"};
-
-        try (Cursor cursor = this.getContentResolver().query(intent.getData(), column, null, null, null)) {
-            cursor.moveToFirst();
-            path = cursor.getString(cursor.getColumnIndexOrThrow(column[0]));
-        } catch (Exception e) {
-            LogUtils.logException(e);
-            try {
-                path = intent.getData().getPath();
-            } catch (Exception ex) {
-                LogUtils.logException(ex);
-            }
-        }
-        return path;
     }
 
     @Override

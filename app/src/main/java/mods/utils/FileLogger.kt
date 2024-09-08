@@ -1,46 +1,43 @@
-package mods.utils;
+package mods.utils
 
-import android.os.Environment;
+import com.discord.models.message.Message
+import mods.DiscordTools
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStreamWriter
+import java.nio.charset.StandardCharsets
 
-import com.discord.models.message.Message;
+object FileLogger {
+    private val TAG = FileLogger::class.java.simpleName
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
-
-import mods.DiscordTools;
-
-public class FileLogger {
-
-    private static final String TAG = FileLogger.class.getSimpleName();
-
-    public static void writeWithProfileInfo(Message message, String type, String info, String dir, String action) {
-        String data =
-                "[" + DiscordTools.formatDate(StoreUtils.getServerSyncedTime()) + "]: " +
-                "A " + type.substring(0, type.length() - 1) +
-                " from " + message.getAuthor().getUsername() + "#" + message.getAuthor().f() +
-                " was " + action +
-                " (" + info + ")";
-
-        writeInformation(type, data, dir);
+    @JvmStatic
+    fun writeWithProfileInfo(
+        message: Message,
+        type: String,
+        info: String,
+        dir: String,
+        action: String
+    ) {
+        val data = "[${DiscordTools.formatDate(StoreUtils.getServerSyncedTime())}]: " +
+                "A ${type.substring(0, type.length - 1)} " +
+                "from @${message.author.username}} " +
+                "was $action ($info)"
+        writeInformation(type, data, dir)
     }
 
-    private static void writeInformation(String type, String message, String dir) {
+    private fun writeInformation(type: String, message: String, dir: String) {
         try {
-            File folder = new File(Environment.getExternalStorageDirectory() + "/Bluecord/" + dir + "/");
-            folder.mkdirs();
-            File file = new File(folder.getAbsolutePath(), type + ".txt");
-            if (!file.exists()) file.createNewFile();
+            val directory = File(FileUtils.bluecordDir, dir).apply { mkdirs() }
+            val file = FileUtils.getSafSafePath(File(directory, "$type.txt"))
 
-            try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8)) {
-                writer.append(message);
-                writer.append("\r\n");
-                writer.flush();
+            OutputStreamWriter(FileOutputStream(file, true), StandardCharsets.UTF_8).use { writer ->
+                writer.append(message)
+                writer.append("\r\n")
+                writer.flush()
             }
-        } catch (IOException e) {
-            LogUtils.log(TAG, "failed to write to disk", e);
+        } catch (e: IOException) {
+            LogUtils.log(TAG, "failed to write to disk", e)
         }
     }
 }

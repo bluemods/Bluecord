@@ -34,6 +34,7 @@ public class User {
     public String getUsername() { return null; }
 
     /** getDiscriminator() */
+    @Deprecated
     public String f() { return null; }
 
 }

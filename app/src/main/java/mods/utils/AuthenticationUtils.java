@@ -61,10 +61,10 @@ public class AuthenticationUtils {
         }
 
         // remove gcm notification storage
-        DiscordTools.getContext().getSharedPreferences("com.google.android.gms.appid", Context.MODE_PRIVATE).edit().clear().commit();
-        DiscordTools.getContext().getSharedPreferences("com.google.android.gms.measurement.prefs", Context.MODE_PRIVATE).edit().clear().commit();
-        DiscordTools.getContext().getSharedPreferences("com.google.firebase.crashlytics", Context.MODE_PRIVATE).edit().clear().commit();
-        DiscordTools.getContext().getSharedPreferences("FirebaseAppHeartBeat", Context.MODE_PRIVATE).edit().clear().commit();
+        Prefs.getByName("com.google.android.gms.appid").edit().clear().commit();
+        Prefs.getByName("com.google.android.gms.measurement.prefs").edit().clear().commit();
+        Prefs.getByName("com.google.firebase.crashlytics").edit().clear().commit();
+        Prefs.getByName("FirebaseAppHeartBeat").edit().clear().commit();
 
         Prefs.getDurablePrefs().edit().remove("STORE_AUTHED_LOGIN").commit();
 

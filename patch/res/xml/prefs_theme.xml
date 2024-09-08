@@ -3,11 +3,11 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
 	<mods.preference.EmptyPreference android:title="Chat Background" />
 	<mods.preference.BackgroundModePreference android:title="Enable Custom Background" android:summary="Allows you to set a custom background" />
-    
+
 	<mods.preference.Background android:key="blue.bgPath" android:enabled="true" android:title="Choose Chat Background Image" />
 	<mods.preference.BackgroundBlurPreference android:key="blue.bg.blur" android:title="Blur Custom Background" android:summary="Blurs the background, improving text legibility" />
     <mods.preference.ColorPicker android:key="blue.bgColor" android:enabled="true" android:title="Background Color" android:summary="Select the color of the chat background" android:defaultValue="#ff000000" />
-    
+
 	<mods.preference.EmptyPreference android:title="Theme" />
     <mods.preference.CustomFont android:title="Custom Font" android:summary="Set the font inside the conversation screen" />
     <mods.preference.SimpleDialogPreference android:title="Custom Font Size" android:dialogTitle="Custom Font Size" android:dialogMessage="Looking to change the font size of text messages? Discord already has this built in!\n\nGo back out to User Settings > Appearance > Chat Font Scaling and customize it there!" />

@@ -236,8 +236,7 @@ public class MediaTray {
     }
 
     private boolean isExistingCustomCommand(String text) {
-        return DiscordTools.getContext()
-                .getSharedPreferences("CustomCommands", 0)
+        return Prefs.getCustomCommandPrefs()
                 .getString(removePrefix(text), null) != null;
     }
 
@@ -260,7 +259,7 @@ public class MediaTray {
     }
 
     private void addCustomCommands(ArrayList<String> commandsList) {
-        SharedPreferences sp = DiscordTools.getContext().getSharedPreferences("CustomCommands", 0);
+        SharedPreferences sp = Prefs.getCustomCommandPrefs();
         Map<String, ?> map = sp.getAll();
         int size = map.size();
 
@@ -393,7 +392,7 @@ public class MediaTray {
     }
 
     private String customComs(String text) {
-        String custom = DiscordTools.getContext().getSharedPreferences("CustomCommands", 0).getString(removePrefix(text), null);
+        String custom = Prefs.getCustomCommandPrefs().getString(removePrefix(text), null);
         if (custom != null) {
             text = custom;
         }
@@ -476,8 +475,7 @@ public class MediaTray {
                                             ? "Command replaced"
                                             : "Command added"
                             );
-                            DiscordTools.getContext()
-                                    .getSharedPreferences("CustomCommands", 0)
+                            Prefs.getCustomCommandPrefs()
                                     .edit()
                                     .putString(input, output)
                                     .apply();
@@ -490,7 +488,7 @@ public class MediaTray {
     }
 
     private void deleteCommand() {
-        final SharedPreferences sp = DiscordTools.getContext().getSharedPreferences("CustomCommands", 0);
+        final SharedPreferences sp = Prefs.getCustomCommandPrefs();
 
         Map<String, ?> map = sp.getAll();
 
