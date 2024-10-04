@@ -29,7 +29,7 @@ apksigner verify --print-certs path_to_bluecord_apk.apk
 
 Expected output:
 
-Signer #1 certificate DN: `C=US, O=bluesmods.com, OU=Mobile Development, CN=Blue`
-Signer #1 certificate SHA-256 digest: `03d6e204a914cb241a162265a6bef7e348d1d31ac3f40c9a93d21ace69d3143a`
-Signer #1 certificate SHA-1 digest: `65b6e1e14850e1820527f1e9bfce2da01174edd5`
-Signer #1 certificate MD5 digest: `756740c16cd430c65d1c7168b70358ce`
+Signer #1 certificate DN: `C=US, O=bluesmods.com, OU=Mobile Development, CN=Blue`<br>
+Signer #1 certificate SHA-256 digest: `03d6e204a914cb241a162265a6bef7e348d1d31ac3f40c9a93d21ace69d3143a`<br>
+Signer #1 certificate SHA-1 digest: `65b6e1e14850e1820527f1e9bfce2da01174edd5`<br>
+Signer #1 certificate MD5 digest: `756740c16cd430c65d1c7168b70358ce`<br>
