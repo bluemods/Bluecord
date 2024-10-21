@@ -34,6 +34,7 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
 
     public static final int CODE_REQUEST_CROP = 6000;
     public static final int CODE_RESULT_ERROR = 6001;
+    public static final int CODE_R_STORAGE_ACCESS = 6002;
 
     public static final int REQUEST_CODE_PICK_BACKGROUND_FILE = 10;
     public static final int REQUEST_CODE_SET_BACKGROUND_UCROP = 7701;

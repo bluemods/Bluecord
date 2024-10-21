@@ -20,6 +20,7 @@ public class MarkRead {
     // TODO: maybe if someone requests it
     // public static void markDMsRead() {}
 
+    @SuppressWarnings("unchecked")
     public static void markGuildsRead() {
         StoreStream.getReadStates().getUnreadGuildIds().Z(1).U(new b<>(unreadIds -> {
             if (unreadIds.isEmpty()) {
@@ -49,7 +50,7 @@ public class MarkRead {
                         switch (method.getName()) {
                             case "invoke": {
                                 // onNext (all ackGuild requests done)
-                                int size = ((List)objects[0]).size();
+                                int size = ((List<?>)objects[0]).size();
                                 ToastUtil.toast(String.format("Marked %s %s read", size, StringUtils.plural("guild", size)));
                                 return null;
                             }
