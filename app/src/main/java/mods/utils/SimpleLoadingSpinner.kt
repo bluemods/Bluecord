@@ -13,7 +13,7 @@ class SimpleLoadingSpinner(context: Context?) {
     private val handler = Handler(Looper.getMainLooper())
 
     @JvmOverloads
-    fun show(title: String, message: String? = null) {
+    fun show(title: String, message: String? = null) = apply {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             showOnMainLoop(title, message)
         } else {
@@ -21,7 +21,7 @@ class SimpleLoadingSpinner(context: Context?) {
         }
     }
 
-    fun hide() {
+    fun hide() = apply {
         if (pd.isShowing) {
             pd.dismiss()
         }

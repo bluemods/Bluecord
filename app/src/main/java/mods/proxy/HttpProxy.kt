@@ -3,7 +3,9 @@ package mods.proxy
 import android.util.Base64
 import b.i.d.p.SerializedName
 import com.google.gson.Gson
-import mods.utils.FileUtils
+import mods.constants.PreferenceKeys
+import mods.preference.Prefs
+import mods.promise.runCatchingOrLog
 import mods.utils.LogUtils
 import java.io.IOException
 import java.net.InetSocketAddress
@@ -20,20 +22,28 @@ object HttpProxy {
         @SerializedName("port") val port: Int,
         @SerializedName("username") val username: String?,
         @SerializedName("password") val password: String?
-    )
+    ) {
+        val usesCredentials: Boolean
+            get() = !username.isNullOrEmpty() && !password.isNullOrEmpty()
+    }
 
     private const val HTTP_PROXY_CONNECT_TIMEOUT = 6000
     private const val HTTP_PROXY_READ_TIMEOUT = 20000
     private val SSL_SOCKET_FACTORY = SSLSocketFactory.getDefault() as SSLSocketFactory
 
     @JvmStatic
-    fun createHttpProxySocket(factory: SSLSocketFactory, socket: Socket, host: String, port: Int, autoClose: Boolean): Socket {
-        val (proxyHost, proxyPort, proxyUsername, proxyPassword) = try {
-            loadConfig()
-        } catch (e: Throwable) {
-            // LogUtils.log(TAG, "no config, connecting direct: ${e.javaClass.simpleName}: ${e.message}")
-            return factory.createSocket(socket, host, port, autoClose)
-        }
+    @JvmOverloads
+    fun createHttpProxySocket(
+        factory: SSLSocketFactory,
+        socket: Socket,
+        host: String,
+        port: Int,
+        autoClose: Boolean,
+        config: HttpProxyConfig? = loadConfig()
+    ): Socket {
+        config ?: return factory.createSocket(socket, host, port, autoClose)
+
+        val (proxyHost, proxyPort, proxyUsername, proxyPassword) = config
         LogUtils.log(TAG, "proxying $host:$port to $proxyHost:$proxyPort")
 
         val payload = buildString {
@@ -41,7 +51,7 @@ object HttpProxy {
             append("\r\n")
             append("hOsT: $host:$port")
             append("\r\n")
-            if (!proxyUsername.isNullOrEmpty() && !proxyPassword.isNullOrEmpty()) {
+            if (config.usesCredentials) {
                 append("pRoXy-AuThOrIZaTiOn: Basic ")
                 append(Base64.encodeToString("$proxyUsername:$proxyPassword".toByteArray(), Base64.NO_WRAP))
             }
@@ -83,9 +93,55 @@ object HttpProxy {
         return upgradedSocket
     }
 
-    private fun loadConfig(): HttpProxyConfig {
-        // val data = FileUtils.tempHttpProxyConfig.readText().trim()
-        // return gson.f(data, HttpProxyConfig::class.java)
-        throw NotImplementedError() // TODO
+    @JvmStatic
+    fun testProxyIp(config: HttpProxyConfig? = loadConfig()): String {
+        return createHttpProxySocket(
+            factory = SSLSocketFactory.getDefault() as SSLSocketFactory,
+            socket = Socket(),
+            host = "checkip.amazonaws.com",
+            port = 443,
+            autoClose = true,
+            config = config
+        ).use { socket ->
+            socket.getOutputStream().apply {
+                write(buildString {
+                    append("GET / HTTP/1.0\r\n")
+                    append("Host: checkip.amazonaws.com\r\n")
+                    append("Connection: close\r\n")
+                    append("\r\n")
+                }.toByteArray())
+            }
+            socket.getInputStream()
+                .readBytes()
+                .decodeToString()
+                .trim()
+                .lines()
+                .lastOrNull()
+                ?.trim()
+                ?: "wtf?"
+        }
+    }
+    @JvmStatic
+    fun loadConfig(): HttpProxyConfig? {
+        val data = Prefs.getString(PreferenceKeys.HTTP_PROXY_CONFIG, null)
+        return if (data.isNullOrEmpty()) {
+            null
+        } else runCatchingOrLog {
+            val config = gson.f(data, HttpProxyConfig::class.java)
+            requireNotNull(config.host) { "host is null" }
+            require(config.port in 1..0xFFFF) { "invalid port" }
+            config
+        }.getOrNull()
+    }
+
+    @JvmStatic
+    fun saveConfig(config: HttpProxyConfig?) {
+        if (config == null) {
+            Prefs.setString(PreferenceKeys.HTTP_PROXY_CONFIG, null)
+            return
+        }
+        requireNotNull(config.host) { "host is null" }
+        require(config.port in 1..0xFFFF) { "invalid port" }
+        Prefs.setString(PreferenceKeys.HTTP_PROXY_CONFIG, gson.m(config))
     }
 }

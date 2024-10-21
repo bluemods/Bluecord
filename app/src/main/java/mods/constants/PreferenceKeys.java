@@ -107,6 +107,7 @@ public final class PreferenceKeys {
     public static final String EVENTS_BACK_OFF_EXPIRY = "EVENTS_BACK_OFF_EXPIRY";
     public static final String HIDE_PRONOUNS = "blue.hide.pronouns";
     public static final String SNI_CHECK_BYPASS = "blue.sni.bypass";
+    public static final String HTTP_PROXY_CONFIG = "blue.http.proxy.config";
 
     // Dead preference keys that should NOT be reused
 

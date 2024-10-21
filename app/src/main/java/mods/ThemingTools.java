@@ -3,6 +3,7 @@ package mods;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -36,6 +38,8 @@ import com.discord.utilities.textprocessing.node.EmojiNode;
 import com.discord.widgets.chat.list.actions.WidgetChatListActions;
 import com.discord.widgets.emoji.EmojiSheetViewModel;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -55,7 +59,6 @@ import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
 import mods.utils.AuthenticationUtils;
 import mods.utils.EmptyUtils;
-import mods.utils.FileUtils;
 import mods.utils.LogUtils;
 import mods.utils.StoreUtils;
 import mods.utils.StringUtils;
@@ -70,6 +73,7 @@ public class ThemingTools {
     private static final String TAG = ThemingTools.class.getSimpleName();
 
     private static Typeface typeface;
+    public static final int KIK_BLUE_COLOR = Color.parseColor("#ff26beff");
 
     public static void init(Activity activity, boolean relaunch) {
         // DebugUtils.enableLogging();
@@ -519,5 +523,26 @@ public class ThemingTools {
             }
         }
         return fallback;
+    }
+
+    /**
+     * Returns an EditText which blocks multi line editing.
+     *
+     * @param context Context to use, should be associated with the current view.
+     * @param hint Hint text
+     * @param initialText initial text
+     * @return a EditText
+     */
+    public static EditText newSingleLineEditText(final Context context, @Nullable CharSequence hint, @Nullable CharSequence initialText) {
+        final int padding = dipToPx(8);
+
+        EditText ret = new EditText(context);
+        ret.setHint(StringUtils.nullToEmpty(hint));
+        ret.setText(StringUtils.nullToEmpty(initialText));
+        ret.setPadding(padding, ret.getPaddingTop(), padding, ret.getPaddingBottom());
+        ret.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2000)});
+        ret.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        ret.setSingleLine(true);
+        return ret;
     }
 }

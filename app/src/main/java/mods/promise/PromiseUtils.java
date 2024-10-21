@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -424,4 +425,26 @@ public final class PromiseUtils {
         });
         return ret;
     }
+
+    /**
+     * Runs the callable in a background thread, posting the result back to the UI thread.
+     * <p/>
+     * Simple replacement for AsyncTask.
+     *
+     * @param callable function to run in the background.
+     * @return a Promise that will callback on the main thread
+     */
+    public static <T> Promise<T> doInBackground(@NotNull Callable<T> callable) {
+        Promise<T> promise = new Promise<>();
+
+        ThreadUtils.runInBackground(() -> {
+            try {
+                promise.resolve(callable.call());
+            } catch (Throwable e) {
+                promise.fail(e);
+            }
+        });
+        return runOnMainThread(promise);
+    }
+
 }
