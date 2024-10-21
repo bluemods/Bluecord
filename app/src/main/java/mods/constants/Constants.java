@@ -38,6 +38,9 @@ public final class Constants {
     // drawable/ic_theme_24dp
     public static final int PREFS_THEME_ICON = 0x7f0805c0;
 
+    // drawable/ic_voice_quality_unknown
+    public static final int PREFS_PROXY_ICON = 0x7f080602;
+
     // layout/blue_toast_layout
     public static final int TOAST_LAYOUT = 0x7f0d0407;
 
@@ -88,6 +91,7 @@ public final class Constants {
     public static final int PREFS_INFO  = 0x7f15000b;
     public static final int PREFS_CHAT  = 0x7f15000c;
     public static final int PREFS_THEME = 0x7f15000d;
+    public static final int PREFS_PROXY = 0x7f15000e;
 
     // style/AppTheme.Light
     public static final int STYLE_LIGHT = 0x7f130029;

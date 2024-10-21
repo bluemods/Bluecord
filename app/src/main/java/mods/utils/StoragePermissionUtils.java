@@ -42,11 +42,13 @@ public class StoragePermissionUtils {
 
     public static boolean needsPermissionForKey(String key) {
         if (StringUtils.isEmpty(key)) return false;
-        return PreferenceKeys.ANTI_DELETE_MODE.equals(key) || PreferenceKeys.ANTI_EDIT_MODE.equals(key);
+        return PreferenceKeys.ANTI_DELETE_MODE.equals(key) ||
+                PreferenceKeys.ANTI_EDIT_MODE.equals(key);
     }
 
     public static boolean needsRestartForKey(String key) {
         if (StringUtils.isEmpty(key)) return false;
-        return PreferenceKeys.BACKGROUND_MODE.equals(key);
+        return PreferenceKeys.BACKGROUND_MODE.equals(key) ||
+                PreferenceKeys.SNI_CHECK_BYPASS.equals(key);
     }
 }

@@ -5,8 +5,7 @@ import android.os.StrictMode;
 public class DebugUtils {
 
     public static boolean showDebugMenu(boolean isStaff) {
-        // TODO: decide if we want to show the menu
-        return true;
+         return true;
     }
 
     public static void dumpStack() {

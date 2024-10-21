@@ -27547,4 +27547,5 @@
     <public type="xml" name="prefs_info" id="0x7f15000b" />
     <public type="xml" name="prefs_chat" id="0x7f15000c" />
     <public type="xml" name="prefs_theme" id="0x7f15000d" />
+    <public type="xml" name="prefs_proxy" id="0x7f15000e" />
 </resources>

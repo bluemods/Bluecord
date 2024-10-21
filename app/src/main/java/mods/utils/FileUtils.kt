@@ -51,11 +51,6 @@ object FileUtils {
     val internalFontDir: File
         get() = File(appDataDir, "custom_fonts").apply { mkdirs() }
 
-    // TODO temp for testing RU block
-    @JvmStatic
-    val tempHttpProxyConfig: File
-        get() = File(bluecordDir, "http_proxy_config.json")
-
     /**
      * Returns true if we have to use the shitty SAF system.
      *

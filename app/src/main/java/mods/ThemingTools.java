@@ -72,9 +72,6 @@ public class ThemingTools {
     private static Typeface typeface;
 
     public static void init(Activity activity, boolean relaunch) {
-        // TODO remove, need it for testing
-        // FileUtils.requestStorageManagerPermission(activity);
-
         // DebugUtils.enableLogging();
         Prefs.migrateLegacyPrefs();
         Colors.init();

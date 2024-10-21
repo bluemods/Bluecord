@@ -32,6 +32,10 @@ public class Tab extends Preference {
                 this.prefXml = Constants.PREFS_THEME;
                 this.prefIcon = Constants.PREFS_THEME_ICON;
                 break;
+            case "Proxy Configurations":
+                this.prefXml = Constants.PREFS_PROXY;
+                this.prefIcon = Constants.PREFS_PROXY_ICON;
+                break;
             default:
                 throw new IllegalArgumentException("unknown tab title in prefs_base.xml");
         }

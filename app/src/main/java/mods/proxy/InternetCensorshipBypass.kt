@@ -1,5 +1,7 @@
 package mods.proxy
 
+import mods.constants.PreferenceKeys
+import mods.preference.Prefs
 import mods.promise.runCatchingOrLog
 import mods.proxy.dns.DnsProvider
 import mods.utils.LogUtils
@@ -15,7 +17,9 @@ object InternetCensorshipBypass {
     private val TAG = InternetCensorshipBypass::class.java.simpleName
 
     @JvmStatic
-    fun isEnabled(): Boolean = true // TODO test!
+    fun isEnabled(): Boolean {
+        return Prefs.getBoolean(PreferenceKeys.SNI_CHECK_BYPASS, false)
+    }
 
     @JvmStatic
     fun createSocket(factory: SSLSocketFactory, socket: Socket, host: String, port: Int, autoClose: Boolean): Socket = runCatchingOrLog {

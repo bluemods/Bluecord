@@ -29,10 +29,9 @@ object HttpProxy {
     @JvmStatic
     fun createHttpProxySocket(factory: SSLSocketFactory, socket: Socket, host: String, port: Int, autoClose: Boolean): Socket {
         val (proxyHost, proxyPort, proxyUsername, proxyPassword) = try {
-            val data = FileUtils.tempHttpProxyConfig.readText().trim()
-            gson.f(data, HttpProxyConfig::class.java)
+            loadConfig()
         } catch (e: Throwable) {
-            LogUtils.log(TAG, "no config, connecting direct: ${e.javaClass.simpleName}: ${e.message}")
+            // LogUtils.log(TAG, "no config, connecting direct: ${e.javaClass.simpleName}: ${e.message}")
             return factory.createSocket(socket, host, port, autoClose)
         }
         LogUtils.log(TAG, "proxying $host:$port to $proxyHost:$proxyPort")
@@ -82,5 +81,11 @@ object HttpProxy {
         LogUtils.log(TAG, "proxy tunnel success")
 
         return upgradedSocket
+    }
+
+    private fun loadConfig(): HttpProxyConfig {
+        // val data = FileUtils.tempHttpProxyConfig.readText().trim()
+        // return gson.f(data, HttpProxyConfig::class.java)
+        throw NotImplementedError() // TODO
     }
 }
