@@ -37,7 +37,12 @@ public class AccountSwitcher extends Preference {
         setOnPreferenceClickListener(preference -> {
             DiscordTools.newBuilder(context)
                     .setTitle("Pick an option")
-                    .setItems(new String[]{"Backup", "Restore", "Delete Backups", "Copy Current Token"}, (dialog, which) -> {
+                    .setItems(new String[]{
+                            "Backup",
+                            "Restore",
+                            "Delete Backups",
+                            "Copy Current Token",
+                    }, (dialog, which) -> {
                         switch (which) {
                             case 0: createBackup(context);  break;
                             case 1: restoreBackup(context); break;
@@ -55,6 +60,18 @@ public class AccountSwitcher extends Preference {
         Alerts.showCopyTokenWarning(context, () -> {
             DiscordTools.copyToClipboard(StoreUtils.getAuthToken());
             ToastUtil.toast("Token copied to clipboard. DO NOT SHARE YOUR TOKEN!");
+        }, () -> {
+            try {
+                DiscordTools.copyToClipboard(new JSONObject()
+                        .put("id", StoreUtils.getSelf().getId())
+                        .put("username", StoreUtils.getSelf().getUsername())
+                        .put("token", StoreUtils.getAuthToken())
+                        .put("fingerprint", StoreStream.getAuthentication().getFingerprint$app_productionGoogleRelease())
+                        .toString(1));
+                ToastUtil.toast("Account data copied to clipboard. DO NOT SHARE!");
+            } catch (JSONException ignore) {
+                ToastUtil.toast("failed to serialize token data");
+            }
         });
     }
 

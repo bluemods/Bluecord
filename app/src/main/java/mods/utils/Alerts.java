@@ -70,7 +70,7 @@ public class Alerts {
                 .showSafely();
     }
 
-    public static void showCopyTokenWarning(final Context context, final Runnable onAccepted) {
+    public static void showCopyTokenWarning(final Context context, final Runnable onAccepted, final Runnable onJsonAccepted) {
         DiscordTools.newBuilder(context)
                 .setTitle("Copy Token?")
                 .setMessage(Html.fromHtml(
@@ -80,7 +80,8 @@ public class Alerts {
                                 "By using this feature, you accept all responsibility with keeping your token secure."
                 ))
                 .setNeutralButton("Exit", null)
-                .setPositiveButton("Accept + Copy", (d, w) -> onAccepted.run())
+                .setNegativeButton("JSON", (d, w) -> onJsonAccepted.run())
+                .setPositiveButton("Copy", (d, w) -> onAccepted.run())
                 .showWithButtonDelay(5, TimeUnit.SECONDS);
     }
 }
