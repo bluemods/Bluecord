@@ -33,13 +33,11 @@ import java.util.concurrent.TimeUnit;
 
 import kotlin.jvm.functions.Function1;
 import mods.DiscordTools;
-import mods.compiler.annotations.DoNotTouch;
 import mods.constants.Permission;
 import mods.parser.MessageChannelTypes;
 import mods.preference.Prefs;
 import rx.Observable;
 
-@DoNotTouch
 @SuppressWarnings("unused")
 public class StoreUtils {
 

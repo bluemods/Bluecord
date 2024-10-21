@@ -1,12 +1,17 @@
 package mods.utils
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.database.Cursor
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DOCUMENTS
 import android.provider.MediaStore
+import android.provider.Settings
 import androidx.annotation.ChecksSdkIntAtLeast
 import mods.DiscordTools
+import mods.activity.BlueSettingsActivity.CODE_R_STORAGE_ACCESS
 import mods.preference.Prefs
 import java.io.File
 import java.security.SecureRandom
@@ -46,10 +51,35 @@ object FileUtils {
     val internalFontDir: File
         get() = File(appDataDir, "custom_fonts").apply { mkdirs() }
 
+    // TODO temp for testing RU block
+    @JvmStatic
+    val tempHttpProxyConfig: File
+        get() = File(bluecordDir, "http_proxy_config.json")
+
+    /**
+     * Returns true if we have to use the shitty SAF system.
+     *
+     * We can opt out if:
+     *
+     * SDK_INT <= 29
+     * targetSdk <= 29
+     * user grants external storage manager permission
+     */
     @JvmStatic
     @get:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
     val isUsingSaf: Boolean
-        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
+                !Environment.isExternalStorageManager()
+
+    @JvmStatic
+    fun requestStorageManagerPermission(activity: android.app.Activity) {
+        if (isUsingSaf) {
+            @SuppressLint("InlinedApi")
+            val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse(
+                "package:${DiscordTools.getApplication().packageName}"))
+            activity.startActivityForResult(intent, CODE_R_STORAGE_ACCESS)
+        }
+    }
 
     /**
      * If we are under SAF, we must check if we have full access to the file,

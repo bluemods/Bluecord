@@ -55,6 +55,7 @@ import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
 import mods.utils.AuthenticationUtils;
 import mods.utils.EmptyUtils;
+import mods.utils.FileUtils;
 import mods.utils.LogUtils;
 import mods.utils.StoreUtils;
 import mods.utils.StringUtils;
@@ -71,6 +72,9 @@ public class ThemingTools {
     private static Typeface typeface;
 
     public static void init(Activity activity, boolean relaunch) {
+        // TODO remove, need it for testing
+        // FileUtils.requestStorageManagerPermission(activity);
+
         // DebugUtils.enableLogging();
         Prefs.migrateLegacyPrefs();
         Colors.init();
