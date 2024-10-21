@@ -129,7 +129,7 @@ object HttpProxy {
         } else runCatchingOrLog {
             val config = gson.f(data, HttpProxyConfig::class.java)
             requireNotNull(config.host) { "host is null" }
-            require(config.port in 1..0xFFFF) { "invalid port" }
+            require(config.port in 0..0xFFFF) { "invalid port" }
             config
         }.getOrNull()
     }
@@ -141,7 +141,7 @@ object HttpProxy {
             return
         }
         requireNotNull(config.host) { "host is null" }
-        require(config.port in 1..0xFFFF) { "invalid port" }
+        require(config.port in 0..0xFFFF) { "invalid port" }
         Prefs.setString(PreferenceKeys.HTTP_PROXY_CONFIG, gson.m(config))
     }
 }

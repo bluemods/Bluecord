@@ -16,11 +16,14 @@ import java.util.UUID
  * Impersonates RN client for future-proofing
  */
 object ReactNativeSpoof {
-    private const val CLIENT_BUILD_NUMBER = 237013
+    private const val CLIENT_BUILD_NUMBER = 251015
     private const val WSS_CAPABILITIES = 351L // 16383
 
+    @Suppress("UNUSED")
+    const val OKHTTP_USER_AGENT = "okhttp/4.9.2"
+
     private const val USER_AGENT = "Discord-Android/$CLIENT_BUILD_NUMBER;RNA"
-    private const val CLIENT_VERSION = "237.13 - rn"
+    private const val CLIENT_VERSION = "251.15 - rn"
 
     @JvmStatic
     fun userAgent(): String = USER_AGENT
@@ -113,7 +116,7 @@ object ReactNativeSpoof {
             put("os_version", Build.VERSION.SDK_INT.toString())
             put("client_build_number", CLIENT_BUILD_NUMBER)
             put("client_event_source", JSONObject.NULL)
-            put("design_id", 0)
+            put("design_id", 2)
         }
     }
 

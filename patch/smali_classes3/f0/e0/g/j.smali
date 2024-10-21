@@ -1010,6 +1010,7 @@
     const-string v4, "User-Agent"
 
     const-string v7, "okhttp/4.8.0"
+    sget-object v7, Lmods/rn/ReactNativeSpoof;->OKHTTP_USER_AGENT:Ljava/lang/String;
 
     .line 12
     invoke-virtual {v3, v4, v7}, Lokhttp3/Request$a;->b(Ljava/lang/String;Ljava/lang/String;)Lokhttp3/Request$a;

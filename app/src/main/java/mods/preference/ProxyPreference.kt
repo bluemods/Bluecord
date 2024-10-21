@@ -166,7 +166,7 @@ class ProxyPreference(context: Context?, attrs: AttributeSet) : Preference(conte
         if (host.isNullOrEmpty()) {
             ToastUtil.toastShort("Invalid hostname")
             return false
-        } else if (port < 0 || port > 0xFFFF) {
+        } else if (port !in 0..0xFFFF) {
             ToastUtil.toastShort("Invalid port (must be 0-65535)")
             return false
         } else {

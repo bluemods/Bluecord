@@ -1,3 +1,4 @@
+res/values-ku/strings.xml
 smali/z/g.smali
 smali/z/b$a.smali
 smali/z/a.smali
