@@ -281,6 +281,8 @@
 
     move-result-object v8
 
+    sget-object v8, Lmods/rn/ReactNativeSpoof;->OKHTTP_USER_AGENT:Ljava/lang/String;
+
     if-nez v8, :cond_a
 
     const-string v8, "okhttp/4.8.0"
