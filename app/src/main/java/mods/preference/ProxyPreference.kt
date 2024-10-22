@@ -14,12 +14,15 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import mods.DiscordTools
 import mods.ThemingTools
 import mods.promise.PromiseUtils
 import mods.promise.hideSpinner
-import mods.proxy.HttpProxy
+import mods.proxy.CustomProxy
+import mods.proxy.CustomProxy.TEMP_TESTING_CREDS
 import mods.utils.LogUtils
 import mods.utils.SimpleLoadingSpinner
 import mods.utils.StringUtils
@@ -34,7 +37,7 @@ class ProxyPreference(context: Context?, attrs: AttributeSet) : Preference(conte
     @SuppressLint("SetTextI18n")
     @Deprecated("Deprecated in Java")
     override fun onPreferenceClick(preference: Preference?): Boolean {
-        val config = HttpProxy.loadConfig()
+        val config = CustomProxy.loadConfig()
         val layout = LinearLayout(context)
         layout.orientation = LinearLayout.VERTICAL
         layout.setPadding(
@@ -89,8 +92,31 @@ class ProxyPreference(context: Context?, attrs: AttributeSet) : Preference(conte
         etPassword.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
         layout.addView(etPassword)
 
+        // Type
+        val tvProxyType = createTextView(context, "Proxy Type")
+        layout.addView(tvProxyType)
+        val proxyGroup = RadioGroup(context)
+        val proxyHttpButton = RadioButton(context).apply {
+            text = "HTTP"
+            id = CustomProxy.HttpProxyConfig.Type.HTTP.ordinal
+        }
+        val proxySocksButton = RadioButton(context).apply {
+            text = "SOCKS4 / SOCKS5"
+            id = CustomProxy.HttpProxyConfig.Type.SOCKS.ordinal
+        }
+
+        proxyGroup.addView(proxyHttpButton)
+        proxyGroup.addView(proxySocksButton)
+        layout.addView(proxyGroup)
+
+        var newType = config?.type ?: CustomProxy.HttpProxyConfig.Type.HTTP
+        proxyGroup.check(newType.ordinal)
+        proxyGroup.setOnCheckedChangeListener { _, checkedId ->
+            newType = CustomProxy.HttpProxyConfig.Type.entries[checkedId]
+        }
+
         val proxyCb = CheckBox(context).apply {
-            isChecked = config?.usesCredentials == true
+            isChecked = config?.hasCredentials == true
             text = "Use credentials"
             val listener = fun(_: CompoundButton, isChecked: Boolean) {
                 val visibility = if (isChecked) View.VISIBLE else View.GONE
@@ -110,7 +136,7 @@ class ProxyPreference(context: Context?, attrs: AttributeSet) : Preference(conte
             .setView(layout)
             .setNeutralButton("Disable Proxy") { _, _ ->
                 ToastUtil.toastShort("Proxy will be disabled on restart")
-                HttpProxy.saveConfig(null)
+                CustomProxy.saveConfig(null)
                 DiscordTools.promptRestart(context)
             }
             .setNegativeButton("Exit", null)
@@ -136,19 +162,23 @@ class ProxyPreference(context: Context?, attrs: AttributeSet) : Preference(conte
                     return@setOnClickListener
                 }
 
-                val newConfig = HttpProxy.HttpProxyConfig(
+                val newConfig = CustomProxy.HttpProxyConfig(
                     host = newHost,
                     port = newPort,
                     username = if (usesCreds) newUsername else null,
-                    password = if (usesCreds) newPassword else null
+                    password = if (usesCreds) newPassword else null,
+                    type = newType
                 )
+                TEMP_TESTING_CREDS = newConfig
                 PromiseUtils.doInBackground {
-                    HttpProxy.testProxyIp(newConfig)
+                    CustomProxy.testProxyIp(newConfig)
                 }.hideSpinner(
                     SimpleLoadingSpinner(context).show("Checking...")
-                ).subscribe({ ip ->
+                ).doFinally {
+                    TEMP_TESTING_CREDS = null
+                }.subscribe({ ip ->
                     ToastUtil.toast("Proxy connected, IP is $ip")
-                    HttpProxy.saveConfig(newConfig)
+                    CustomProxy.saveConfig(newConfig)
                     dialog.dismiss()
                     DiscordTools.promptRestart(context)
                     reload()
@@ -187,11 +217,14 @@ class ProxyPreference(context: Context?, attrs: AttributeSet) : Preference(conte
     }
 
     private fun reload() {
-        val config = HttpProxy.loadConfig()
-        summary = if (config == null) {
-            "Use your own HTTP proxy to connect to Discord"
-        } else {
-            "Use your own HTTP proxy to connect to Discord\n\nProxy configured"
+        var baseText = "Use your own proxy to connect to Discord"
+        val config = CustomProxy.loadConfig()
+        if (config != null) {
+            baseText += when (config.type) {
+                CustomProxy.HttpProxyConfig.Type.SOCKS -> "\n\nSOCKS proxy active"
+                null, CustomProxy.HttpProxyConfig.Type.HTTP -> "\n\nHTTP proxy active"
+            }
         }
+        summary = baseText
     }
 }

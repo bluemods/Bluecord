@@ -54,9 +54,9 @@ object InternetCensorshipBypass {
         val enabled = isEnabled()
         LogUtils.log(TAG, "createSocket($host:$port)${if (enabled) " (bypassing)" else ""}")
         if (!enabled) {
-            HttpProxy.createHttpProxySocket(REAL_FACTORY, socket, host, port, autoClose)
+            CustomProxy.createProxySocket(REAL_FACTORY, socket, host, port, autoClose)
         } else if (host in WHITELISTED_HOSTS) {
-            val s = HttpProxy.createHttpProxySocket(REAL_FACTORY, socket, host, port, autoClose) as SSLSocket
+            val s = CustomProxy.createProxySocket(REAL_FACTORY, socket, host, port, autoClose) as SSLSocket
             s.sslParameters = s.sslParameters.apply {
                 serverNames = listOf(SNIHostName(host))
             }
@@ -64,7 +64,7 @@ object InternetCensorshipBypass {
         } else {
             val ipAddress = DnsProvider.resolveHost(host) // This is the key component
             LogUtils.log(TAG, "$host=$ipAddress")
-            val s = HttpProxy.createHttpProxySocket(REAL_FACTORY, socket, ipAddress, port, autoClose) as SSLSocket
+            val s = CustomProxy.createProxySocket(REAL_FACTORY, socket, ipAddress, port, autoClose) as SSLSocket
             s.sslParameters = s.sslParameters.apply {
                 serverNames = listOf()
             }

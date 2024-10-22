@@ -7,33 +7,71 @@ import mods.constants.PreferenceKeys
 import mods.preference.Prefs
 import mods.promise.runCatchingOrLog
 import mods.utils.LogUtils
+import mods.utils.ToastUtil
 import java.io.IOException
+import java.net.Authenticator
 import java.net.InetSocketAddress
+import java.net.PasswordAuthentication
+import java.net.Proxy
 import java.net.Socket
 import javax.net.ssl.SSLSocketFactory
 
-object HttpProxy {
+object CustomProxy {
 
-    private val TAG = HttpProxy::class.java.simpleName
+    private val TAG = CustomProxy::class.java.simpleName
     private val gson = Gson()
 
     data class HttpProxyConfig(
         @SerializedName("host") val host: String,
         @SerializedName("port") val port: Int,
         @SerializedName("username") val username: String?,
-        @SerializedName("password") val password: String?
+        @SerializedName("password") val password: String?,
+        @SerializedName("type") val type: Type?
     ) {
-        val usesCredentials: Boolean
+        enum class Type {
+            HTTP,
+            SOCKS
+        }
+
+        val hasCredentials: Boolean
             get() = !username.isNullOrEmpty() && !password.isNullOrEmpty()
     }
 
-    private const val HTTP_PROXY_CONNECT_TIMEOUT = 6000
+    private const val PROXY_CONNECT_TIMEOUT = 6000
     private const val HTTP_PROXY_READ_TIMEOUT = 20000
     private val SSL_SOCKET_FACTORY = SSLSocketFactory.getDefault() as SSLSocketFactory
 
+    // Bad JDK design requires us to use
+    // a temp global variable like this,
+    // per-request authenticators aren't possible
+    @JvmField
+    @Volatile
+    var TEMP_TESTING_CREDS: HttpProxyConfig? = null
+
+    init {
+        Authenticator.setDefault(object : Authenticator() {
+            override fun getPasswordAuthentication(): PasswordAuthentication? {
+                val config = TEMP_TESTING_CREDS ?: loadConfig() ?: return null
+
+                val (proxyHost, proxyPort, proxyUsername, proxyPassword, type) = config
+                if (proxyHost != requestingHost) return null
+                if (proxyPort != requestingPort) return null
+                if (type != HttpProxyConfig.Type.SOCKS) return null
+
+                if (!config.hasCredentials) {
+                    ToastUtil.toast(
+                        "SOCKS5 proxy requested credentials and you didn't specify them"
+                    )
+                    return null
+                }
+                return PasswordAuthentication(proxyUsername, proxyPassword!!.toCharArray())
+            }
+        })
+    }
+
     @JvmStatic
     @JvmOverloads
-    fun createHttpProxySocket(
+    fun createProxySocket(
         factory: SSLSocketFactory,
         socket: Socket,
         host: String,
@@ -42,7 +80,36 @@ object HttpProxy {
         config: HttpProxyConfig? = loadConfig()
     ): Socket {
         config ?: return factory.createSocket(socket, host, port, autoClose)
+        return when (config.type) {
+            HttpProxyConfig.Type.SOCKS -> createSocks5ProxySocket(host, port, config)
+            null, HttpProxyConfig.Type.HTTP -> createHttpProxySocket(host, port, config)
+        }
+    }
 
+    private fun createSocks5ProxySocket(
+        host: String,
+        port: Int,
+        config: HttpProxyConfig
+    ): Socket {
+        val (proxyHost, proxyPort, _, _) = config
+        LogUtils.log(TAG, "proxying $host:$port to $proxyHost:$proxyPort")
+
+        val socks5Socket = Socket(Proxy(Proxy.Type.SOCKS, InetSocketAddress(proxyHost, proxyPort)))
+        socks5Socket.connect(InetSocketAddress(host, port), PROXY_CONNECT_TIMEOUT)
+
+        val upgradedSocket = SSL_SOCKET_FACTORY
+            .createSocket(socks5Socket, host, port, true)
+
+        LogUtils.log(TAG, "proxy tunnel success")
+
+        return upgradedSocket
+    }
+
+    private fun createHttpProxySocket(
+        host: String,
+        port: Int,
+        config: HttpProxyConfig
+    ): Socket {
         val (proxyHost, proxyPort, proxyUsername, proxyPassword) = config
         LogUtils.log(TAG, "proxying $host:$port to $proxyHost:$proxyPort")
 
@@ -51,7 +118,7 @@ object HttpProxy {
             append("\r\n")
             append("hOsT: $host:$port")
             append("\r\n")
-            if (config.usesCredentials) {
+            if (config.hasCredentials) {
                 append("pRoXy-AuThOrIZaTiOn: Basic ")
                 append(Base64.encodeToString("$proxyUsername:$proxyPassword".toByteArray(), Base64.NO_WRAP))
             }
@@ -60,7 +127,8 @@ object HttpProxy {
         }.toByteArray()
 
         val preConnectSocket = Socket()
-        preConnectSocket.connect(InetSocketAddress(proxyHost, proxyPort), HTTP_PROXY_CONNECT_TIMEOUT)
+        val soTimeout = preConnectSocket.soTimeout
+        preConnectSocket.connect(InetSocketAddress(proxyHost, proxyPort), PROXY_CONNECT_TIMEOUT)
         preConnectSocket.setKeepAlive(true)
         preConnectSocket.setSoLinger(false, 0)
         preConnectSocket.setSoTimeout(HTTP_PROXY_READ_TIMEOUT)
@@ -85,6 +153,7 @@ object HttpProxy {
             if (!responseData.startsWith("HTTP/1.1 200")) {
                 throw IOException("Proxy authentication failed. Try again\n$responseData")
             }
+            preConnectSocket.soTimeout = soTimeout
             SSL_SOCKET_FACTORY
                 .createSocket(preConnectSocket, host, port, true)
         }
@@ -95,7 +164,7 @@ object HttpProxy {
 
     @JvmStatic
     fun testProxyIp(config: HttpProxyConfig? = loadConfig()): String {
-        return createHttpProxySocket(
+        return createProxySocket(
             factory = SSLSocketFactory.getDefault() as SSLSocketFactory,
             socket = Socket(),
             host = "checkip.amazonaws.com",
@@ -121,6 +190,7 @@ object HttpProxy {
                 ?: "wtf?"
         }
     }
+
     @JvmStatic
     fun loadConfig(): HttpProxyConfig? {
         val data = Prefs.getString(PreferenceKeys.HTTP_PROXY_CONFIG, null)
