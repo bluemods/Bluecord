@@ -31,9 +31,10 @@ object InternetCensorshipBypass {
     @JvmStatic
     @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.N)
     fun isEnabled(): Boolean {
-        val enabled =
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
-                Prefs.getBoolean(PreferenceKeys.SNI_CHECK_BYPASS, false)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            return false
+        }
+        val enabled = Prefs.getBoolean(PreferenceKeys.SNI_CHECK_BYPASS, false)
         toggleSNIProperty(enabled)
         return enabled
     }
