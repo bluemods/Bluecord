@@ -111,8 +111,6 @@
 
     move-result-object p2
 
-    invoke-static {p2}, Lmods/anti/AntiButtons;->hideCallButton(Landroid/view/View;)V
-
     move-object v4, p2
 
     check-cast v4, Lcom/google/android/material/button/MaterialButton;
@@ -125,6 +123,8 @@
     invoke-virtual {p0, p1}, Landroid/view/View;->findViewById(I)Landroid/view/View;
 
     move-result-object p2
+
+    invoke-static {p2}, Lmods/anti/AntiButtons;->hideCallButton(Landroid/view/View;)V
 
     move-object v5, p2
 
