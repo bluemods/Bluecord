@@ -113,7 +113,7 @@ public class AccountSwitcher extends Preference {
                     if (count == 0) {
                         ToastUtil.customToast(DiscordTools.getActivity(context), "No backups selected");
                     } else {
-                        ToastUtil.customToast(DiscordTools.getActivity(context), count + " " + (count == 1 ? "backup" : "backups") + " deleted.");
+                        ToastUtil.customToast(DiscordTools.getActivity(context), StringUtils.plural("backup", count) + " deleted.");
                     }
                 })
                 .showSafely();

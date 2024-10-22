@@ -30,7 +30,7 @@ public class BlueSettingsFragment extends PreferenceFragment {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        int overrideXml = this.getArguments() == null ? 0 : this.getArguments().getInt("pref", 0);
+        int overrideXml = this.getArguments() == null ? 0 : this.getArguments().getInt(BlueSettingsActivity.EXTRA_PREF_KEY, 0);
         addPreferencesFromResource(overrideXml == 0 ? Constants.PREFS_BASE : overrideXml);
         handleBackgroundState();
     }
@@ -41,9 +41,9 @@ public class BlueSettingsFragment extends PreferenceFragment {
     }
 
     public void handleBackgroundState() {
-        Preference file = findPreference("blue.bgPath");
-        Preference blur = findPreference("blue.bg.blur");
-        Preference color = findPreference("blue.bgColor");
+        Preference file = findPreference(PreferenceKeys.BACKGROUND_PATH);
+        Preference blur = findPreference(PreferenceKeys.BACKGROUND_BLUR);
+        Preference color = findPreference(PreferenceKeys.BACKGROUND_COLOR);
 
         if (file == null || blur == null || color == null) return;
 

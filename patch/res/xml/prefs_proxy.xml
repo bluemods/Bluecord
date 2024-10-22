@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen android:title="Proxy Configurations" android:key=""
+<PreferenceScreen android:title="Proxy Settings" android:key=""
   xmlns:android="http://schemas.android.com/apk/res/android">
 	<SwitchPreference android:title="SNI Check Bypass" android:key="blue.sni.bypass" android:summary="Bypasses common firewall censorship techniques found in some nations (like Russia)\nTry enabling this if you are unable to connect to Discord." />
     <mods.preference.ProxyPreference android:title="Custom Proxy" android:summary="Use your own HTTP proxy to connect to Discord" />    

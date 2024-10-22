@@ -13,6 +13,8 @@ import javax.net.ssl.SSLSocketFactory
 object InternetCensorshipBypass {
 
     private val TAG = InternetCensorshipBypass::class.java.simpleName
+
+    // My host needs SNI for proper routing, change this if needed later
     private val WHITELISTED_HOSTS = arrayOf("bluesmods.com", "www.bluesmods.com")
 
     @JvmStatic

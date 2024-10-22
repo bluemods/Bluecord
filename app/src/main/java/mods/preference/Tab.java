@@ -45,7 +45,7 @@ public class Tab extends Preference {
             preference.getContext()
                     .startActivity(
                             new Intent(preference.getContext(), BlueSettingsActivity.class)
-                                    .putExtra("pref", prefXml)
+                                    .putExtra(BlueSettingsActivity.EXTRA_PREF_KEY, prefXml)
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     );
             return true;

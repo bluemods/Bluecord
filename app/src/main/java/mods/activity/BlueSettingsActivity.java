@@ -39,6 +39,7 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
     public static final int REQUEST_CODE_PICK_BACKGROUND_FILE = 10;
     public static final int REQUEST_CODE_SET_BACKGROUND_UCROP = 7701;
     public static final int REQUEST_CODE_PICK_FONT_FILE = 7702;
+    public static final String EXTRA_PREF_KEY = "pref";
 
     private static boolean needsActivityRefresh;
     public static boolean needsFragmentRefresh;
@@ -52,7 +53,8 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
             View settingsButton = settingsView.findViewById(android.R.id.text1);
             if (settingsButton != null) {
                 settingsButton.setOnClickListener(v -> {
-                    fragment.startActivity(new Intent(fragment.getActivity(), BlueSettingsActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                    fragment.startActivity(new Intent(fragment.getActivity(), BlueSettingsActivity.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 });
             }
         }

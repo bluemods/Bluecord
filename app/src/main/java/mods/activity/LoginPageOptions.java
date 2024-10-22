@@ -1,6 +1,7 @@
 package mods.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.EditText;
@@ -11,6 +12,7 @@ import com.discord.app.AppFragment;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import mods.DiscordTools;
+import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
 import mods.preference.AccountSwitcher;
 import mods.preference.Prefs;
@@ -54,6 +56,15 @@ public class LoginPageOptions {
         View accountRestoreButton = view.findViewById(android.R.id.secondaryProgress);
         if (accountRestoreButton != null) {
             accountRestoreButton.setOnClickListener(v -> AccountSwitcher.restoreBackup(fragment.getContext()));
+        }
+
+        View proxySettingsButton = view.findViewById(android.R.id.switchInputMethod);
+        if (proxySettingsButton != null) {
+            proxySettingsButton.setOnClickListener(v -> {
+                fragment.startActivity(new Intent(fragment.getActivity(), BlueSettingsActivity.class)
+                        .putExtra(BlueSettingsActivity.EXTRA_PREF_KEY, Constants.PREFS_PROXY)
+                        .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            });
         }
 
         View restoreTokenButton = view.findViewById(android.R.id.primary);
