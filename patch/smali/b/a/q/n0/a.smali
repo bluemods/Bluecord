@@ -818,6 +818,12 @@
 
     if-eqz v1, :cond_2
 
+    invoke-static {}, Lmods/proxy/InternetCensorshipBypass;->isEnabled()Z
+
+    move-result v2
+
+    if-nez v2, :cond_0
+
     .line 12
     sget-object v2, Lf0/e0/k/h;->c:Lf0/e0/k/h$a;
 

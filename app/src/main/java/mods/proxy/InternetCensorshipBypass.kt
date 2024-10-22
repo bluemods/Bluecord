@@ -1,11 +1,16 @@
 package mods.proxy
 
+import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
 import mods.constants.PreferenceKeys
+import mods.extensions.Address
 import mods.preference.Prefs
 import mods.promise.runCatchingOrLog
 import mods.proxy.dns.DnsProvider
 import mods.utils.LogUtils
 import java.net.Socket
+import javax.net.ssl.SNIHostName
+import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
 
 // Bypasses network censorship techniques found in speech hostile nations such as Russia.
@@ -14,24 +19,55 @@ object InternetCensorshipBypass {
 
     private val TAG = InternetCensorshipBypass::class.java.simpleName
 
+    private val REAL_FACTORY = SSLSocketFactory.getDefault() as SSLSocketFactory
+
     // My host needs SNI for proper routing, change this if needed later
     private val WHITELISTED_HOSTS = arrayOf("bluesmods.com", "www.bluesmods.com")
 
+    init {
+        isEnabled()
+    }
+
     @JvmStatic
+    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.N)
     fun isEnabled(): Boolean {
-        return Prefs.getBoolean(PreferenceKeys.SNI_CHECK_BYPASS, false)
+        val enabled =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
+                Prefs.getBoolean(PreferenceKeys.SNI_CHECK_BYPASS, false)
+        toggleSNIProperty(enabled)
+        return enabled
+    }
+
+    private fun toggleSNIProperty(enabled: Boolean) {
+        System.setProperty("jsse.enableSNIExtension", if (enabled) "false" else "true")
+    }
+
+    @JvmStatic
+    fun logSocketCreate(address: Address): Socket {
+        LogUtils.log(TAG, "plainSocketCreate=${address.a}")
+        return address.e.createSocket()
     }
 
     @JvmStatic
     fun createSocket(factory: SSLSocketFactory, socket: Socket, host: String, port: Int, autoClose: Boolean): Socket = runCatchingOrLog {
         val enabled = isEnabled()
         LogUtils.log(TAG, "createSocket($host:$port)${if (enabled) " (bypassing)" else ""}")
-        if (!enabled || host in WHITELISTED_HOSTS) {
-            HttpProxy.createHttpProxySocket(factory, socket, host, port, autoClose)
+        if (!enabled) {
+            HttpProxy.createHttpProxySocket(REAL_FACTORY, socket, host, port, autoClose)
+        } else if (host in WHITELISTED_HOSTS) {
+            val s = HttpProxy.createHttpProxySocket(REAL_FACTORY, socket, host, port, autoClose) as SSLSocket
+            s.sslParameters = s.sslParameters.apply {
+                serverNames = listOf(SNIHostName(host))
+            }
+            s
         } else {
             val ipAddress = DnsProvider.resolveHost(host) // This is the key component
             LogUtils.log(TAG, "$host=$ipAddress")
-            HttpProxy.createHttpProxySocket(factory, socket, ipAddress, port, autoClose)
+            val s = HttpProxy.createHttpProxySocket(REAL_FACTORY, socket, ipAddress, port, autoClose) as SSLSocket
+            s.sslParameters = s.sslParameters.apply {
+                serverNames = listOf()
+            }
+            s
         }
     }.getOrThrow()
 }

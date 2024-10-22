@@ -5791,44 +5791,7 @@
         }
     .end annotation
 
-    .line 1
-    sget-object v0, Lcom/discord/utilities/rest/RestAPI;->apiClientVersions:Lcom/discord/restapi/RestAPIInterface$Dynamic;
-
-    if-nez v0, :cond_0
-
-    const-string v1, "apiClientVersions"
-
-    invoke-static {v1}, Ld0/z/d/m;->throwUninitializedPropertyAccessException(Ljava/lang/String;)V
-
-    :cond_0
-    const-string v1, "https://dl.discordapp.net/apps/android/versions.json"
-
-    .line 2
-    invoke-interface {v0, v1}, Lcom/discord/restapi/RestAPIInterface$Dynamic;->get(Ljava/lang/String;)Lrx/Observable;
-
-    move-result-object v0
-
-    .line 3
-    sget-object v1, Lcom/discord/utilities/rest/RestAPI$getClientVersion$1;->INSTANCE:Lcom/discord/utilities/rest/RestAPI$getClientVersion$1;
-
-    invoke-virtual {v0, v1}, Lrx/Observable;->G(Lj0/k/b;)Lrx/Observable;
-
-    move-result-object v0
-
-    const-string v1, "apiClientVersions\n      \u2026n_version\")?.asInt ?: 0 }"
-
-    invoke-static {v0, v1}, Ld0/z/d/m;->checkNotNullExpressionValue(Ljava/lang/Object;Ljava/lang/String;)V
-
-    const/4 v1, 0x0
-
-    const/4 v2, 0x1
-
-    const/4 v3, 0x0
-
-    .line 4
-    invoke-static {v0, v1, v2, v3}, Lcom/discord/utilities/rx/ObservableExtensionsKt;->restSubscribeOn$default(Lrx/Observable;ZILjava/lang/Object;)Lrx/Observable;
-
-    move-result-object v0
+    sget-object v0, Lmods/rn/ReactNativeSpoof;->MIN_CLIENT_VERSION:Lrx/Observable;
 
     return-object v0
 .end method

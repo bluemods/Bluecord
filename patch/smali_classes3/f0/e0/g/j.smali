@@ -787,6 +787,8 @@
 
     .line 6
     :cond_1
+    invoke-static {v1}, Lmods/proxy/InternetCensorshipBypass;->logSocketCreate(Lf0/a;)Ljava/net/Socket;
+
     iget-object v1, v1, Lf0/a;->e:Ljavax/net/SocketFactory;
 
     .line 7

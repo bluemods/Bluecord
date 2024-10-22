@@ -6,6 +6,7 @@ import com.discord.restapi.RequiredHeadersInterceptor
 import com.discord.utilities.rest.RestAPI.AppHeadersProvider
 import mods.constants.PreferenceKeys
 import mods.preference.Prefs
+import mods.utils.RxUtils
 import okhttp3.Headers
 import org.json.JSONObject
 import java.util.Locale
@@ -16,6 +17,14 @@ import java.util.UUID
  * Impersonates RN client for future-proofing
  */
 object ReactNativeSpoof {
+    /**
+     * WAFs like to block this first as the client requests it first.
+     *
+     * It doesn't matter to us, so return the hard-coded result
+     */
+    @JvmField
+    val MIN_CLIENT_VERSION = RxUtils.observableJust(388)
+
     private const val CLIENT_BUILD_NUMBER = 251015
     private const val WSS_CAPABILITIES = 351L // 16383
 

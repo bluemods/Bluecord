@@ -1,12 +1,9 @@
 package mods.extensions
 
-import okhttp3.Interceptor
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
-import org.json.JSONArray
-import org.json.JSONObject
+import okhttp3.*
+import org.json.*
 import java.io.IOException
+import javax.net.ssl.*
 
 typealias OkHttpClient = f0.x
 typealias OkHttpClientBuilder = f0.x.a
@@ -14,9 +11,13 @@ typealias Call = f0.e
 typealias Callback = f0.f
 typealias CacheControl = f0.x.d
 typealias RequestBuilder = Request.a
+typealias Address = f0.a
 
 fun OkHttpClientBuilder.addInterceptor(interceptor: Interceptor) = apply {
     c.add(interceptor)
+}
+fun OkHttpClientBuilder.sslSocketFactory(factory: SSLSocketFactory, x509: X509TrustManager) = apply {
+    b(factory, x509)
 }
 fun OkHttpClientBuilder.build(): OkHttpClient = OkHttpClient(this)
 
@@ -95,6 +96,8 @@ fun Call.enqueue(
         }
     })
 }
+
+fun OkHttpClient.newWebSocket(request: Request, listener: WebSocketListener): WebSocket = g(request, listener)
 
 fun JSONObject.toRequestBody(): RequestBody = toString().toRequestBody()
 fun String?.toRequestBody(): RequestBody = RequestBody.create(orEmpty().toByteArray(), null)
