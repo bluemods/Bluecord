@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.charset.StandardCharsets;
 
 import mods.DiscordTools;
-import mods.activity.UpdateResult;
+import mods.activity.update.UpdateResult;
 
 public final class URLConstants {
 

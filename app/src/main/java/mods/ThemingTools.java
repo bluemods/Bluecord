@@ -50,8 +50,7 @@ import java.util.Map;
 
 import b.f.g.f.a;
 import b.f.g.f.c;
-import mods.activity.Updater;
-import mods.constants.Constants;
+import mods.activity.update.Updater;
 import mods.constants.PreferenceKeys;
 import mods.constants.URLConstants;
 import mods.events.EventTracker;

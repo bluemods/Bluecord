@@ -1,4 +1,4 @@
-package mods.activity;
+package mods.activity.update;
 
 import android.app.Activity;
 import android.content.Context;

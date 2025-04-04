@@ -1,4 +1,4 @@
-package mods.activity
+package mods.activity.update
 
 import mods.DiscordTools
 import mods.constants.Constants
