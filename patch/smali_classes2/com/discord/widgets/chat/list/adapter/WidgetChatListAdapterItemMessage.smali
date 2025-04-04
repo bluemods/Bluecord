@@ -1001,7 +1001,7 @@
 
     invoke-virtual {v0, v1}, Landroid/widget/TextView;->setGravity(I)V
 
-	sget v1, Lmods/constants/Constants;->VERIFIED_DEV_BADGE:I
+	sget v1, Lmods/utils/DevBadge;->VERIFIED_DEV_BADGE:I
 
 	const/4 v2, 0x0
 
