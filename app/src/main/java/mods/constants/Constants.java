@@ -9,8 +9,8 @@ public final class Constants {
 
     // Version number. This is changed on release
     // and is used for checking if Bluecord needs an update
-    public static final int    VERSION_CODE = 24001;
-    public static final String VERSION_NAME = "2.4 (Preview)";
+    public static final int    VERSION_CODE = 24100;
+    public static final String VERSION_NAME = "2.4.1";
 
     // Adds support for Bluecord emotes and other systems that use a '.'
     public static final String VALID_UNICODE_EMOJI_PATTERN = "^<&?\u200b?(a)?[:|\\.]([a-zA-Z_0-9]+)[:|\\.](\\d+)>";
