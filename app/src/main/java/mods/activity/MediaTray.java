@@ -304,7 +304,6 @@ public class MediaTray {
                 Long channelId = StoreUtils.getCurrentChannelId();
 
                 if (limit < 1 || limit > MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND) {
-                    // TODO: consider removing the upper bound limit?
                     ToastUtil.toast("Use a number between 1-" + MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND);
                 } else if (channelId == null) {
                     ToastUtil.toast("Could not locate the current channel. Restart Bluecord and retry.");

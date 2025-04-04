@@ -9,6 +9,7 @@ import com.discord.widgets.chat.list.entries.ChatListEntry;
 
 import mods.utils.LogUtils;
 
+// TODO encode with something like https://github.com/theeasiestway/android-opus-codec
 @SuppressWarnings("unused")
 public class VoiceMessageAdapterItemAttachment extends WidgetChatListItem implements FragmentLifecycleListener {
 
