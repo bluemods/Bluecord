@@ -59,7 +59,7 @@ public class Notifications {
         final Context ctx = DiscordTools.getContext();
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, CHANNEL_ID)
-                .setSmallIcon(Constants.NOTIFICATION_ICON)
+                .setSmallIcon(com.bluecord.R.drawable.ic_notification_24dp)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text))

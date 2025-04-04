@@ -70,6 +70,8 @@ val Response.code: Int
 val Response.isSuccessful: Boolean
     get() = code in 200..299
 
+inline fun <T> Response.use(block: (Response) -> T): T = this.p.use { block(this) }
+
 fun Response.string(): String = this.p.use { it.d() }
 
 fun Response.json(): JSONObject = JSONObject(string())

@@ -20,10 +20,12 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.URLSpan;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bluecord.R;
 import com.discord.BuildConfig;
 import com.discord.api.channel.Channel;
 import com.discord.api.message.reaction.MessageReactionUpdate;
@@ -58,6 +60,7 @@ import mods.preference.EmoteMode;
 import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
 import mods.utils.AuthenticationUtils;
+import mods.utils.ClipboardUtil;
 import mods.utils.EmptyUtils;
 import mods.utils.LogUtils;
 import mods.utils.StoreUtils;
@@ -152,8 +155,8 @@ public class ThemingTools {
 
     public static int hideBlocked() {
         return Prefs.getBoolean(PreferenceKeys.HIDE_BLOCKED, false)
-                ? Constants.LAYOUT_HIDE_BLOCKED
-                : Constants.LAYOUT_SHOW_BLOCKED;
+                ? R.layout.blue_hide_blocked
+                : R.layout.widget_chat_list_adapter_item_blocked;
     }
 
     public static boolean showSquarePics() {
@@ -422,15 +425,10 @@ public class ThemingTools {
                     emoteUrl = "https://cdn.discordapp.com/emojis/" + id + "." + ext + "?v=1&size=" + px + "&quality=lossless";
                 }
 
-                DiscordTools.copyToClipboard(emoteUrl);
-
-                ToastUtil.toast("Copied to clipboard");
+                ClipboardUtil.copy(emoteUrl, "Copied to clipboard");
             } else if (o instanceof EmojiSheetViewModel.ViewState.EmojiUnicode) {
                 ModelEmojiUnicode emoji = ((EmojiSheetViewModel.ViewState.EmojiUnicode) o).getEmojiUnicode();
-
-                DiscordTools.copyToClipboard(emoji.getMessageContentReplacement());
-
-                ToastUtil.toast("Copied to clipboard");
+                ClipboardUtil.copy(emoji.getMessageContentReplacement(), "Copied to clipboard");
             }
         });
     }
@@ -497,8 +495,12 @@ public class ThemingTools {
         }
     }
 
-    public static int dipToPx(float dips) {
-        return (int) (dips * DiscordTools.getContext().getResources().getDisplayMetrics().density + 0.5f);
+    public static int dipToPx(int dip) {
+        return dipToPx(DiscordTools.getContext(), dip);
+    }
+
+    public static int dipToPx(Context context, int dip) {
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, context.getResources().getDisplayMetrics()));
     }
 
     public static RectF getViewBounds(View view) {

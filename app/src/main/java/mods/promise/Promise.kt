@@ -3,7 +3,8 @@
 package mods.promise
 
 import mods.utils.LogUtils
-import mods.utils.SimpleLoadingSpinner
+import mods.dialog.SimpleLoadingSpinner
+import mods.utils.ThreadUtils
 
 fun <T> Promise<T>.subscribe(onSuccess: (T) -> Unit = {}, onError: (Throwable) -> Unit = {}) {
     add(object : PromiseListener<T>() {

@@ -1,17 +1,19 @@
 package mods.utils.translate;
 
-import mods.view.SpinnerMap;
+import mods.dialog.spinner.SpinnerMap;
 
 public final class LanguageHolder {
 
-    private static final SpinnerMap choices;
+    private static final SpinnerMap map;
 
     static {
-        choices = new SpinnerMap(120);
+        SpinnerMap choices = new SpinnerMap(120, 1.0f);
         choices.put("English", "en");
         choices.put("Spanish", "es");
+        choices.put("Dutch", "nl");
         choices.put("French", "fr");
-        choices.put("Dutch (Netherlands)", "nl");
+        choices.put("German", "de");
+        choices.put("Russian", "ru");
         choices.put("Afrikaans", "af");
         choices.put("Albanian", "sq");
         choices.put("Amharic", "am");
@@ -36,7 +38,6 @@ public final class LanguageHolder {
         choices.put("Finnish", "fi");
         choices.put("Galician", "gl");
         choices.put("Georgian", "ka");
-        choices.put("German", "de");
         choices.put("Gujarati", "gu");
         choices.put("Haitian", "ht");
         choices.put("Hausa", "ha");
@@ -73,13 +74,12 @@ public final class LanguageHolder {
         choices.put("Norwegian", "no");
         choices.put("Nyanja", "ny");
         choices.put("Oriya", "or");
-        choices.put("Panjabi", "pa");
+        choices.put("Panjabi", "wb");
         choices.put("Persian", "fa");
         choices.put("Polish", "pl");
         choices.put("Portuguese", "pt");
         choices.put("Pushto", "ps");
         choices.put("Romanian", "ro");
-        choices.put("Russian", "ru");
         choices.put("Samoan", "sm");
         choices.put("Scottish Gaelic", "gd");
         choices.put("Serbian", "sr");
@@ -112,9 +112,10 @@ public final class LanguageHolder {
         choices.put("Yiddish", "yi");
         choices.put("Yoruba", "yo");
         choices.put("Zulu", "zu");
+        map = choices;
     }
 
     public static SpinnerMap getLangs() {
-        return choices;
+        return map;
     }
 }

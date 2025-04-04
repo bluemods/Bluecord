@@ -2,7 +2,6 @@ package mods.anti;
 
 import android.content.Context;
 
-import mods.constants.Constants;
 import mods.preference.QuickAccessPrefs;
 import mods.utils.LogUtils;
 
@@ -99,7 +98,7 @@ public class AntiEdit {
         if (!QuickAccessPrefs.isEditTimestampEnabled() || message.getEditedTimestamp() == null) return EditedMessageNode.Companion.getEditedString(context);
 
         return " (" +
-                context.getString(Constants.STRING_MESSAGE_EDITED) + ' ' +
+                context.getString(com.bluecord.R.string.message_edited) + ' ' +
                 TimeUtils.toReadableTimeString(context, message.getEditedTimestamp().g(), ClockFactory.get()) +
                 ')';
     }

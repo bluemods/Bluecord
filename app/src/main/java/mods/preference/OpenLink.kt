@@ -9,7 +9,7 @@ import mods.DiscordTools
 import mods.constants.URLConstants
 import mods.extensions.string
 import mods.net.Net
-import mods.utils.SimpleLoadingSpinner
+import mods.dialog.SimpleLoadingSpinner
 import mods.utils.ToastUtil
 
 class OpenLink(context: Context?, attrs: AttributeSet) : Preference(context, attrs) {

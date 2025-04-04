@@ -5,6 +5,8 @@ import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
+import com.bluecord.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +20,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import mods.DiscordTools;
-import mods.constants.Constants;
 import mods.net.Net;
 import mods.rn.ReactNativeSpoof;
 import mods.utils.Assertions;
@@ -73,7 +74,7 @@ public class MessageDeleterTask {
         this.limit = limit;
         this.builder = new Notification.Builder(DiscordTools.getApplication())
                 .setOngoing(true)
-                .setSmallIcon(Constants.NOTIFICATION_ICON)
+                .setSmallIcon(R.drawable.ic_notification_24dp)
                 .setContentTitle("Message Deleter")
                 .setContentText("Fetching messages to delete...")
                 .setProgress(limit, 0, false)
@@ -323,7 +324,7 @@ public class MessageDeleterTask {
                     this.builder.setContentTitle("Deleting messages...")
                             .setContentText(this.deleteCount + " / " + this.deleteTotal)
                             .setProgress(this.deleteTotal, this.deleteCount, false)
-                            .setSmallIcon(Constants.APP_ICON);
+                            .setSmallIcon(R.drawable.bluecord_logo_big);
 
                     Notifications.showNotification(NOTIFICATIONS_DELETE_TASK_ID, this.builder.build());
 

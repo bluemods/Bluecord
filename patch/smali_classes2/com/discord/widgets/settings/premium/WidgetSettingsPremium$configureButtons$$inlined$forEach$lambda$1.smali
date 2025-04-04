@@ -73,7 +73,7 @@
 
     move-result-object v0
 
-	invoke-static {v0}, Lmods/utils/Alerts;->alertNitroClick(Landroid/content/Context;)V
+	invoke-static {v0}, Lmods/dialog/StandardAlerts;->alertNitroClick(Landroid/content/Context;)V
 
     return-void
 .end method

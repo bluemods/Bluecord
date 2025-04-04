@@ -16,6 +16,7 @@ import mods.DiscordTools
 import mods.activity.BlueSettingsActivity
 import mods.constants.PreferenceKeys.CUSTOM_FONT_PATH
 import mods.constants.PreferenceKeys.CUSTOM_FONT
+import mods.dialog.Dialogs
 import mods.promise.runCatchingOrLog
 import mods.utils.FileUtils
 import mods.utils.IntentUtils
@@ -35,7 +36,7 @@ class CustomFont(context: Context?, attrs: AttributeSet?)
 
     @Deprecated("Deprecated in Java")
     override fun onPreferenceClick(preference: Preference?): Boolean {
-        DiscordTools.newBuilder(context)
+        Dialogs.newBuilder(context)
             .setTitle("Pick an option")
             .setItems(arrayOf(
                 "Pre-installed fonts",
@@ -68,7 +69,7 @@ class CustomFont(context: Context?, attrs: AttributeSet?)
         val selectedFile = Prefs.getString(CUSTOM_FONT, DEFAULT_VALUE)
         val selectedItem = fonts.indexOfFirst { selectedFile == it.assetName }
 
-        DiscordTools.newBuilder(cont).apply {
+        Dialogs.newBuilder(cont).apply {
             setTitle("Choose a font")
             setSingleChoiceItems(
                 fonts.map { it.displayName }.toTypedArray(),
@@ -195,7 +196,7 @@ class CustomFont(context: Context?, attrs: AttributeSet?)
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     // Create a preview
-                    DiscordTools.newBuilder(RefreshUtils.WIDGET_CHAT_LIST.requireActivity()).apply {
+                    Dialogs.newBuilder(RefreshUtils.WIDGET_CHAT_LIST.requireActivity()).apply {
                         setTitle("Use Font?")
                         setMessage(SpannableStringBuilder().apply {
                             append("Here's a preview of what the font looks like:\n\n")

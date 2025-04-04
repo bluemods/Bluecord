@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import mods.DiscordTools;
 import mods.activity.BlueSettingsActivity;
 import mods.constants.PreferenceKeys;
+import mods.dialog.Dialogs;
 import mods.ucrop.UCropUtils;
 import mods.utils.StoragePermissionUtils;
 import mods.utils.ToastUtil;
@@ -32,7 +33,7 @@ public class Background extends Preference {
                     return true;
                 }
 
-                DiscordTools.newBuilder(getContext())
+                Dialogs.newBuilder(getContext())
                         .setTitle("Pick an action")
                         .setItems(
                                 new String[]{"Custom (pick from your files)", "Random (image from unsplash.com)"},
@@ -51,7 +52,7 @@ public class Background extends Preference {
                                         );
                                     }
                                 })
-                        .setPositiveButton("Exit", null)
+                        .setPositiveButton("Exit")
                         .showSafely();
             }
             return true;

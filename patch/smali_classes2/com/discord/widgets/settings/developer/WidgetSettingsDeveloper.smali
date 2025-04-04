@@ -506,7 +506,7 @@
     .line 4
     invoke-direct {p0}, Lcom/discord/widgets/settings/developer/WidgetSettingsDeveloper;->setupCrashes()V
 
-	invoke-static {p0}, Lmods/utils/Alerts;->alertDevMenuWarning(Landroidx/fragment/app/Fragment;)V
+	invoke-static {p0}, Lmods/dialog/StandardAlerts;->alertDevMenuWarning(Landroidx/fragment/app/Fragment;)V
 
     return-void
 .end method

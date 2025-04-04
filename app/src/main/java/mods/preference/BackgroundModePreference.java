@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import mods.DiscordTools;
 import mods.activity.BlueSettingsFragment;
 import mods.constants.PreferenceKeys;
+import mods.dialog.Dialogs;
 
 public class BackgroundModePreference extends Preference {
 
@@ -26,7 +27,7 @@ public class BackgroundModePreference extends Preference {
                     "Background Color"
             };
 
-            DiscordTools.newBuilder(preference.getContext())
+            Dialogs.newBuilder(preference.getContext())
                     .setTitle("Pick an option")
                     .setSingleChoiceItems(values, val, (dialog, which) -> {
                         Prefs.setInt(key, which);
@@ -36,7 +37,7 @@ public class BackgroundModePreference extends Preference {
                         }
                         set();
                     })
-                    .setPositiveButton("Exit", null)
+                    .setPositiveButton("Exit")
                     .showSafely();
             return true;
         });

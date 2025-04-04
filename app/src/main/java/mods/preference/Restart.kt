@@ -1,21 +1,18 @@
-package mods.preference;
+package mods.preference
 
-import android.content.Context;
-import android.preference.Preference;
-import android.util.AttributeSet;
+import android.content.Context
+import android.preference.Preference
+import android.util.AttributeSet
+import mods.DiscordTools
 
-import mods.DiscordTools;
-
-public class Restart extends Preference implements Preference.OnPreferenceClickListener {
-
-    public Restart(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        setOnPreferenceClickListener(this);
+class Restart(context: Context?, attrs: AttributeSet?) :
+    Preference(context, attrs), Preference.OnPreferenceClickListener {
+    init {
+        onPreferenceClickListener = this
     }
 
-    @Override
-    public boolean onPreferenceClick(Preference preference) {
-        DiscordTools.restartDiscord(DiscordTools.getActivity(getContext()));
-        return true;
+    override fun onPreferenceClick(preference: Preference): Boolean {
+        DiscordTools.restartDiscord(DiscordTools.getActivity(context))
+        return true
     }
 }

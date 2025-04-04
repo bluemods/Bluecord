@@ -12,8 +12,8 @@ import com.discord.app.AppFragment;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import mods.DiscordTools;
-import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
+import mods.dialog.Dialogs;
 import mods.preference.AccountSwitcher;
 import mods.preference.Prefs;
 import mods.utils.AuthenticationUtils;
@@ -62,7 +62,7 @@ public class LoginPageOptions {
         if (proxySettingsButton != null) {
             proxySettingsButton.setOnClickListener(v -> {
                 fragment.startActivity(new Intent(fragment.getActivity(), BlueSettingsActivity.class)
-                        .putExtra(BlueSettingsActivity.EXTRA_PREF_KEY, Constants.PREFS_PROXY)
+                        .putExtra(BlueSettingsActivity.EXTRA_PREF_KEY, com.bluecord.R.xml.prefs_proxy)
                         .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
             });
         }
@@ -78,13 +78,13 @@ public class LoginPageOptions {
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             input.setLayoutParams(lp);
 
-            DiscordTools.newBuilder(fragment.getContext())
+            Dialogs.newBuilder(fragment.requireContext())
                     .setTitle("Token Login")
                     .setView(input)
-                    .setNegativeButton("Dismiss", null)
+                    .setNegativeButton("Dismiss")
                     .setNeutralButton("Help", (d, w) -> {
-                        DiscordTools.basicAlert(
-                                fragment.getContext(),
+                        Dialogs.basicAlert(
+                                fragment.requireContext(),
                                 "Token Login",
                                 "Use this if you are logged in on your PC or have your token on hand. " +
                                         "If you're not sure what a Discord token is, don't worry, it's not very important.\n\n" +

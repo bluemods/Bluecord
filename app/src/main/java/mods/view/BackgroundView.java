@@ -60,8 +60,8 @@ public class BackgroundView extends AppCompatImageView {
 
     public static void setBackgroundColor(View view) {
         if (Prefs.getInt(PreferenceKeys.BACKGROUND_MODE, Background.MODE_OFF) == Background.MODE_COLOR) {
-            long chatId = Constants.ID_PANEL_CENTER;
-            long chatBgId = Constants.WIDGET_HOME_PANEL_CENTER_CHAT;
+            long chatId = com.bluecord.R.id.panel_center;
+            long chatBgId = com.bluecord.R.id.widget_home_panel_center_chat;
 
             while (view.getId() != chatId) {
                 view = (View) view.getParent();
@@ -137,7 +137,7 @@ public class BackgroundView extends AppCompatImageView {
                             setClipBounds(RefreshUtils.WIDGET_CHAT_LIST.giveMeTheRecycler().getClipBounds());
 
                             int top = 0;
-                            top += ((View) BackgroundView.this.getParent()).findViewById(Constants.ACTION_BAR_TOOLBAR_LAYOUT).getHeight();
+                            top += ((View) BackgroundView.this.getParent()).findViewById(com.bluecord.R.id.action_bar_toolbar_layout).getHeight();
 
                             setPadding(getPaddingLeft(), top, getPaddingRight(), getPaddingBottom());
 

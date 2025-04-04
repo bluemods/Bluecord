@@ -1,6 +1,8 @@
 package mods.anti;
 
 import android.content.Context;
+
+import mods.dialog.Dialogs;
 import mods.utils.LogUtils;
 
 import androidx.fragment.app.Fragment;
@@ -79,7 +81,7 @@ public class AntiHidden {
                     lastMessageSent = SnowflakeUtils.toTimestamp(lastMessageSent);
                 }
 
-                DiscordTools.basicAlert(
+                Dialogs.basicAlert(
                         context,
                         "Hidden Channel",
                         "Info for hidden channel #" +

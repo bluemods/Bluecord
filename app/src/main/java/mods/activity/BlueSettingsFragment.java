@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 
 import java.util.HashMap;
 
-import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
 import mods.preference.Background;
 import mods.preference.Prefs;
@@ -31,7 +30,7 @@ public class BlueSettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         int overrideXml = this.getArguments() == null ? 0 : this.getArguments().getInt(BlueSettingsActivity.EXTRA_PREF_KEY, 0);
-        addPreferencesFromResource(overrideXml == 0 ? Constants.PREFS_BASE : overrideXml);
+        addPreferencesFromResource(overrideXml == 0 ? com.bluecord.R.xml.prefs_base : overrideXml);
         handleBackgroundState();
     }
 

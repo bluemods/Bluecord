@@ -3,7 +3,6 @@ package mods.utils.apng
 import android.graphics.Bitmap
 import com.discord.rlottie.RLottieDrawable
 import com.discord.utilities.stickers.StickerUtils
-import mods.DiscordTools
 import mods.extensions.RequestBuilder
 import mods.extensions.build
 import mods.extensions.enqueue
@@ -12,8 +11,9 @@ import mods.extensions.string
 import mods.extensions.url
 import mods.net.Net
 import mods.promise.Promise
-import mods.promise.ThreadUtils
+import mods.utils.ThreadUtils
 import mods.promise.runOnMainThread
+import mods.utils.FileUtils
 import mods.utils.LogUtils
 import java.io.File
 import java.io.FileOutputStream
@@ -31,7 +31,7 @@ object StickerTranscoder {
         ThreadUtils.runOnIOThread {
             try {
                 URL(url).openStream().use { input ->
-                    val file = File(DiscordTools.getTempDir(), UUID.randomUUID().toString() + ".gif")
+                    val file = File(FileUtils.tempDir, UUID.randomUUID().toString() + ".gif")
 
                     val apngCls = Class.forName("com.linecorp.apng.decoder.Apng")
                     val apngCompanion = apngCls.getDeclaredField("Companion").get(null)
@@ -87,7 +87,7 @@ object StickerTranscoder {
         ThreadUtils.runOnIOThread {
             Net.client.newCall(RequestBuilder().url(url).build()).enqueue({ (_, response) ->
                 val fileId = UUID.randomUUID().toString().replace("-", "")
-                val file = File(DiscordTools.getTempDir(), "$fileId.gif")
+                val file = File(FileUtils.tempDir, "$fileId.gif")
                 val jsonData = response.string()
 
                 // Lotties have a large amount of objects so this should be more lightweight

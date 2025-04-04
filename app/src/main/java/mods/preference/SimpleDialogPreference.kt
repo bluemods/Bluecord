@@ -1,25 +1,26 @@
-package mods.preference;
+package mods.preference
 
-import android.content.Context;
-import android.preference.Preference;
-import android.util.AttributeSet;
+import android.content.Context
+import android.preference.Preference
+import android.preference.Preference.OnPreferenceClickListener
+import android.util.AttributeSet
+import mods.dialog.Dialogs
 
-import mods.DiscordTools;
+class SimpleDialogPreference(context: Context?, attrs: AttributeSet) :
+    Preference(context, attrs), OnPreferenceClickListener {
+    private val title =
+        attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "dialogTitle").orEmpty()
 
-public class SimpleDialogPreference extends Preference {
+    private val summary =
+        attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "dialogMessage").orEmpty()
 
-    private final String title;
-    private final String summary;
+    init {
+        onPreferenceClickListener = this
+    }
 
-    public SimpleDialogPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-
-        title = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "dialogTitle");
-        summary = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "dialogMessage");
-
-        setOnPreferenceClickListener(preference -> {
-            DiscordTools.basicAlert(preference.getContext(), title, summary);
-            return true;
-        });
+    @Deprecated("Deprecated in Java")
+    override fun onPreferenceClick(preference: Preference?): Boolean {
+        Dialogs.basicAlert(context, title, summary)
+        return true
     }
 }

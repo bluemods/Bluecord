@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.bluecord.R;
 import com.discord.api.premium.PremiumTier;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,13 +35,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import mods.DiscordTools;
 import mods.ThemingTools;
-import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
 import mods.constants.URLConstants;
+import mods.dialog.Dialogs;
 import mods.net.Urban;
 import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
-import mods.utils.Alerts;
+import mods.dialog.StandardAlerts;
 import mods.utils.AuthenticationUtils;
 import mods.utils.PatternUtils;
 import mods.utils.StoreUtils;
@@ -48,6 +49,7 @@ import mods.utils.StringUtils;
 import mods.utils.ToastUtil;
 import mods.utils.deleter.MessageDeleterTask;
 import mods.utils.translate.Translate;
+import mods.view.Colors;
 import mods.view.TextWatcherTerse;
 
 @SuppressWarnings("unused")
@@ -79,8 +81,8 @@ public class MediaTray {
         if (this.prefix.equals("/")) {
             this.prefix = "!";
             Prefs.setString(PreferenceKeys.COMMAND_PREFIX, "!");
-            DiscordTools.basicAlert(
-                    fragment.getContext(),
+            Dialogs.basicAlert(
+                    fragment.requireContext(),
                     "Commands",
                     "Since slash commands are now used for internal commands and Discord bots, " +
                             "it is no longer available for use as a prefix." +
@@ -102,8 +104,8 @@ public class MediaTray {
     @SuppressLint("SetTextI18n")
     private void setupCharacterCounter() {
         if (inst.mediaTrayView != null) {
-            EditText et = inst.mediaTrayView.findViewById(Constants.TEXT_INPUT);
-            TextView tvCharCount = inst.mediaTrayView.findViewById(Constants.BLUE_ID_CHAR_COUNT);
+            EditText et = inst.mediaTrayView.findViewById(R.id.text_input);
+            TextView tvCharCount = inst.mediaTrayView.findViewById(R.id.blue_id_char_count);
 
             et.addTextChangedListener(new TextWatcherTerse() {
                 @Override
@@ -129,7 +131,7 @@ public class MediaTray {
 
     public static void setTrayText(CharSequence text) {
         if (inst != null && inst.mFragment.isVisible() && inst.mediaTrayView != null) {
-            EditText et = inst.mediaTrayView.findViewById(Constants.TEXT_INPUT);
+            EditText et = inst.mediaTrayView.findViewById(R.id.text_input);
             et.setText(text);
             et.setSelection(et.getText().length());
         }
@@ -207,7 +209,7 @@ public class MediaTray {
             mediaTrayList.setVisibility(View.VISIBLE);
             mediaTrayList.setDividerHeight(1);
             mediaTrayList.setOnItemClickListener((parent, view, position, id) -> {
-                EditText tv = mediaTrayView.findViewById(Constants.TEXT_INPUT);
+                EditText tv = mediaTrayView.findViewById(com.bluecord.R.id.text_input);
                 tv.setText(ensurePrefix(commandsList.get(position)));
                 tv.setSelection(tv.getText().length());
             });
@@ -298,7 +300,7 @@ public class MediaTray {
         } else if (text.startsWith("purge ")) {
             final int limit = StringUtils.getIntSafe(text.substring(6).trim());
 
-            Alerts.showDeleteDisclaimer(mFragment.getContext(), () -> {
+            StandardAlerts.showDeleteDisclaimer(mFragment.getContext(), () -> {
                 Long channelId = StoreUtils.getCurrentChannelId();
 
                 if (limit < 1 || limit > MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND) {
@@ -350,7 +352,7 @@ public class MediaTray {
             FragmentActivity activity = mFragment.getActivity();
             if (activity != null) {
                 activity.runOnUiThread(() -> {
-                    DiscordTools.basicAlert(
+                    Dialogs.basicAlert(
                             mFragment.requireActivity(),
                             "Bluecord",
                             "The reason I started this project was that there were no other Discord mods available for Android where you can customize all the mods to your liking with a settings UI. " +
@@ -419,16 +421,15 @@ public class MediaTray {
             TextView tvNameInput = new TextView(context);
             tvNameInput.setText("Command Name");
             tvNameInput.setTextSize(18.0f);
-            tvNameInput.setTextColor(Color.parseColor("#ff26beff"));
+            tvNameInput.setTextColor(ThemingTools.KIK_BLUE_COLOR);
             tvNameInput.setGravity(Gravity.CENTER);
             tvNameInput.setPadding(8, 8, 8, 8);
             layout.addView(tvNameInput);
 
             EditText etNameInput = new EditText(context);
             etNameInput.setHint(ensurePrefix("lenny"));
-            etNameInput.setTextColor(Color.parseColor("#eeeeee"));
-            etNameInput.setHintTextColor(Color.parseColor("#cccccc"));
-            etNameInput.setEms(10);
+            etNameInput.setTextColor(Colors.getDialogTextColor());
+            etNameInput.setHintTextColor(Colors.getDialogHintTextColor());
             etNameInput.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_CORRECT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
             layout.addView(etNameInput);
 
@@ -436,7 +437,7 @@ public class MediaTray {
             TextView tvNameOutput = new TextView(context);
             tvNameOutput.setText("Command Output");
             tvNameOutput.setTextSize(18.0f);
-            tvNameOutput.setTextColor(Color.parseColor("#ff26beff"));
+            tvNameOutput.setTextColor(ThemingTools.KIK_BLUE_COLOR);
             tvNameOutput.setGravity(Gravity.CENTER);
             tvNameOutput.setPadding(8, 8, 8, 8);
             layout.addView(tvNameOutput);
@@ -447,7 +448,6 @@ public class MediaTray {
             etNameOutput.setHint("( \u0361\u00b0 \u035c\u0296 \u0361\u00b0)");
             etNameOutput.setTextColor(Color.parseColor("#eeeeee"));
             etNameOutput.setHintTextColor(Color.parseColor("#cccccc"));
-            etNameOutput.setEms(10);
             etNameOutput.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_CORRECT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
             layout.addView(etNameOutput);
 
@@ -456,7 +456,7 @@ public class MediaTray {
             etNameInput.setText("");
             etNameOutput.setText("");
 
-            DiscordTools.newBuilder(mFragment.getContext())
+            Dialogs.newBuilder(mFragment.requireContext())
                     .setView(rootView)
                     .setTitle("Add Command")
                     .setPositiveButton("Add", (dialog, id) -> {
@@ -482,7 +482,7 @@ public class MediaTray {
                         }
                         addCommand();
                     })
-                    .setNegativeButton("Exit", null)
+                    .setNegativeButton("Exit")
                     .showSafely();
         });
     }
@@ -511,10 +511,10 @@ public class MediaTray {
                 return;
             }
 
-            mFragment.getActivity().runOnUiThread(() -> DiscordTools.newBuilder(mFragment.getContext())
+            mFragment.getActivity().runOnUiThread(() -> Dialogs.newBuilder(mFragment.getContext())
                     .setTitle("Delete Commands")
                     .setMultiChoiceItems(coms, checked, (dialog, which, isChecked) -> checked[which] = isChecked)
-                    .setNegativeButton("Exit", null)
+                    .setNegativeButton("Exit")
                     .setPositiveButton("Delete", (dialog, which) -> {
                         boolean deleted = false;
                         for (int i = 0; i < size; i++) {

@@ -6,9 +6,8 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.bluecord.R;
 import mods.DiscordTools;
-import mods.constants.Constants;
 
 public class ToastUtil {
 
@@ -35,7 +34,7 @@ public class ToastUtil {
             try {
                 cancelAll();
 
-                View view = activity.getLayoutInflater().inflate(Constants.TOAST_LAYOUT, null);
+                View view = activity.getLayoutInflater().inflate(R.layout.blue_toast_layout, null);
 
                 TextView tv = view.findViewById(android.R.id.text1);
                 tv.setText(text);

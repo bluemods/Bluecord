@@ -1,9 +1,7 @@
 package mods.utils
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.database.Cursor
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DOCUMENTS
@@ -15,6 +13,7 @@ import mods.activity.BlueSettingsActivity.CODE_R_STORAGE_ACCESS
 import mods.preference.Prefs
 import java.io.File
 import java.security.SecureRandom
+import androidx.core.net.toUri
 
 object FileUtils {
 
@@ -51,6 +50,10 @@ object FileUtils {
     val internalFontDir: File
         get() = File(appDataDir, "custom_fonts").apply { mkdirs() }
 
+    @JvmStatic
+    val tempDir: File
+        get() = File(cacheDir, "bluecord_temp").apply { mkdirs() }
+
     /**
      * Returns true if we have to use the shitty SAF system.
      *
@@ -69,9 +72,10 @@ object FileUtils {
     @JvmStatic
     fun requestStorageManagerPermission(activity: android.app.Activity) {
         if (isUsingSaf) {
-            @SuppressLint("InlinedApi")
-            val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse(
-                "package:${DiscordTools.getApplication().packageName}"))
+            val intent = Intent(
+                Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                "package:${DiscordTools.getApplication().packageName}".toUri()
+            )
             activity.startActivityForResult(intent, CODE_R_STORAGE_ACCESS)
         }
     }

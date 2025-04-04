@@ -1,12 +1,12 @@
 package mods.voice;
 
+import com.bluecord.R;
 import com.discord.models.message.Message;
 import com.discord.widgets.chat.list.FragmentLifecycleListener;
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapter;
 import com.discord.widgets.chat.list.adapter.WidgetChatListItem;
 import com.discord.widgets.chat.list.entries.ChatListEntry;
 
-import mods.constants.Constants;
 import mods.utils.LogUtils;
 
 @SuppressWarnings("unused")
@@ -15,7 +15,7 @@ public class VoiceMessageAdapterItemAttachment extends WidgetChatListItem implem
     private static final String TAG = "VoiceMessageAttachment";
 
     public VoiceMessageAdapterItemAttachment(WidgetChatListAdapter adapter) {
-        super(Constants.VOICE_MESSAGE_ATTACHMENT, adapter);
+        super(R.layout.widget_chat_list_adapter_item_audio, adapter);
     }
 
     @Override

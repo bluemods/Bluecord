@@ -20,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.bluecord.R;
 import com.discord.api.channel.Channel;
 import com.discord.api.message.attachment.MessageAttachment;
 import com.discord.api.user.UserProfile;
@@ -48,12 +49,13 @@ import java.util.Date;
 import mods.DiscordTools;
 import mods.ThemingTools;
 import mods.activity.MediaTray;
-import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
+import mods.dialog.Dialogs;
 import mods.net.Net;
 import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
 import mods.utils.Callback;
+import mods.utils.ClipboardUtil;
 import mods.utils.EmptyUtils;
 import mods.utils.FileUtils;
 import mods.utils.LogUtils;
@@ -80,7 +82,7 @@ public class SheetConfig {
         if (view == null) return false;
 
         try {
-            if (selected != Constants.IC_STATUS_ONLINE && selected != Constants.IC_STATUS_IDLE && selected != Constants.IC_STATUS_DND) {
+            if (selected != R.drawable.ic_status_online_16dp && selected != R.drawable.ic_status_idle_16dp && selected != R.drawable.ic_status_dnd_16dp) {
                 // This is because RecyclerView items will reuse the image,
                 // which we may have filtered for someone else
                 if (view.getColorFilter() != null) view.clearColorFilter();
@@ -95,21 +97,18 @@ public class SheetConfig {
             }
 
             switch (selected) {
-                // ic_status_online_16dp
-                case Constants.IC_STATUS_ONLINE: {
-                    view.setImageResource(Constants.IC_SCREEN_14DP);
+                case R.drawable.ic_status_online_16dp: {
+                    view.setImageResource(R.drawable.ic_screen_14dp);
                     view.setColorFilter(Color.parseColor(ONLINE_COLOR), PorterDuff.Mode.SRC_ATOP);
                     break;
                 }
-                // ic_status_idle_16dp
-                case Constants.IC_STATUS_IDLE: {
-                    view.setImageResource(Constants.IC_SCREEN_14DP);
+                case R.drawable.ic_status_idle_16dp: {
+                    view.setImageResource(R.drawable.ic_screen_14dp);
                     view.setColorFilter(Color.parseColor(IDLE_COLOR), PorterDuff.Mode.SRC_ATOP);
                     break;
                 }
-                // ic_status_dnd_16dp
-                case Constants.IC_STATUS_DND: {
-                    view.setImageResource(Constants.IC_SCREEN_14DP);
+                case R.drawable.ic_status_dnd_16dp: {
+                    view.setImageResource(R.drawable.ic_screen_14dp);
                     view.setColorFilter(Color.parseColor(DND_COLOR), PorterDuff.Mode.SRC_ATOP);
                     break;
                 }
@@ -174,7 +173,7 @@ public class SheetConfig {
         long authorId = user.getId();
 
         SearchKey searchKey = new SearchKey(channelOrGuildId, authorId);
-        View tagView = binding.getRoot().findViewById(Constants.BLUE_ID_USERNAME_DETAILS_TV);
+        View tagView = binding.getRoot().findViewById(R.id.bluecord_text);
 
         if (tagView.getTag() instanceof SearchKey && searchKey.equals(tagView.getTag())) {
             LogUtils.log(TAG, "UserDetails have already been set for this user. Dropping addUserDetails()");
@@ -207,7 +206,7 @@ public class SheetConfig {
         }
 
         if (
-                headerViewId == Constants.SELF_USER_PROFILE_HEADER_VIEW ||
+                headerViewId == com.bluecord.R.id.user_settings_profile_header_view ||
                 channelOrGuildId <= 0 || authorId <= 0 ||
                 !Prefs.getBoolean(PreferenceKeys.SHOW_LAST_MESSAGE, false)
         ) {
@@ -252,7 +251,7 @@ public class SheetConfig {
 
     private static void appendDetails(UserProfileHeaderViewBinding binding, String infoToAppend, SearchKey tagKey) {
         DiscordTools.HANDLER.post(() -> {
-            SimpleDraweeSpanTextView tv = binding.getRoot().findViewById(Constants.BLUE_ID_USERNAME_DETAILS_TV);
+            SimpleDraweeSpanTextView tv = binding.getRoot().findViewById(R.id.bluecord_text);
 
             if (tv.getTag() instanceof SearchKey && !tv.getTag().equals(tagKey)) {
                 LogUtils.log(TAG, "attempting to set details view for the wrong user. ignoring");
@@ -276,7 +275,7 @@ public class SheetConfig {
             sb.setSpan(new BluecordMarkingSpan(), currentCharCount, nextCharCount, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             tv.setVisibility(View.VISIBLE);
-            tv.setTypeface(ResourcesCompat.getFont(DiscordTools.getContext(), Constants.FONT_WHITNEY_SEMIBOLD));
+            tv.setTypeface(ResourcesCompat.getFont(DiscordTools.getContext(), com.bluecord.R.font.whitney_semibold));
             tv.setDraweeSpanStringBuilder(sb);
         });
     }
@@ -291,8 +290,8 @@ public class SheetConfig {
     @SuppressLint("SetTextI18n")
     public static void configureChatList(AppBottomSheet sheet, WidgetChatListActionsBinding binding, WidgetChatListActions.Model model) {
         TextView tvCopy = binding.c;
-        TextView tvQuote = binding.getRoot().findViewById(Constants.BLUE_ID_1);
-        TextView tvTranslate = binding.getRoot().findViewById(Constants.BLUE_ID_2);
+        TextView tvQuote = binding.getRoot().findViewById(R.id.blue_id_1);
+        TextView tvTranslate = binding.getRoot().findViewById(R.id.blue_id_2);
 
         Channel channel = model.getChannel();
         Message message = model.getMessage();
@@ -339,9 +338,7 @@ public class SheetConfig {
                             sb.append("\n").append(attachment.proxyUrl);
                         }
                     }
-                    ToastUtil.toast("Attachment URLs copied to clipboard");
-                    DiscordTools.copyToClipboard(sb.toString().trim());
-
+                    ClipboardUtil.copy(sb.toString().trim(), "Attachment URLs copied to clipboard");
                     sheet.dismiss();
                 });
             }
@@ -361,7 +358,7 @@ public class SheetConfig {
                 IconUtils.INSTANCE.getForGuildMemberOrUser(
                         state.getUser(),
                         state.getGuildMember(),
-                        (int) view.getResources().getDimension(Constants.DIMEN_SMALL_AVATAR),
+                        (int) view.getResources().getDimension(R.dimen.avatar_size_profile_small),
                         true
                 )
         );
@@ -371,7 +368,7 @@ public class SheetConfig {
         String name = state.getUser().getUsername().toLowerCase();
 
         // open user avatar
-        openUrlAsAttachment(binding.getRoot().findViewById(Constants.ID_AVATAR), name, picUrl);
+        openUrlAsAttachment(binding.getRoot().findViewById(R.id.avatar), name, picUrl);
 
         // copy pfp url to clipboard
         TextView tv = view.findViewById(android.R.id.copy);
@@ -379,8 +376,7 @@ public class SheetConfig {
 
         tv.setOnClickListener(v -> {
             if (!StringUtils.isEmpty(picUrl)) {
-                DiscordTools.copyToClipboard(picUrl);
-                ToastUtil.toast("URL copied to clipboard");
+                ClipboardUtil.copy(picUrl, "URL copied to clipboard");
             } else {
                 ToastUtil.toast("User does not have a profile picture or you're not connected to Discord");
             }
@@ -393,8 +389,7 @@ public class SheetConfig {
             String bannerUrl = getBannerUrl(state);
 
             if (!StringUtils.isEmpty(bannerUrl)) {
-                DiscordTools.copyToClipboard(bannerUrl);
-                ToastUtil.toast("Banner URL copied to clipboard");
+                ClipboardUtil.copy(picUrl, "Banner URL copied to clipboard");
             } else {
                 ToastUtil.toast("User does not have a banner picture or you're not connected to Discord");
             }
@@ -403,8 +398,7 @@ public class SheetConfig {
         // copy name + tag to clipboard
         TextView tv3 = view.findViewById(android.R.id.hint);
         tv3.setOnClickListener(v -> {
-            DiscordTools.copyToClipboard(StringUtils.getUsernameWithDiscriminator(state.getUser()));
-            ToastUtil.toast("Name + Tag copied to clipboard");
+            ClipboardUtil.copy(StringUtils.getUsernameWithDiscriminator(state.getUser()), "Name + Tag copied to clipboard");
         });
         tv3.setVisibility(View.VISIBLE);
 
@@ -468,10 +462,10 @@ public class SheetConfig {
         String bannerUrl = maxUrlResolution(bannerIcon);
 
         // open guild icon
-        openUrlAsAttachment(rootView.findViewById(Constants.ID_GUILD_PROFILE_SHEET_ICON), state.guildName, guildUrl);
+        openUrlAsAttachment(rootView.findViewById(R.id.guild_profile_sheet_icon), state.guildName, guildUrl);
 
         // open guild banner
-        openUrlAsAttachment(rootView.findViewById(Constants.ID_GUILD_PROFILE_SHEET_BANNER), state.guildName, bannerUrl);
+        openUrlAsAttachment(rootView.findViewById(R.id.guild_profile_sheet_banner), state.guildName, bannerUrl);
 
         // downloading pics
         TextView tv = rootView.findViewById(android.R.id.copy);
@@ -480,16 +474,16 @@ public class SheetConfig {
         tv.setOnClickListener(v -> {
             final FragmentActivity activity = fragment.requireActivity();
             activity.runOnUiThread(() -> {
-                DiscordTools.newBuilder(activity)
+                Dialogs.newBuilder(activity)
                         .setTitle("Guild Icon / Banner")
                         .setItems(new String[]{"Copy to clipboard", "Download"}, (dialog, which) -> {
                             if (which == 0) {
-                                DiscordTools.copyToClipboard(
+                                ClipboardUtil.copy(
                                         "Icon URL:\n" + (StringUtils.isEmpty(guildUrl) ? "None" : guildUrl) +
                                                 "\n\n" +
-                                                "Banner URL:\n" + (StringUtils.isEmpty(bannerUrl) ? "None" : bannerUrl)
+                                                "Banner URL:\n" + (StringUtils.isEmpty(bannerUrl) ? "None" : bannerUrl),
+                                        "Copied to clipboard"
                                 );
-                                ToastUtil.toast("Copied to clipboard");
                             } else {
                                 new Thread(() -> {
                                     if (StoragePermissionUtils.hasStoragePermission(activity)) {
@@ -511,7 +505,7 @@ public class SheetConfig {
                                 }).start();
                             }
                         })
-                        .setPositiveButton("Exit", null)
+                        .setPositiveButton("Exit")
                         .showSafely();
             });
         });
@@ -519,7 +513,7 @@ public class SheetConfig {
 
     public static void configBulkOptions(View view) {
         view.setOnLongClickListener(v -> {
-            DiscordTools.newBuilder(v.getContext())
+            Dialogs.newBuilder(v.getContext())
                     .setTitle("Bulk Options")
                     .setItems(new String[]{"Mark All Guilds Read"}, (dialog, which) -> {
                         switch (which) {
@@ -529,7 +523,7 @@ public class SheetConfig {
                             }
                         }
                     })
-                    .setPositiveButton("Exit", null)
+                    .setPositiveButton("Exit")
                     .showSafely();
             return true;
         });

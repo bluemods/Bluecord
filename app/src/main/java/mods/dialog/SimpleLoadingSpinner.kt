@@ -1,15 +1,13 @@
 @file:Suppress("DEPRECATION")
-package mods.utils
+package mods.dialog
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import mods.DiscordTools
-import mods.constants.Constants
+import com.bluecord.R
 
-class SimpleLoadingSpinner(context: Context?) {
-    private val pd: ProgressDialog = DiscordTools.newProgressDialog(context)
+class SimpleLoadingSpinner(context: Context) {
+    private val pd = BlueProgressDialog(context)
     private val handler = Handler(Looper.getMainLooper())
 
     @JvmOverloads
@@ -30,7 +28,7 @@ class SimpleLoadingSpinner(context: Context?) {
     private fun showOnMainLoop(title: String, message: String?) {
         pd.setTitle(title)
         message?.let { pd.setMessage(it) }
-        pd.setIcon(Constants.APP_ICON)
+        pd.setIcon(R.drawable.bluecord_logo_big)
         pd.setCancelable(false)
         pd.setCanceledOnTouchOutside(false)
         pd.show()

@@ -843,7 +843,7 @@
     :pswitch_10
     iget-object v0, p0, Lcom/discord/models/domain/ModelUserSettings;->guildFolders:Ljava/util/List;
 
-	invoke-static {p0, p1, v0}, Lmods/utils/APIPatcher;->skipIfNeeded(Ljava/lang/Object;Lcom/discord/models/domain/Model$JsonReader;Ljava/util/List;)V
+	invoke-static {p0, p1, v0}, Lmods/parser/RNParserFix;->skipIfNeeded(Ljava/lang/Object;Lcom/discord/models/domain/Model$JsonReader;Ljava/util/List;)V
 
     if-eqz v0, :cond_14
 

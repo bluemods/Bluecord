@@ -17,16 +17,17 @@ import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
-import mods.DiscordTools
 import mods.ThemingTools
+import mods.dialog.Dialogs
 import mods.promise.PromiseUtils
 import mods.promise.hideSpinner
 import mods.proxy.CustomProxy
 import mods.proxy.CustomProxy.TEMP_TESTING_CREDS
 import mods.utils.LogUtils
-import mods.utils.SimpleLoadingSpinner
+import mods.dialog.SimpleLoadingSpinner
 import mods.utils.StringUtils
 import mods.utils.ToastUtil
+import mods.view.dp
 
 class ProxyPreference(context: Context?, attrs: AttributeSet) : Preference(context, attrs), Preference.OnPreferenceClickListener {
     init {
@@ -42,9 +43,9 @@ class ProxyPreference(context: Context?, attrs: AttributeSet) : Preference(conte
         layout.orientation = LinearLayout.VERTICAL
         layout.setPadding(
             layout.paddingLeft,
-            layout.paddingTop + ThemingTools.dipToPx(8f),
+            layout.paddingTop + 8.dp(),
             layout.paddingRight,
-            layout.paddingBottom + ThemingTools.dipToPx(8f)
+            layout.paddingBottom + 8.dp()
         )
 
         // Host
@@ -131,13 +132,13 @@ class ProxyPreference(context: Context?, attrs: AttributeSet) : Preference(conte
         }
         layout.addView(proxyCb)
 
-        val dialog = DiscordTools.newBuilder(context)
+        val dialog = Dialogs.newBuilder(context)
             .setTitle("Proxy Server Setup")
             .setView(layout)
             .setNeutralButton("Disable Proxy") { _, _ ->
                 ToastUtil.toastShort("Proxy will be disabled on restart")
                 CustomProxy.saveConfig(null)
-                DiscordTools.promptRestart(context)
+                Dialogs.promptRestart(context)
             }
             .setNegativeButton("Exit", null)
             .create()
@@ -180,7 +181,7 @@ class ProxyPreference(context: Context?, attrs: AttributeSet) : Preference(conte
                     ToastUtil.toast("Proxy connected, IP is $ip")
                     CustomProxy.saveConfig(newConfig)
                     dialog.dismiss()
-                    DiscordTools.promptRestart(context)
+                    Dialogs.promptRestart(context)
                     reload()
                 }, {
                     ToastUtil.toast("Unable to connect to proxy: ${it.message}")
@@ -205,7 +206,7 @@ class ProxyPreference(context: Context?, attrs: AttributeSet) : Preference(conte
     }
 
     private fun createTextView(context: Context, text: String): TextView {
-        val padding = ThemingTools.dipToPx(8f)
+        val padding = 8.dp()
         val tv = TextView(context)
         tv.textSize = 14.0f
         tv.setTextColor(ThemingTools.KIK_BLUE_COLOR)

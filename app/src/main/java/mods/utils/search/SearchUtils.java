@@ -73,7 +73,7 @@ public class SearchUtils {
                 long timestamp = SnowflakeUtils.timestampForMessage(lastMessage);
 
                 synchronized (lastMessageCache) {
-                    lastMessageCache.put(searchKey, SearchResult.create(timestamp));
+                    lastMessageCache.put(searchKey, new SearchResult(timestamp));
                 }
 
                 LogUtils.log("SheetConfig", "last msg: cgid=" + channelOrGuildId + ", uid=" + authorId + ", ts=" + new Date(timestamp));

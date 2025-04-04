@@ -19,6 +19,7 @@ import java.io.File;
 import mods.DiscordTools;
 import mods.constants.PreferenceKeys;
 import mods.preference.Prefs;
+import mods.utils.FileUtils;
 import mods.utils.LogUtils;
 
 public class UCropUtils {
@@ -41,7 +42,7 @@ public class UCropUtils {
             }
 
             // builder.withMaxResultSize(1200, 1200);
-            
+
             b.q.a.a ucrop = new b.q.a.a(path, Uri.fromFile(out));
             ucrop.b.putAll(builder.getOptions());
             startUCrop(activity, ucrop, REQUEST_CODE_SET_BACKGROUND_UCROP);
@@ -72,7 +73,7 @@ public class UCropUtils {
     }
 
     public static File getCroppedImagePath(boolean temp) throws Exception {
-        File folder = new File(DiscordTools.getAppDataDir(), temp ? "blue_backgrounds_temp" : "blue_backgrounds");
+        File folder = new File(FileUtils.getAppDataDir(), temp ? "blue_backgrounds_temp" : "blue_backgrounds");
         folder.mkdirs();
 
         File ret = new File(folder, String.format("%s.jpg", "chat_bg_normal"));

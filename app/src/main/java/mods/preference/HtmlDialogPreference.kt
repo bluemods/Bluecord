@@ -4,58 +4,40 @@ package mods.preference
 import android.content.Context
 import android.preference.Preference
 import android.preference.Preference.OnPreferenceClickListener
-import android.text.Html
-import android.text.method.LinkMovementMethod
 import android.util.AttributeSet
-import android.widget.ScrollView
-import android.widget.TextView
-import mods.DiscordTools
 import mods.constants.URLConstants
+import mods.dialog.Dialogs
 import mods.extensions.string
 import mods.net.Net
-import mods.utils.SimpleLoadingSpinner
+import mods.dialog.SimpleLoadingSpinner
 import mods.utils.ToastUtil
 
 class HtmlDialogPreference(
-    context: Context?,
+    context: Context,
     attrs: AttributeSet
-) : Preference(context, attrs) {
+) : Preference(context, attrs), OnPreferenceClickListener {
+
+    private val query =
+        attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "key")
+
+    private val title =
+        attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "title")
 
     init {
-        val query = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "key")
-        val title = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "title")
-
         @Suppress("DEPRECATION")
-        onPreferenceClickListener = OnPreferenceClickListener {
-            val spinner = SimpleLoadingSpinner(context).apply {
-                show("Loading...")
-            }
-
-            Net.doGetAsync(URLConstants.phpLink(query), onSuccess = {
-                spinner.hide()
-                showDialog(title, it.string())
-            }, onError = {
-                spinner.hide()
-                ToastUtil.toast("Failed to load, check your Internet and retry.")
-            })
-            true
-        }
+        onPreferenceClickListener = this
     }
 
-    private fun showDialog(title: String, text: String) {
-        val rootView = ScrollView(context)
-        val tv = TextView(context)
-        tv.text = Html.fromHtml(text.replace("\n", "<br>"))
-        tv.setPadding(20, 20, 20, 20)
-        tv.textSize = 16f
-        tv.movementMethod = LinkMovementMethod.getInstance()
-        rootView.addView(tv)
-
-        DiscordTools.newBuilder(context)
-            .setTitle(title)
-            .setView(rootView)
-            .setPositiveButton("Dismiss", null)
-            .create()
-            .show()
+    @Deprecated("Deprecated in Java")
+    override fun onPreferenceClick(preference: Preference?): Boolean {
+        val spinner = SimpleLoadingSpinner(context).show("Loading...")
+        Net.doGetAsync(URLConstants.phpLink(query), onSuccess = {
+            spinner.hide()
+            Dialogs.basicAlertLinkify(context, title, it.string())
+        }, onError = {
+            spinner.hide()
+            ToastUtil.toast("Failed to load, check your Internet and retry.")
+        })
+        return true
     }
 }

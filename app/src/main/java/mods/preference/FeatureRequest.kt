@@ -13,9 +13,11 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import mods.DiscordTools
 import mods.constants.URLConstants
+import mods.dialog.Dialogs
 import mods.extensions.json
 import mods.net.Net
-import mods.utils.SimpleLoadingSpinner
+import mods.dialog.SimpleLoadingSpinner
+import mods.utils.ClipboardUtil
 import mods.utils.StoreUtils
 import mods.utils.StringUtils
 import mods.utils.ToastUtil
@@ -51,7 +53,7 @@ class FeatureRequest @SuppressLint("SetTextI18n") constructor(
 
             root.addView(layout)
 
-            DiscordTools.newBuilder(preference.context)
+            Dialogs.newBuilder(preference.context)
                 .setTitle("Feature Request")
                 .setView(root)
                 .setNegativeButton("Discard", null)
@@ -93,12 +95,12 @@ class FeatureRequest @SuppressLint("SetTextI18n") constructor(
             onSuccess = {
                 spinner.hide()
                 val msg = it.json().getString("message")
-                DiscordTools.basicAlert(context, "Success", msg)
+                Dialogs.basicAlert(context, "Success", msg)
             },
             onError = {
                 spinner.hide()
-                DiscordTools.copyToClipboard(feedbackText)
-                DiscordTools.basicAlert(context, "Error", ERROR_MESSAGE)
+                ClipboardUtil.copy(feedbackText)
+                Dialogs.basicAlert(context, "Error", ERROR_MESSAGE)
             }
         )
     }

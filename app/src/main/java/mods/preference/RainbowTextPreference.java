@@ -5,6 +5,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.preference.Preference;
 import android.util.AttributeSet;
+
+import mods.ThemingTools;
+import mods.dialog.Dialogs;
 import mods.utils.LogUtils;
 import android.view.Gravity;
 import android.widget.CheckBox;
@@ -13,7 +16,6 @@ import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import mods.DiscordTools;
 import mods.constants.PreferenceKeys;
 
 public class RainbowTextPreference extends Preference {
@@ -44,7 +46,7 @@ public class RainbowTextPreference extends Preference {
             layout.addView(cbMessage);
 
             TextView tv = new TextView(context);
-            tv.setTextColor(Color.parseColor("#ff26beff"));
+            tv.setTextColor(ThemingTools.KIK_BLUE_COLOR);
             tv.setTextSize(16.0f);
             tv.setGravity(Gravity.CENTER);
             layout.addView(tv);
@@ -78,10 +80,10 @@ public class RainbowTextPreference extends Preference {
 
             parent.addView(layout);
 
-            DiscordTools.newBuilder(context)
+            Dialogs.newBuilder(context)
                     .setTitle("Rainbow Color Options")
                     .setView(parent)
-                    .setPositiveButton("Exit", null)
+                    .setPositiveButton("Exit")
                     .showSafely();
 
             return true;

@@ -5,13 +5,12 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 
 import mods.DiscordTools;
-import mods.activity.BlueSettingsActivity;
 import mods.colorpicker.ColorPickerPreference;
 import mods.colorpicker.ColorPickerView;
 import mods.colorpicker.builder.ColorPickerDialogBuilder;
 import mods.constants.PreferenceKeys;
+import mods.dialog.Dialogs;
 import mods.utils.ToastUtil;
-import mods.view.Colors;
 
 public class ColorPicker extends ColorPickerPreference {
 
@@ -44,13 +43,13 @@ public class ColorPicker extends ColorPickerPreference {
 
         if (!customAuthorColors) {
             if (key.equals(PreferenceKeys.COLOR_AUTHORS_INCOMING) || key.equals(PreferenceKeys.COLOR_AUTHORS_OUTGOING)) {
-                DiscordTools.basicAlert(context, "Hold Up!", "Please enable the \"Custom Message Name Colors\" option above before setting custom author colors!");
+                Dialogs.basicAlert(context, "Hold Up!", "Please enable the \"Custom Message Name Colors\" option above before setting custom author colors!");
                 return;
             }
         }
 
         if (!customMessageColors) {
-            DiscordTools.basicAlert(context, "Hold Up!", "Please enable the \"Custom Colors\" option in the Text Color Mode menu before setting custom colors!");
+            Dialogs.basicAlert(context, "Hold Up!", "Please enable the \"Custom Colors\" option in the Text Color Mode menu before setting custom colors!");
         } else {
             ColorPickerDialogBuilder.with(context)
                     .setTitle(title)

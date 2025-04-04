@@ -18,8 +18,8 @@ import java.io.File;
 import mods.DiscordTools;
 import mods.ThemingTools;
 import mods.anti.AntiDiscordRebrand;
-import mods.constants.Constants;
 import mods.constants.PreferenceKeys;
+import mods.dialog.Dialogs;
 import mods.preference.CustomFont;
 import mods.preference.Prefs;
 import mods.ucrop.UCropUtils;
@@ -72,7 +72,7 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
-        setTheme(AntiDiscordRebrand.isEnabled() ? Constants.BLUE_STYLE_PREFS_NO_REBRAND : Constants.BLUE_STYLE_PREFS);
+        setTheme(AntiDiscordRebrand.isEnabled() ? com.bluecord.R.style.PrefsTheme_NoRebrand : com.bluecord.R.style.PrefsTheme);
 
         Prefs.getPreferences().registerOnSharedPreferenceChangeListener(this);
 
@@ -108,7 +108,7 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
                 Prefs.setString(PreferenceKeys.BACKGROUND_PATH, newPath);
                 Prefs.setBoolean(PreferenceKeys.BACKGROUND_UCROP_UPGRADED, true);
                 ToastUtil.customToast(this, "Background changed successfully");
-                DiscordTools.promptRestart(this);
+                Dialogs.promptRestart(this);
             } catch (Exception e) {
                 LogUtils.logException(e);
                 ToastUtil.customToast(this, "Something went wrong");

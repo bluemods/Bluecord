@@ -173,4 +173,12 @@ public class Colors {
     public static int getThemeBackground() {
         return Color.parseColor(ThemingTools.isDarkModeOn() ? "#ff2f3136" : "#ffffffff");
     }
+
+    public static int getDialogTextColor() {
+        return Color.parseColor("#eeeeee");
+    }
+
+    public static int getDialogHintTextColor() {
+        return Color.parseColor("#cccccc");
+    }
 }

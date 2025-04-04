@@ -2,8 +2,6 @@ package mods.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.util.Base64;
@@ -14,9 +12,10 @@ import java.util.concurrent.TimeUnit;
 import mods.DiscordTools;
 import mods.constants.Constants;
 import mods.constants.URLConstants;
+import mods.dialog.Dialogs;
 import mods.preference.Prefs;
 import mods.utils.Callback;
-import mods.utils.SimpleLoadingSpinner;
+import mods.dialog.SimpleLoadingSpinner;
 import mods.utils.ToastUtil;
 
 @SuppressWarnings("deprecation")
@@ -50,11 +49,11 @@ public class Updater extends Preference {
 
         if (!appName.startsWith(d("Ymx1ZWNvcmQ")) || (!packageName.equals(d("Y29tLmJsdWVjb3Jk")) && !packageName.equals(d("Y29tLmJsdWVjb3JkYmV0YQ")))) {
             if (!Prefs.getBoolean(d("bW9kZGVk"), false)) {
-                DiscordTools.newBuilder(activity)
+                Dialogs.newBuilder(activity)
                         .setTitle(d("Qmx1ZWNvcmQ"))
                         .setMessage(d("VGhlIGFwcCBoYXMgYmVlbiBjbG9uZWQsIG1vZGlmaWVkLCBvciBoYWQgdGhlIGFwcCBuYW1lIGNoYW5nZWQuCgpUaGlzIGlzbid0IGEgYmlnIGRlYWwsIGJ1dCBzb21lIGZlYXR1cmVzIG1heSAodW5pbnRlbnRpb25hbGx5KSBicmVhayBpZiB5b3UgY2xvbmVkIGl0LCBhbmQgc3VwcG9ydCBjYW5ub3QgYmUgb2ZmZXJlZCBmb3IgdGhvc2UgaXNzdWVzLgoKVGhpcyBhcHAgaXMgQmx1ZWNvcmQsIGFuZCBvZmZpY2lhbCByZWxlYXNlcyBhcmUgb25seSBmb3VuZCBhdCBibHVlc21vZHMuY29t"))
                         .setNeutralButton(d("TmV2ZXIgU2hvdyBBZ2Fpbg"), (dialog, which) -> Prefs.setBoolean(d("bW9kZGVk"), true))
-                        .setPositiveButton(d("Q2xvc2U"), null)
+                        .setPositiveButton(d("Q2xvc2U"))
                         .showSafely();
                 return;
             }
@@ -88,14 +87,14 @@ public class Updater extends Preference {
                     alertUpdate(context, result);
                     markUpdate(true);
                 } else {
-                    DiscordTools.basicAlert(context, "No Update Yet", result.getMessage());
+                    Dialogs.basicAlert(context, "No Update Yet", result.getMessage());
                 }
             }
 
             @Override
             public void onError() {
                 spinner.hide();
-                DiscordTools.basicAlert(
+                Dialogs.basicAlert(
                         context,
                         "Error",
                         "Could not connect to check for an update. Please check your Internet connection and try again."
@@ -109,10 +108,10 @@ public class Updater extends Preference {
     }
 
     private static void alertUpdate(final Context context, final UpdateResult result) {
-        DiscordTools.newBuilder(context)
+        Dialogs.newBuilder(context)
                 .setTitle("Update Available")
                 .setMessage(result.getMessage())
-                .setNegativeButton("Dismiss", null)
+                .setNegativeButton("Dismiss")
                 .setPositiveButton("Download", (d, w) -> DiscordTools.openUrlInBrowser(context, result.getUpdateLink()))
                 .showSafely();
     }

@@ -2,8 +2,8 @@ package mods.utils
 
 import android.annotation.SuppressLint
 import android.view.View
+import com.bluecord.R
 import com.discord.views.UsernameView
-import mods.constants.Constants
 
 object DevBadge {
     private var badgeList = LongArray(0)
@@ -15,7 +15,7 @@ object DevBadge {
             val tv = view.j.b
             tv.visibility = View.VISIBLE
             tv.text = "Bluecord Dev"
-            tv.setCompoundDrawablesWithIntrinsicBounds(Constants.VERIFIED_DEV_BADGE, 0, 0, 0)
+            tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_verified_10dp, 0, 0, 0)
         }
     }
 

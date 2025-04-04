@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kotlin.Pair;
+import mods.utils.ThreadUtils;
 
 @SuppressWarnings("unused")
 public final class PromiseUtils {

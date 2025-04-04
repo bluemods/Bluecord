@@ -6,8 +6,6 @@ import android.text.style.RelativeSizeSpan;
 
 import com.discord.utilities.color.ColorCompat;
 
-import mods.constants.Constants;
-
 public class EditedMessageNode {
 
     public static final Companion Companion = new Companion();
@@ -32,9 +30,7 @@ public class EditedMessageNode {
         }
 
         public final String getEditedString(Context context) {
-            String string = context.getString(Constants.STRING_MESSAGE_EDITED);
-            return " (" + string + ')';
+            return "";
         }
     }
-
 }

@@ -21,8 +21,10 @@ import java.util.Iterator;
 import java.util.Set;
 
 import mods.DiscordTools;
-import mods.utils.Alerts;
+import mods.dialog.Dialogs;
+import mods.dialog.StandardAlerts;
 import mods.utils.AuthenticationUtils;
+import mods.utils.ClipboardUtil;
 import mods.utils.LogUtils;
 import mods.utils.StoreUtils;
 import mods.utils.StringUtils;
@@ -35,7 +37,7 @@ public class AccountSwitcher extends Preference {
         super(context, attrs);
 
         setOnPreferenceClickListener(preference -> {
-            DiscordTools.newBuilder(context)
+            Dialogs.newBuilder(context)
                     .setTitle("Pick an option")
                     .setItems(new String[]{
                             "Backup",
@@ -50,19 +52,19 @@ public class AccountSwitcher extends Preference {
                             case 3: copyToken(context); break;
                         }
                     })
-                    .setPositiveButton("Exit", null)
+                    .setPositiveButton("Exit")
                     .showSafely();
             return true;
         });
     }
 
     private void copyToken(final Context context) {
-        Alerts.showCopyTokenWarning(context, () -> {
-            DiscordTools.copyToClipboard(StoreUtils.getAuthToken());
+        StandardAlerts.showCopyTokenWarning(context, () -> {
+            ClipboardUtil.copy(StoreUtils.getAuthToken());
             ToastUtil.toast("Token copied to clipboard. DO NOT SHARE YOUR TOKEN!");
         }, () -> {
             try {
-                DiscordTools.copyToClipboard(new JSONObject()
+                ClipboardUtil.copy(new JSONObject()
                         .put("id", StoreUtils.getSelf().getId())
                         .put("username", StoreUtils.getSelf().getUsername())
                         .put("token", StoreUtils.getAuthToken())
@@ -79,7 +81,7 @@ public class AccountSwitcher extends Preference {
         final ArrayList<AccountBackup> backups = AccountBackup.getBackups(context);
 
         if (backups.isEmpty()) {
-            DiscordTools.basicAlert(context, "Account Switcher", "There are no backups to delete.");
+            Dialogs.basicAlert(context, "Account Switcher", "There are no backups to delete.");
             return;
         }
 
@@ -92,14 +94,14 @@ public class AccountSwitcher extends Preference {
 
         final boolean[] checked = new boolean[backups.size()];
 
-        DiscordTools.newBuilder(context)
+        Dialogs.newBuilder(context)
                 .setTitle("Select backups to delete")
                 .setMultiChoiceItems(names, checked, (dialog, which, isChecked) -> checked[which] = isChecked)
                 .setNeutralButton("Delete All", (dialog, which) -> {
                     AccountBackup.clearBackups(context);
                     ToastUtil.customToast(DiscordTools.getActivity(context), "Backups cleared");
                 })
-                .setNegativeButton("Exit", null)
+                .setNegativeButton("Exit")
                 .setPositiveButton("Confirm", (dialog, which) -> {
                     int count = 0;
                     for (int i = 0; i < checked.length; i++) {
@@ -125,13 +127,13 @@ public class AccountSwitcher extends Preference {
         final String fingerprint = StoreStream.getAuthentication().getFingerprint$app_productionGoogleRelease();
 
         if (self == null || token == null) {
-            DiscordTools.basicAlert(context, "Error", "Somehow, your account information cannot be found. Try restarting the app.");
+            Dialogs.basicAlert(context, "Error", "Somehow, your account information cannot be found. Try restarting the app.");
         // } else if (self.getMfaEnabled()) {
         //     DiscordTools.basicAlert(context, "Account Switcher", "Unfortunately, backing up accounts with Two-Factor Authentication enabled is not possible at the moment, as Discord revokes the token every few minutes.\n\nPlease do not disable 2FA for this, account security is always more important.");
         } else {
             final String name = StringUtils.getUsernameWithDiscriminator(self);
 
-            DiscordTools.newBuilder(context)
+            Dialogs.newBuilder(context)
                     .setTitle("Are you sure?")
                     .setMessage(
                             "Are you sure you want to backup " + name +
@@ -141,7 +143,7 @@ public class AccountSwitcher extends Preference {
                                     "Note while it does not store your real password, your token can be used to get full access to your account, so do not share it!\n\n" +
                                     "Also note that changing your password will make this backup no longer work."
                     )
-                    .setNegativeButton("No", null)
+                    .setNegativeButton("No")
                     .setPositiveButton("Yes", (dialog, which) -> {
                         new AccountBackup(
                                 String.valueOf(self.getId()),
@@ -161,7 +163,7 @@ public class AccountSwitcher extends Preference {
         final ArrayList<AccountBackup> backups = AccountBackup.getBackups(context);
 
         if (backups.isEmpty()) {
-            DiscordTools.basicAlert(context, "Account Switcher", "There are no backups to restore from.");
+            Dialogs.basicAlert(context, "Account Switcher", "There are no backups to restore from.");
         } else {
             final CharSequence[] names = new CharSequence[backups.size()];
 
@@ -170,18 +172,18 @@ public class AccountSwitcher extends Preference {
                 names[i] = backup.getAccountName() + "\n(backed up at " + DiscordTools.formatDate(backup.getBackupTime()) + ")";
             }
 
-            DiscordTools.newBuilder(context)
+            Dialogs.newBuilder(context)
                     .setTitle("Select an account")
                     .setItems(names, (dialog, which) -> {
                         final AccountBackup backup = backups.get(which);
-                        DiscordTools.newBuilder(context)
+                        Dialogs.newBuilder(context)
                                 .setTitle("Are you sure?")
                                 .setMessage("Are you sure you want to restore to " + backup.getAccountName() + "?\n\nThis will log you out of your current account and restart the app.")
-                                .setNegativeButton("No", null)
+                                .setNegativeButton("No")
                                 .setPositiveButton("Yes", (d, w) -> AuthenticationUtils.restoreTokenFromBackup(context, backup.getToken(), backup.getFingerprint()))
                                 .showSafely();
                     })
-                    .setPositiveButton("Exit", null)
+                    .setPositiveButton("Exit")
                     .showSafely();
         }
     }

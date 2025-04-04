@@ -7,6 +7,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.preference.Preference;
 import android.util.AttributeSet;
+
+import mods.ThemingTools;
+import mods.dialog.Dialogs;
 import mods.utils.LogUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -17,7 +20,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import mods.DiscordTools;
-import mods.activity.BlueSettingsActivity;
 import mods.constants.PreferenceKeys;
 import mods.utils.StoragePermissionUtils;
 import mods.utils.ToastUtil;
@@ -47,7 +49,7 @@ public class BackgroundBlurPreference extends Preference {
                 layout.setOrientation(LinearLayout.VERTICAL);
 
                 TextView tv = new TextView(context);
-                tv.setTextColor(Color.parseColor("#ff26beff"));
+                tv.setTextColor(ThemingTools.KIK_BLUE_COLOR);
                 tv.setTextSize(16.0f);
                 tv.setGravity(Gravity.CENTER);
 
@@ -94,10 +96,10 @@ public class BackgroundBlurPreference extends Preference {
 
                 parent.addView(layout);
 
-                DiscordTools.newBuilder(context)
+                Dialogs.newBuilder(context)
                         .setTitle("Background Blur")
                         .setView(parent)
-                        .setPositiveButton("Exit", (d, w) -> DiscordTools.promptRestart(getContext()))
+                        .setPositiveButton("Exit", (d, w) -> Dialogs.promptRestart(getContext()))
                         .setCancelable(false)
                         .showSafely();
             }
