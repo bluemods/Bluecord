@@ -79,7 +79,7 @@ object ReactNativeSpoof {
     @JvmStatic
     fun makeHeaderMap(authToken: String?): Map<String, String> {
         val ret = LinkedHashMap<String, String>()
-        if (authToken?.isNotEmpty() == true) {
+        if (!authToken.isNullOrEmpty()) {
             ret["authorization"] = authToken
         }
         ret["User-Agent"] = USER_AGENT
@@ -87,7 +87,7 @@ object ReactNativeSpoof {
         ret["x-discord-timezone"] = deviceTimezone
 
         val fingerprint = AppHeadersProvider.INSTANCE.fingerprint
-        if (fingerprint?.isNotEmpty() == true) {
+        if (!fingerprint.isNullOrEmpty()) {
             ret["x-fingerprint"] = fingerprint
         }
 

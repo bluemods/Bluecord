@@ -77,7 +77,6 @@ object RNInteractionFix {
     }
 
     @JvmStatic
-    @Suppress("UNUSED_VARIABLE")
     private fun updateGuildSlashCommands(
         guildId: Long,
         nonce: String,
@@ -166,8 +165,7 @@ object RNInteractionFix {
                         if (permissions.has("roles")) {
                             val roles = permissions.getJSONObject("roles")
                             permissionsArray.put(JSONObject().apply {
-                                val permKey =
-                                    roles.keys().asSequence().first { it.toLongOrNull() != null }
+                                val permKey = roles.keys().asSequence().first { it.toLongOrNull() != null }
                                 put("id", permKey.toLong())
                                 put("permission", true)
                                 put("type", ApplicationCommandPermissionType.ROLE.ordinal)
@@ -177,8 +175,7 @@ object RNInteractionFix {
                         if (permissions.has("channels")) {
                             val channels = permissions.getJSONObject("channels")
                             permissionsArray.put(JSONObject().apply {
-                                val permKey =
-                                    channels.keys().asSequence().first { it.toLongOrNull() != null }
+                                val permKey = channels.keys().asSequence().first { it.toLongOrNull() != null }
                                 put("id", permKey.toLong())
                                 put("permission", true)
                                 put("type", ApplicationCommandPermissionType.USER.ordinal)
@@ -188,8 +185,7 @@ object RNInteractionFix {
                         if (permissions.has("user")) {
                             val user = permissions.getJSONObject("user")
                             permissionsArray.put(JSONObject().apply {
-                                val permKey =
-                                    user.keys().asSequence().first { it.toLongOrNull() != null }
+                                val permKey = user.keys().asSequence().first { it.toLongOrNull() != null }
                                 put("id", permKey.toLong())
                                 put("permission", user.optBoolean(permKey, true))
                                 put("type", ApplicationCommandPermissionType.USER.ordinal)

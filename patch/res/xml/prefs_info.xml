@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen android:title="Update + Info" android:key=""
         xmlns:android="http://schemas.android.com/apk/res/android">
-    <mods.activity.Updater android:title="Check for Update" android:summary="" />
+    <mods.activity.update.Updater android:title="Check for Update" android:summary="" />
     <mods.preference.HtmlDialogPreference android:title="Patch Notes" android:key="patch" android:summary="See what's changed and what's new!" />
     <mods.preference.HtmlDialogPreference android:title="About Bluecord" android:key="about" android:summary="In-depth information and FAQ" />
     <mods.preference.FeatureRequest android:title="Feature Request" android:key="request" android:summary="Have an idea (not related to Nitro) that you'd like to see added? Let me know here!" />
