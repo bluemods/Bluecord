@@ -56,10 +56,6 @@ public class ChatPins {
             LogUtils.log(TAG, "unable to find required fragment in stack");
             return;
         }
-        WidgetChannelsList channelsFragment = (WidgetChannelsList)
-                DiscordTools.findFragmentByClass(actions, WidgetChannelsList.class);
-
-        if (channelsFragment == null) return;
 
         View v = root.findViewById(android.R.id.button1);
 
@@ -77,7 +73,7 @@ public class ChatPins {
 
         tv.setOnClickListener(view -> {
             actions.dismiss();
-            setPinned(channelsFragment, channel.k(), !isPinned);
+            setPinned(list, channel.k(), !isPinned);
         });
     }
 

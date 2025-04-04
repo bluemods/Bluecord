@@ -22,6 +22,7 @@ import android.text.style.URLSpan;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -85,6 +86,7 @@ public class ThemingTools {
         AuthenticationUtils.pushTokenToDiscord();
         EventTracker.flushEvents();
         setupExperiments();
+        setupWindowColors(activity);
 
         if (!relaunch) Updater.checkFromLaunch(activity);
 
@@ -93,6 +95,13 @@ public class ThemingTools {
             Prefs.setBoolean(PreferenceKeys.WAS_TOKEN_LOGIN, false);
         }
         typeface = CustomFont.load();
+    }
+
+    private static void setupWindowColors(Activity activity) {
+        Window window = activity.getWindow();
+        if (window != null) {
+            window.setNavigationBarColor(Colors.getNavigationBarColor());
+        }
     }
 
     private static void setupExperiments() {
@@ -135,16 +144,18 @@ public class ThemingTools {
     }
 
     public static boolean isDarkModeOn() {
-        String value;
+        return !"light".equals(getThemeId());
+    }
 
+    public static String getThemeId() {
+        String value;
         try {
             value = StoreStream.Companion.getUserSettingsSystem().getTheme();
         } catch (Throwable e) {
             LogUtils.log(TAG, "It appears that the user settings are not ready yet, falling back to shared prefs", e);
             value = StringUtils.nullToEmpty(Prefs.getString(PreferenceKeys.DISCORD_THEME_KEY, ""));
         }
-
-        return !"light".equalsIgnoreCase(value);
+        return StringUtils.nullToEmpty(value);
     }
 
     public static void setTrayText(final EditText et) {

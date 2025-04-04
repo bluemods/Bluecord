@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.discord.models.domain.ModelUserSettings;
 import com.discord.models.message.Message;
 import com.discord.models.user.MeUser;
 
@@ -180,5 +181,16 @@ public class Colors {
 
     public static int getDialogHintTextColor() {
         return Color.parseColor("#cccccc");
+    }
+
+    public static int getNavigationBarColor() {
+        switch (ThemingTools.getThemeId()) {
+            case ModelUserSettings.THEME_LIGHT:
+                return Color.WHITE;
+            case ModelUserSettings.THEME_PURE_EVIL:
+                return Color.BLACK;
+            default:
+                return Color.parseColor("#ff2f3136");
+        }
     }
 }

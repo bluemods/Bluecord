@@ -3,8 +3,6 @@ package mods;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -21,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.os.HandlerCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.discord.app.App;
 import com.discord.utilities.lifecycle.ApplicationProvider;
@@ -127,11 +124,8 @@ public class DiscordTools {
     @SuppressWarnings("unchecked")
     @Nullable
     public static <T extends Fragment> T findFragmentByClass(Fragment fragment, Class<T> cls) {
-        FragmentManager fm = fragment.getParentFragmentManager();
-
-        for (Fragment f : fm.getFragments()) {
+        for (Fragment f : fragment.getParentFragmentManager().getFragments()) {
             LogUtils.log("BlueFindFrag", "Found fragment: " + f.getClass().getName());
-
             if (cls.isInstance(f)) {
                 return (T) f;
             }
@@ -161,7 +155,6 @@ public class DiscordTools {
                 return RefreshUtils.WIDGET_CHAT_LIST.requireActivity().getDisplay();
             } catch (Throwable ignore) {}
         }
-        //noinspection deprecation
         return ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
     }
 }

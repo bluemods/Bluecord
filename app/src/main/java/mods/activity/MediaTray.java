@@ -445,8 +445,8 @@ public class MediaTray {
 
             // ( ͡° ͜ʖ ͡°)
             etNameOutput.setHint("( \u0361\u00b0 \u035c\u0296 \u0361\u00b0)");
-            etNameOutput.setTextColor(Color.parseColor("#eeeeee"));
-            etNameOutput.setHintTextColor(Color.parseColor("#cccccc"));
+            etNameOutput.setTextColor(Colors.getDialogTextColor());
+            etNameOutput.setHintTextColor(Colors.getDialogHintTextColor());
             etNameOutput.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_CORRECT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
             layout.addView(etNameOutput);
 
