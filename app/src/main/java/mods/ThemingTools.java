@@ -26,10 +26,13 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.bluecord.R;
 import com.discord.BuildConfig;
 import com.discord.api.channel.Channel;
 import com.discord.api.message.reaction.MessageReactionUpdate;
+import com.discord.app.AppFragment;
 import com.discord.models.domain.emoji.Emoji;
 import com.discord.models.domain.emoji.ModelEmojiUnicode;
 import com.discord.models.message.Message;
@@ -100,6 +103,30 @@ public class ThemingTools {
     private static void setupWindowColors(Activity activity) {
         Window window = activity.getWindow();
         if (window != null) {
+            window.setNavigationBarColor(Colors.getNavigationBarColor());
+        }
+    }
+
+    public static void themeWindowColorsToTab(AppFragment fragment, boolean isTabOpen) {
+        Activity activity = fragment.getAppActivity() != null
+                ? fragment.getAppActivity()
+                : fragment.getActivity();
+
+        if (activity == null) {
+            return;
+        }
+        Window window = activity.getWindow();
+        if (window == null) {
+            return;
+        }
+        if (isTabOpen) {
+            // ?attr=colorTabsBackground
+            if (isDarkModeOn()) {
+                window.setNavigationBarColor(ContextCompat.getColor(activity, R.color.primary_dark_800));
+            } else {
+                window.setNavigationBarColor(ContextCompat.getColor(activity, R.color.primary_light_130));
+            }
+        } else {
             window.setNavigationBarColor(Colors.getNavigationBarColor());
         }
     }
