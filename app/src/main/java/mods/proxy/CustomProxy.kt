@@ -117,8 +117,8 @@ object CustomProxy {
             append("CONNECT $host:$port HTTP/1.1")
             append("\r\n")
             append("hOsT: $host:$port")
-            append("\r\n")
             if (config.hasCredentials) {
+                append("\r\n")
                 append("pRoXy-AuThOrIZaTiOn: Basic ")
                 append(Base64.encodeToString("$proxyUsername:$proxyPassword".toByteArray(), Base64.NO_WRAP))
             }
