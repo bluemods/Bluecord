@@ -2703,7 +2703,7 @@
     <string name="file_size_mb">{size} MB</string>
     <string name="file_upload_limit_premium_tier_1">50MB</string>
     <string name="file_upload_limit_premium_tier_2">100MB</string>
-    <string name="file_upload_limit_standard">8MB</string>
+    <string name="file_upload_limit_standard">10MB</string>
     <string name="filter">फ़िल्टर लगाएं</string>
     <string name="filter_mentions">फिल्टर के मेंशन</string>
     <string name="filter_options">फिल्टर ऑप्शन</string>

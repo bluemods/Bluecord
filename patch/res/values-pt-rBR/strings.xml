@@ -2671,7 +2671,7 @@ Crie o seu e comece a interagir."</string>
     <string name="file_size_mb">{size} MB</string>
     <string name="file_upload_limit_premium_tier_1">50MB</string>
     <string name="file_upload_limit_premium_tier_2">100 MB</string>
-    <string name="file_upload_limit_standard">8MB</string>
+    <string name="file_upload_limit_standard">10MB</string>
     <string name="filter">Filtrar</string>
     <string name="filter_mentions">Filtrar menções</string>
     <string name="filter_options">Opções de filtro</string>

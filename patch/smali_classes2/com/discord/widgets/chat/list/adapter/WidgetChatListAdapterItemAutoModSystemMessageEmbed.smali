@@ -774,7 +774,7 @@
 
     move-result-object v0
 
-    invoke-static {v0}, Ljava/lang/Long;->parseLong(Ljava/lang/String;)J
+    invoke-static {v0}, Lmods/utils/StringUtils;->getLongSafe(Ljava/lang/String;)J
 
     move-result-wide v0
 

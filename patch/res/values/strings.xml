@@ -2921,7 +2921,7 @@ We sent instructions to change your password to **!!{email}!!**, please check bo
     <string name="file_upload_limit_premium_tier_0">20MB</string>
     <string name="file_upload_limit_premium_tier_1">50MB</string>
     <string name="file_upload_limit_premium_tier_2">100MB</string>
-    <string name="file_upload_limit_standard">8MB</string>
+    <string name="file_upload_limit_standard">10MB</string>
     <string name="filter">Filter</string>
     <string name="filter_mentions">Filter Mentions</string>
     <string name="filter_options">Filter Options</string>

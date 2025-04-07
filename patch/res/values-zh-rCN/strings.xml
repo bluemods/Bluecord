@@ -2722,7 +2722,7 @@
     <string name="file_size_mb">{size} MB</string>
     <string name="file_upload_limit_premium_tier_1">50MB</string>
     <string name="file_upload_limit_premium_tier_2">100MB</string>
-    <string name="file_upload_limit_standard">8MB</string>
+    <string name="file_upload_limit_standard">10MB</string>
     <string name="filter">筛选</string>
     <string name="filter_mentions">筛选/过滤提及</string>
     <string name="filter_options">筛选/过滤设置</string>

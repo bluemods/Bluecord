@@ -2703,7 +2703,7 @@
     <string name="file_size_mb">{size} МБ</string>
     <string name="file_upload_limit_premium_tier_1">50 МБ</string>
     <string name="file_upload_limit_premium_tier_2">100 МБ</string>
-    <string name="file_upload_limit_standard">8 МБ</string>
+    <string name="file_upload_limit_standard">10 МБ</string>
     <string name="filter">Фільтр</string>
     <string name="filter_mentions">Фільтрувати згадування</string>
     <string name="filter_options">Параметри фільтру</string>

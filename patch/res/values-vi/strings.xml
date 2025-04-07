@@ -2703,7 +2703,7 @@ Bạn có thể thay đổi cài đặt Tìm bạn bè bất kỳ lúc nào."</s
     <string name="file_size_mb">{size} MB</string>
     <string name="file_upload_limit_premium_tier_1">50MB</string>
     <string name="file_upload_limit_premium_tier_2">100MB</string>
-    <string name="file_upload_limit_standard">8MB</string>
+    <string name="file_upload_limit_standard">10MB</string>
     <string name="filter">Bộ lọc</string>
     <string name="filter_mentions">Bộ Lọc Đề Cập</string>
     <string name="filter_options">Tùy Chọn Bộ Lọc</string>

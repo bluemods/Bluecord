@@ -2723,7 +2723,7 @@ Puoi cambiare le tue Impostazioni Trova i tuoi amici in qualsiasi momento."</str
     <string name="file_size_mb">{size} MB</string>
     <string name="file_upload_limit_premium_tier_1">50 MB</string>
     <string name="file_upload_limit_premium_tier_2">100MB</string>
-    <string name="file_upload_limit_standard">8 MB</string>
+    <string name="file_upload_limit_standard">10 MB</string>
     <string name="filter">Filtro</string>
     <string name="filter_mentions">Filtri delle menzioni</string>
     <string name="filter_options">Filtri</string>

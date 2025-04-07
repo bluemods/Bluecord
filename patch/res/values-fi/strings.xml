@@ -2703,7 +2703,7 @@ Voit muuttaa Etsi kaverisi ‑asetuksia milloin tahansa halutessasi."</string>
     <string name="file_size_mb">{size} Mt</string>
     <string name="file_upload_limit_premium_tier_1">50 Mt</string>
     <string name="file_upload_limit_premium_tier_2">100 Mt</string>
-    <string name="file_upload_limit_standard">8 Mt</string>
+    <string name="file_upload_limit_standard">10 Mt</string>
     <string name="filter">Suodata</string>
     <string name="filter_mentions">Suodata maininnat</string>
     <string name="filter_options">Suodatusasetukset</string>

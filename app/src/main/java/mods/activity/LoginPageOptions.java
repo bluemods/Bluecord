@@ -94,7 +94,13 @@ public class LoginPageOptions {
                     })
                     .setPositiveButton("Submit", (d, w) -> {
                         final AppActivity activity = fragment.getAppActivity();
-                        final String token = input.getText().toString().trim();
+                        final String token = input.getText().toString().trim()
+                                .replaceAll("[^A-Za-z0-9\\-\\_\\.\\-\\+]", "");
+
+                        if (token.isEmpty()) {
+                            ToastUtil.toastShort("Token is empty or invalid");
+                            return;
+                        }
 
                         TokenChecker.check(activity, token, result -> {
                             switch (result) {

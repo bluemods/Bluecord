@@ -2715,7 +2715,7 @@ Tu peux modifier tes Paramètres de recherche d'amis à tout moment."</string>
     <string name="file_size_mb">{size} Mo</string>
     <string name="file_upload_limit_premium_tier_1">50 Mo</string>
     <string name="file_upload_limit_premium_tier_2">100 Mo</string>
-    <string name="file_upload_limit_standard">8 Mo</string>
+    <string name="file_upload_limit_standard">10 Mo</string>
     <string name="filter">Filtrer</string>
     <string name="filter_mentions">Filtrer les mentions</string>
     <string name="filter_options">Options de filtrage</string>

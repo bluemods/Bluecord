@@ -2723,7 +2723,7 @@ PC 앱을 [다운로드](onDownloadClick)하세요."</string>
     <string name="file_size_mb">{size}MB</string>
     <string name="file_upload_limit_premium_tier_1">50MB</string>
     <string name="file_upload_limit_premium_tier_2">100MB</string>
-    <string name="file_upload_limit_standard">8MB</string>
+    <string name="file_upload_limit_standard">10MB</string>
     <string name="filter">필터</string>
     <string name="filter_mentions">멘션 필터하기</string>
     <string name="filter_options">필터 옵션</string>

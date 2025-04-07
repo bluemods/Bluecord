@@ -2728,7 +2728,7 @@ Arkadaşlarını Bul ayarlarını istediğin zaman değiştirebilirsin."</string
     <string name="file_size_mb">{size} MB</string>
     <string name="file_upload_limit_premium_tier_1">50MB</string>
     <string name="file_upload_limit_premium_tier_2">100MB</string>
-    <string name="file_upload_limit_standard">8MB</string>
+    <string name="file_upload_limit_standard">10MB</string>
     <string name="filter">Filtre</string>
     <string name="filter_mentions">Bahsetmeleri Filtrele</string>
     <string name="filter_options">Filtre Ayarları</string>

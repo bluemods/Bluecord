@@ -2728,7 +2728,7 @@
     <string name="file_size_mb">{size} МБ</string>
     <string name="file_upload_limit_premium_tier_1">50МБ</string>
     <string name="file_upload_limit_premium_tier_2">100МБ</string>
-    <string name="file_upload_limit_standard">8МБ</string>
+    <string name="file_upload_limit_standard">10МБ</string>
     <string name="filter">Фильтр</string>
     <string name="filter_mentions">Фильтр упоминаний</string>
     <string name="filter_options">Параметры фильтра</string>

@@ -2614,7 +2614,7 @@ Puedes cambiar tus ajustes de Encuentra a tus amigos en cualquier momento."</str
     <string name="file_size_mb">{size} MB</string>
     <string name="file_upload_limit_premium_tier_1">50 MB</string>
     <string name="file_upload_limit_premium_tier_2">100 MB</string>
-    <string name="file_upload_limit_standard">8 MB</string>
+    <string name="file_upload_limit_standard">10 MB</string>
     <string name="filter">Filtrar</string>
     <string name="filter_mentions">Filtrar menciones</string>
     <string name="filter_options">Opciones de filtro</string>

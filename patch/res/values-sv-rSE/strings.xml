@@ -2614,7 +2614,7 @@ Du kan ändra dina Hitta dina vänner-inställningar när som helst."</string>
     <string name="file_size_mb">{size} MB</string>
     <string name="file_upload_limit_premium_tier_1">50 MB</string>
     <string name="file_upload_limit_premium_tier_2">100 MB</string>
-    <string name="file_upload_limit_standard">8 MB</string>
+    <string name="file_upload_limit_standard">10 MB</string>
     <string name="filter">Filtrera</string>
     <string name="filter_mentions">Filtrera omnämningar</string>
     <string name="filter_options">Filteralternativ</string>

@@ -73,9 +73,13 @@ public class AuthenticationUtils {
 
     // Added to JSONReader to intercept the new push token
     public static void snipeGCMToken(String token) {
-        // Prefs.setBoolean(PreferenceKeys.TEMP_NEEDS_GCM_TOKEN, true);
-        Prefs.setString(PreferenceKeys.TEMP_GCM_PUSH_TOKEN, token);
-        pushTokenToDiscord();
+        try {
+            // Prefs.setBoolean(PreferenceKeys.TEMP_NEEDS_GCM_TOKEN, true);
+            Prefs.setString(PreferenceKeys.TEMP_GCM_PUSH_TOKEN, token);
+            pushTokenToDiscord();
+        } catch (Throwable e) {
+            LogUtils.log(TAG, "snipeGCMToken error", e);
+        }
     }
 
     // Sends a API request to discord indicating this is out new GCM push token.

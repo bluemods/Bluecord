@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.discord.app.App;
 import com.discord.utilities.lifecycle.ApplicationProvider;
+import com.google.firebase.provider.FirebaseInitProvider;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +33,7 @@ import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -56,7 +58,16 @@ public class DiscordTools {
         if (App.app != null) {
             return App.app;
         } else {
-            return ApplicationProvider.INSTANCE.get();
+            try {
+                return ApplicationProvider.INSTANCE.get();
+            } catch (Throwable ignore) {
+                // If we get here, we were likely launched from Firebase, as it has the highest init order.
+                // Try to get the context from there.
+                return Objects.requireNonNull(
+                        FirebaseInitProvider.context,
+                        "Could not get context from anywhere!"
+                );
+            }
         }
     }
 
@@ -104,7 +115,7 @@ public class DiscordTools {
     }
 
     public static boolean isConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 

@@ -2703,7 +2703,7 @@ Avatar"</string>
     <string name="file_size_mb">{size} MB</string>
     <string name="file_upload_limit_premium_tier_1">50MB</string>
     <string name="file_upload_limit_premium_tier_2">100MB</string>
-    <string name="file_upload_limit_standard">8MB</string>
+    <string name="file_upload_limit_standard">10MB</string>
     <string name="filter">Φιλτράρισμα</string>
     <string name="filter_mentions">Αναφορές φίλτρων</string>
     <string name="filter_options">Επιλογές φίλτρων</string>

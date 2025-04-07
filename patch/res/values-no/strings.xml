@@ -2594,7 +2594,7 @@ Du kan når som helst endre innstillingene for Finn vennene dine."</string>
     <string name="file_size_mb">{size} MB</string>
     <string name="file_upload_limit_premium_tier_1">50 MB</string>
     <string name="file_upload_limit_premium_tier_2">100 MB</string>
-    <string name="file_upload_limit_standard">8 MB</string>
+    <string name="file_upload_limit_standard">10 MB</string>
     <string name="filter">Filter</string>
     <string name="filter_mentions">Filternevninger</string>
     <string name="filter_options">Filteralternativer</string>
