@@ -56,7 +56,7 @@ object FileUtils {
 
     @JvmStatic
     val voiceCacheDir: File
-        get() = File(tempDir, "voice_cache").apply { mkdirs() }
+        get() = File(cacheDir, "voice_cache").apply { mkdirs() }
 
     /**
      * Returns true if we have to use the shitty SAF system.
