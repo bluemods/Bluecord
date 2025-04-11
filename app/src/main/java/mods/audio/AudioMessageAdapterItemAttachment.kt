@@ -1,0 +1,111 @@
+package mods.audio
+
+import android.graphics.Color
+import android.view.View
+import android.view.ViewPropertyAnimator
+import android.widget.FrameLayout
+import androidx.constraintlayout.widget.Barrier
+import androidx.constraintlayout.widget.Guideline
+import com.bluecord.R
+import com.discord.stores.StoreStream
+import com.discord.utilities.view.extensions.ViewExtensions
+import com.discord.widgets.chat.list.FragmentLifecycleListener
+import com.discord.widgets.chat.list.adapter.WidgetChatListAdapter
+import com.discord.widgets.chat.list.adapter.WidgetChatListItem
+import com.discord.widgets.chat.list.entries.AttachmentEntry
+import com.discord.widgets.chat.list.entries.ChatListEntry
+import com.google.android.material.card.MaterialCardView
+import mods.audio.view.player.VoicePlayerView
+import mods.promise.runCatchingOrLog
+import mods.utils.LogUtils
+import java.lang.reflect.Proxy
+
+@Suppress("unused")
+class AudioMessageAdapterItemAttachment(
+    adapter: WidgetChatListAdapter?
+) : WidgetChatListItem(R.layout.widget_chat_list_adapter_item_audio_v2, adapter), FragmentLifecycleListener {
+
+    companion object {
+        private const val TAG = "AudioMessageAttachment"
+    }
+
+    private val chatListAdapterItemHighlightedBg: View = itemView.findViewById(R.id.chat_list_adapter_item_highlighted_bg)
+    private val chatListAdapterItemGutterBg: View = itemView.findViewById(R.id.chat_list_adapter_item_gutter_bg)
+    private val uikitChatGuideline: Guideline = itemView.findViewById(R.id.uikit_chat_guideline)
+    private val chatListItemAttachmentCard: MaterialCardView = itemView.findViewById(R.id.chat_list_item_attachment_card)
+    private val voicePlayerView: VoicePlayerView = itemView.findViewById(R.id.blue_audio_voice_player_view)
+    private val chatListItemAttachmentBarrier: Barrier = itemView.findViewById(R.id.chat_list_item_attachment_barrier)
+    private val chatListItemAttachmentSpoiler: FrameLayout = itemView.findViewById(R.id.chat_list_item_attachment_spoiler)
+
+    override fun onPause() {}
+    override fun onResume() {}
+
+    override fun onConfigure(i: Int, entry: ChatListEntry) {
+        if (entry !is AudioMessageEntry) {
+            LogUtils.log(TAG, "entry type mismatch: got ${entry.javaClass.name}")
+            return
+        }
+        val message = entry.message
+        val attachment = entry.attachment
+        LogUtils.log(TAG, "got msg; message=$message, attachment=$attachment")
+        configureCellHighlight(message, chatListAdapterItemHighlightedBg, chatListAdapterItemGutterBg)
+        configureUI(entry)
+    }
+
+    private fun configureUI(entry: AudioMessageEntry) {
+        runCatchingOrLog {
+            configureHiddenMsg(entry)
+        }
+        chatListItemAttachmentSpoiler.setOnClickListener {
+            if (adapter.data.isSpoilerClickAllowed) {
+                StoreStream.Companion.getMessageState().revealSpoilerEmbed(entry.message.id, entry.embedIndex)
+            }
+        }
+
+        chatListItemAttachmentCard.visibility = View.VISIBLE
+        voicePlayerView.setStyleColor(Color.LTGRAY)
+        voicePlayerView.setModel(entry)
+    }
+
+    private fun configureHiddenMsg(entry: AudioMessageEntry) {
+        val attachment = entry.attachment ?: return
+        val isSpoilerHidden = attachment.h() && !isSpoilerEmbedRevealed(entry)
+
+        val cls = ViewExtensions::class.java
+        val f0 = Class.forName("kotlin.jvm.functions.Function0")
+        val f1 = Class.forName("kotlin.jvm.functions.Function1")
+        if (isSpoilerHidden) {
+            cls.getMethod("fadeIn\$default",
+                View::class.java,
+                Long::class.java,
+                f1,
+                f1,
+                f0,
+                Int::class.java,
+                Any::class.java
+            ).invoke(null, chatListItemAttachmentSpoiler, 50L, null, Proxy.newProxyInstance(cls.classLoader, arrayOf(f1)) { _, _, objects ->
+                val p = objects[0] as ViewPropertyAnimator
+                p.scaleX(0.9f)
+                p.scaleY(0.9f)
+            }, null, 10, null)
+        } else {
+            cls.getMethod("fadeOut\$default",
+                View::class.java,
+                Long::class.java,
+                f1,
+                f0,
+                Int::class.java,
+                Any::class.java
+            ).invoke(null, chatListItemAttachmentSpoiler, 50L, Proxy.newProxyInstance(cls.classLoader, arrayOf(f1)) { _, _, objects ->
+                val p = objects[0] as ViewPropertyAnimator
+                p.scaleX(0.9f)
+                p.scaleY(0.9f)
+            }, null, 4, null)
+        }
+    }
+
+    private fun isSpoilerEmbedRevealed(entry: AttachmentEntry): Boolean {
+        val map = entry.messageState?.visibleSpoilerEmbedMap ?: return true
+        return entry.embedIndex in map
+    }
+}

@@ -196,6 +196,8 @@
     .end annotation
 .end field
 
+.field public voiceManager:Lmods/audio/view/record/VoiceManager;
+
 
 # direct methods
 .method public static constructor <clinit>()V

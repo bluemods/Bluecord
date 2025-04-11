@@ -50,8 +50,7 @@ public abstract class ChatListEntry implements MGRecyclerDataPayload {
     public static final int GUILD_SCHEDULED_EVENT_INVITE = 43;
     public static final int AUTOMOD_BLOCKED = 44;
     public static final int AUTOMOD_SYSTEM_MESSAGE = 45;
-
-    public static final int VOICE_MESSAGE = 46;
+    public static final int AUDIO_MESSAGE = 46;
 
     private boolean shouldShowThreadSpine;
 

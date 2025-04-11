@@ -280,4 +280,18 @@ public class StringUtils {
         return number != 1 ? str + "s" : str;
     }
 
+    public static String toFileSize(long byteLen) {
+        if (byteLen < 1024) return byteLen + " bytes";
+
+        if (byteLen >= 1073741824d) {
+            double gb = byteLen / 1073741824d;
+            return String.format(Locale.US, "%.2f GB", gb);
+        } else if (byteLen >= 1048576d) {
+            double mb = byteLen / 1048576d;
+            return String.format(Locale.US, "%.2f MB", mb);
+        } else {
+            long kb = byteLen / 1024;
+            return String.format(Locale.US, "%s KB", kb);
+        }
+    }
 }

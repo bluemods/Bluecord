@@ -2,6 +2,7 @@ package mods.extensions
 
 import okhttp3.*
 import org.json.*
+import java.io.File
 import java.io.IOException
 import javax.net.ssl.*
 
@@ -101,5 +102,6 @@ fun Call.enqueue(
 
 fun OkHttpClient.newWebSocket(request: Request, listener: WebSocketListener): WebSocket = g(request, listener)
 
+fun File.toRequestBody(mimeType: String): RequestBody = RequestBody.create(this, MediaType.b(mimeType))
 fun JSONObject.toRequestBody(): RequestBody = toString().toRequestBody()
 fun String?.toRequestBody(): RequestBody = RequestBody.create(orEmpty().toByteArray(), null)

@@ -4208,4 +4208,15 @@
     <item type="id" name="blue_id_5" />
     <item type="id" name="bluecord_text" />
     <item type="id" name="blue_id_char_count" />
+    <item type="id" name="blue_audio_action_frame_container" />
+    <item type="id" name="blue_audio_play_button" />
+    <item type="id" name="blue_audio_pause_button" />
+    <item type="id" name="blue_audio_loader" />
+    <item type="id" name="blue_audio_thumb" />
+    <item type="id" name="blue_audio_timer_text" />
+    <item type="id" name="blue_audio_voice_player_view" />
+    <item type="id" name="blue_audio_play_pause_btn_container" />
+    <item type="id" name="blue_audio_play_pause_btn_image" />
+    <item type="id" name="blue_audio_send_btn_container" />
+    <item type="id" name="blue_audio_send_btn_image" />
 </resources>

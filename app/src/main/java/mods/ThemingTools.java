@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.URLSpan;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -32,6 +34,7 @@ import com.bluecord.R;
 import com.discord.BuildConfig;
 import com.discord.api.channel.Channel;
 import com.discord.api.message.reaction.MessageReactionUpdate;
+import com.discord.app.App;
 import com.discord.app.AppFragment;
 import com.discord.models.domain.emoji.Emoji;
 import com.discord.models.domain.emoji.ModelEmojiUnicode;
@@ -55,6 +58,7 @@ import java.util.Map;
 import b.f.g.f.a;
 import b.f.g.f.c;
 import mods.activity.update.Updater;
+import mods.audio.view.player.headphone.HeadphoneUnpluggedReceiver;
 import mods.constants.PreferenceKeys;
 import mods.constants.URLConstants;
 import mods.events.EventTracker;
@@ -63,6 +67,7 @@ import mods.preference.EmoteMode;
 import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
 import mods.utils.AuthenticationUtils;
+import mods.utils.CacheUtils;
 import mods.utils.ClipboardUtil;
 import mods.utils.EmptyUtils;
 import mods.utils.LogUtils;
@@ -98,6 +103,8 @@ public class ThemingTools {
             Prefs.setBoolean(PreferenceKeys.WAS_TOKEN_LOGIN, false);
         }
         typeface = CustomFont.load();
+        HeadphoneUnpluggedReceiver.setup(App.app);
+        CacheUtils.clearBluecordCache();
     }
 
     private static void setupWindowColors(Activity activity) {
@@ -583,5 +590,20 @@ public class ThemingTools {
         ret.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         ret.setSingleLine(true);
         return ret;
+    }
+
+    public static void enlargeHitbox(View button, int byDip) {
+        int px = dipToPx(byDip);
+
+        final View parent = (View) button.getParent();  // button: the view you want to enlarge hit area
+        parent.post(() -> {
+            final Rect rect = new Rect();
+            button.getHitRect(rect);
+            rect.top    -= px; // increase top hit area
+            rect.left   -= px; // increase left hit area
+            rect.bottom += px; // increase bottom hit area
+            rect.right  += px; // increase right hit area
+            parent.setTouchDelegate(new TouchDelegate(rect, button));
+        });
     }
 }

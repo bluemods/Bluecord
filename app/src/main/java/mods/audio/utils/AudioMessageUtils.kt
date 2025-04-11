@@ -1,47 +1,35 @@
-package mods.voice.utils;
+package mods.audio.utils
 
-import com.discord.api.message.attachment.MessageAttachment;
-import com.discord.models.message.Message;
+import android.os.Build
+import androidx.annotation.ChecksSdkIntAtLeast
+import com.discord.api.message.attachment.MessageAttachment
+import com.discord.models.message.Message
 
-import mods.utils.LogUtils;
+object AudioMessageUtils {
+    private val AUDIO_EXTENSIONS = setOf(
+        "opus", "ogg", "webm", "mp3", "aac", "m4a", "wav", "flac", "wma"
+    )
 
-public class VoiceUtils {
+    @JvmStatic
+    fun isAudioMessage(attachment: MessageAttachment?): Boolean {
+        val extension = attachment
+            ?.filename
+            ?.takeIf { '.' in it }
+            ?.substringAfterLast('.')
+            ?.lowercase()
+            ?: return false
 
-    private static final String TAG = VoiceUtils.class.getSimpleName();
-
-    private static final String[] FILE_EXTENSIONS = {
-            ".ogg", ".mp3", ".m4a", ".opus"
-    };
-
-    public static boolean isAudioMessage(MessageAttachment attachment) {
-        LogUtils.log(TAG, "attachment=" + attachment);
-
-        if (attachment == null) {
-            return false;
-        }
-        final String fileName = attachment.filename;
-        if (fileName == null) {
-            return false;
-        }
-
-        for (String extension : FILE_EXTENSIONS) {
-            if (fileName.endsWith(extension)) {
-                return true;
-            }
-        }
-        return false;
+        return extension in AUDIO_EXTENSIONS
     }
 
-    public static boolean isAudioMessage(Message message) {
-        // LogUtils.log(TAG, "message=" + message);
-        if (message == null || !message.hasAttachments()) {
-            return false;
-        }
-        for (MessageAttachment attachment : message.getAttachments()) {
-            if (isAudioMessage(attachment)) {
-                return true;
-            }
-        }
-        return false;
+    @JvmStatic
+    fun isAudioMessage(message: Message?): Boolean {
+        return message?.attachments?.any(::isAudioMessage) == true
+    }
+
+    @JvmStatic
+    @ChecksSdkIntAtLeast(Build.VERSION_CODES.Q)
+    fun isRecordingSupported(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
     }
 }

@@ -1,6 +1,5 @@
 package mods.utils
 
-import mods.DiscordTools
 import java.io.File
 
 object CacheUtils {
@@ -10,7 +9,17 @@ object CacheUtils {
     @JvmStatic
     fun clearCache() {
         val files = ArrayList<File>()
-        listFiles(DiscordTools.getContext().cacheDir, files)
+        listFiles(FileUtils.cacheDir, files)
+
+        val bytesDeleted = files.sumOf(::deleteQuietly)
+        LogUtils.log(TAG, "Deleted ${files.size} files (${StringUtils.toMB(bytesDeleted)})")
+        files.clear()
+    }
+
+    @JvmStatic
+    fun clearBluecordCache() {
+        val files = ArrayList<File>()
+        listFiles(FileUtils.tempDir, files)
 
         val bytesDeleted = files.sumOf(::deleteQuietly)
         LogUtils.log(TAG, "Deleted ${files.size} files (${StringUtils.toMB(bytesDeleted)})")

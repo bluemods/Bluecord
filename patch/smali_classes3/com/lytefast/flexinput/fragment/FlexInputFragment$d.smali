@@ -53,10 +53,12 @@
 
 # virtual methods
 .method public invoke(Ljava/lang/Object;)Ljava/lang/Object;
-    .locals 12
+    .locals 13
 
     .line 1
     check-cast p1, Lcom/lytefast/flexinput/viewmodel/FlexInputState;
+
+    move-object v12, p1
 
     const-string v0, "p1"
 
@@ -669,6 +671,13 @@
 
     .line 71
     :goto_d
+
+    iget-object v0, p0, Ld0/z/d/d;->receiver:Ljava/lang/Object;
+
+    check-cast v0, Lcom/lytefast/flexinput/fragment/FlexInputFragment;
+
+    invoke-static {v0, v12}, Lmods/audio/view/record/VoiceManager;->setup(Lcom/lytefast/flexinput/fragment/FlexInputFragment;Lcom/lytefast/flexinput/viewmodel/FlexInputState;)V
+
     sget-object p1, Lkotlin/Unit;->a:Lkotlin/Unit;
 
     return-object p1

@@ -88,5 +88,10 @@ public class StoreStream {
         public void initialize(android.app.Application application) {
 
         }
+
+        @NotNull
+        public static StoreMessageState getMessageState() {
+            return null;
+        }
     }
 }

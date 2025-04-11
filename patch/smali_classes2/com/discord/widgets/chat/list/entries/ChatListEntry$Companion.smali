@@ -641,10 +641,10 @@
 
     check-cast v7, Lcom/discord/api/message/attachment/MessageAttachment;
 
-    # TODO voice messages
-	# invoke-static {v7}, Lmods/voice/utils/VoiceUtils;->isAudioMessage(Lcom/discord/api/message/attachment/MessageAttachment;)Z
-	# move-result v10
-	# if-nez v10, :cond_100
+    # TODO audio messages
+	invoke-static {v7}, Lmods/audio/utils/AudioMessageUtils;->isAudioMessage(Lcom/discord/api/message/attachment/MessageAttachment;)Z
+	move-result v10
+	if-nez v10, :cond_100
 
     .line 16
     new-instance v10, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;
@@ -677,12 +677,12 @@
     .line 18
     invoke-direct/range {v1 .. v11}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;-><init>(IJLcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;Lcom/discord/api/message/attachment/MessageAttachment;ZZZZ)V
 
-    # END TODO voice messages
+    # END TODO audio messages
 	goto :goto_101
-	# :cond_100
+	:cond_100
 
     .line 69420
-    new-instance v10, Lmods/voice/VoiceMessageEntry;
+    new-instance v10, Lmods/audio/AudioMessageEntry;
 
     add-int/lit8 v17, v2, 0x1
 
@@ -710,7 +710,7 @@
     move/from16 v11, p7
 
     .line 69422
-    invoke-direct/range {v1 .. v11}, Lmods/voice/VoiceMessageEntry;-><init>(IJLcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;Lcom/discord/api/message/attachment/MessageAttachment;ZZZZ)V
+    invoke-direct/range {v1 .. v11}, Lmods/audio/AudioMessageEntry;-><init>(IJLcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;Lcom/discord/api/message/attachment/MessageAttachment;ZZZZ)V
 
     .line 19
 	:goto_101

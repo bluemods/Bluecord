@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+	android:background="?selectableItemBackground" 
+	style="@style/UiKit.ViewGroup" 
+	android:id="@id/blue_voice_player_container" 
+	android:clipChildren="false" 
+	android:clipToPadding="false" 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+>
+    <!-- Based off of res/layout/widget_chat_list_adapter_item_attachment with basic audio player added -->
+    <View android:id="@id/chat_list_adapter_item_highlighted_bg" android:background="?theme_chat_mentioned_me" android:layout_width="0.0dip" android:layout_height="0.0dip" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+    <View android:id="@id/chat_list_adapter_item_gutter_bg" android:background="@color/status_yellow_500" android:layout_width="2.0dip" android:layout_height="0.0dip" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="@id/chat_list_adapter_item_highlighted_bg" />
+    <androidx.constraintlayout.widget.Guideline android:id="@id/uikit_chat_guideline" style="@style/UiKit.Chat.Guideline" />
+    <com.google.android.material.card.MaterialCardView 
+        android:id="@id/chat_list_item_attachment_card" 
+        android:visibility="visible" 
+        android:layout_width="wrap_content" 
+        android:layout_marginStart="@dimen/chat_cell_horizontal_spacing_total" 
+        android:layout_marginTop="@dimen/chat_cell_vertical_spacing_padding" 
+        android:layout_marginBottom="@dimen/chat_cell_vertical_spacing_padding" 
+        android:layout_marginEnd="@dimen/chat_cell_horizontal_spacing_total" 
+        android:transitionGroup="true" 
+        app:layout_constraintBottom_toBottomOf="parent" 
+        app:layout_constraintEnd_toEndOf="parent" 
+        app:layout_constraintStart_toEndOf="@id/uikit_chat_guideline" 
+        app:layout_constraintTop_toTopOf="parent" 
+        style="@style/UiKit.Chat.Embed.CardView">
+        <mods.audio.view.player.VoicePlayerView 
+            android:id="@id/blue_audio_voice_player_view" 
+            android:visibility="visible" 
+            android:layout_width="fill_parent" 
+            android:layout_height="48.0dip" />
+    </com.google.android.material.card.MaterialCardView>
+    <androidx.constraintlayout.widget.Barrier android:id="@id/chat_list_item_attachment_barrier" android:layout_width="0.0dip" android:layout_height="0.0dip" app:barrierDirection="end" app:constraint_referenced_ids="chat_list_item_attachment_card,                                        chat_list_item_attachment_inline_media" />
+    <FrameLayout android:id="@id/chat_list_item_attachment_spoiler" android:background="?theme_chat_spoiler_bg" android:visibility="gone" android:layout_width="0.0dip" android:layout_height="0.0dip" android:elevation="@dimen/app_elevation" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="@id/chat_list_item_attachment_barrier" app:layout_constraintStart_toEndOf="@id/uikit_chat_guideline" app:layout_constraintTop_toTopOf="parent">
+        <androidx.cardview.widget.CardView android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" app:cardBackgroundColor="@color/black_alpha_60" app:cardCornerRadius="16.0dip" app:cardElevation="@dimen/app_elevation">
+            <TextView android:textColor="@color/primary_200" android:layout_gravity="center" android:paddingLeft="8.0dip" android:paddingTop="4.0dip" android:paddingRight="8.0dip" android:paddingBottom="4.0dip" android:layout_marginLeft="4.0dip" android:layout_marginRight="4.0dip" android:text="@string/spoiler" android:textAllCaps="true" style="@style/UiKit.TextView.H2" />
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+</LinearLayout>

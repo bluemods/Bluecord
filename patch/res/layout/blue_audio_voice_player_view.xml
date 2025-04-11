@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+  xmlns:android="http://schemas.android.com/apk/res/android" 
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+>
+    <FrameLayout 
+        android:id="@id/blue_audio_action_frame_container" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_marginLeft="13.0dip" 
+        android:layout_alignParentLeft="true" 
+        android:layout_centerVertical="true">
+
+        <mods.audio.view.player.IndependentPressImageView 
+            android:id="@id/blue_audio_play_button" 
+            android:visibility="gone" 
+            android:duplicateParentState="false" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:src="@drawable/blue_audio_play_msg_icon" 
+            android:scaleType="centerInside" />
+        <mods.audio.view.player.IndependentPressImageView 
+            android:id="@id/blue_audio_pause_button" 
+            android:visibility="gone" 
+            android:duplicateParentState="false" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:src="@drawable/blue_audio_voice_msg_bubble_copy" 
+            android:scaleType="centerInside" />
+        <mods.audio.view.player.LoadingWheel 
+            android:id="@id/blue_audio_loader" 
+            android:background="@drawable/blue_audio_circle" 
+            android:visibility="gone" 
+            android:duplicateParentState="false" 
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content" 
+            android:src="@drawable/blue_audio_voice_msg_loader" 
+            android:scaleType="centerInside" />
+    </FrameLayout>
+
+    <mods.audio.view.player.VoiceSeekBar 
+        android:id="@id/blue_audio_thumb" 
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent" 
+        android:layout_marginLeft="5.0dip" 
+        android:layout_marginRight="5.0dip" 
+        android:layout_toRightOf="@id/blue_audio_action_frame_container" 
+        android:layout_centerVertical="true"
+        style="@style/UiKit.SeekBar"
+    />
+
+    <TextView 
+        android:textSize="12.0sp" 
+        android:gravity="center" 
+        android:id="@id/blue_audio_timer_text" 
+        android:clickable="false" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
+        android:layout_marginRight="20.0dip" 
+        android:layout_marginBottom="5.0dip" 
+        android:layout_alignParentRight="true" 
+        android:layout_alignParentBottom="true" 
+        style="@style/UiKit.TextView"
+    />
+</merge>

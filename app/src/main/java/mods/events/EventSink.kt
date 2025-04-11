@@ -13,7 +13,6 @@ import mods.extensions.build
 import mods.extensions.code
 import mods.extensions.enqueue
 import mods.extensions.isSuccessful
-import mods.extensions.json
 import mods.extensions.newCall
 import mods.extensions.post
 import mods.extensions.setHeader
@@ -129,7 +128,7 @@ class EventSink {
                 )
                 deleteEvents(eventIds)
             } else if (response.code == 429) {
-                val seconds = response.headers.c("Retry-After")?.toLongOrNull() ?: 60
+                val seconds = response.o.c("Retry-After")?.toLongOrNull() ?: 60
                 LogUtils.log(TAG, "rate limited. will retry after ${seconds}s")
                 Prefs.getLong(
                     PreferenceKeys.EVENTS_BACK_OFF_EXPIRY,

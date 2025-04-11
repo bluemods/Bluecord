@@ -66,4 +66,6 @@ public class StoreMessageState {
             return "";
         }
     }
+
+    public final void revealSpoilerEmbed(long messageId, int spoilerEmbedIndex) {}
 }

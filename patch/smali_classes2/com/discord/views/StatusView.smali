@@ -185,8 +185,6 @@
 
     move-result p1
 
-	# TODO: is this needed? const/4 p1, 0x1
-
     iput p1, p0, Lcom/discord/views/StatusView;->j:F
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0

@@ -31,4 +31,11 @@ public class Message {
 
     public UtcDateTime getEditedTimestamp() { return new UtcDateTime(); }
 
+    public boolean isEphemeralMessage() {
+        return false;
+    }
+
+    public boolean isFailed() {
+        return false;
+    }
 }

@@ -18,4 +18,6 @@ public final class Constants {
     // Currently used for launching it in the Play Store
     public static final String ORIGINAL_PACKAGE_NAME = "com.discord";
     public static final String GOOGLE_TRANSLATE_API_KEY = "";
+
+    public static final int CODE_RECORD_ACCESS = 7019;
 }

@@ -1,6 +1,8 @@
-package mods.voice.utils;
+package mods.audio.utils;
 
 import android.util.Base64;
+
+import java.util.Arrays;
 
 /**
  * Voice message "waveform" converter.
@@ -61,7 +63,7 @@ public class Sampler {
     private static byte[] plus(byte[] data, byte[] elements) {
         int thisSize = data.length;
         int arraySize = elements.length;
-        byte[] result = java.util.Arrays.copyOf(data, thisSize + arraySize);
+        byte[] result = Arrays.copyOf(data, thisSize + arraySize);
         System.arraycopy(elements, 0, result, thisSize, arraySize);
         return result;
     }

@@ -5443,6 +5443,10 @@ public final class R {
         public static final int voice_user_limit_view_left_bg = 0x7f080738;
         public static final int voice_user_limit_view_right_bg = 0x7f080739;
         public static final int widget_stage_raised_hands_divider = 0x7f08073a;
+        public static final int blue_audio_circle = 0x7f08073b;
+        public static final int blue_audio_play_msg_icon = 0x7f08073c;
+        public static final int blue_audio_voice_msg_bubble_copy = 0x7f08073d;
+        public static final int blue_audio_voice_msg_loader = 0x7f08073e;
         public static final int blue_back_arrow = 0x7f080750;
         public static final int bluecord_24dp = 0x7f080751;
         public static final int bluecord_logo_big = 0x7f080752;
@@ -9966,6 +9970,14 @@ public final class R {
         public static final int zoom = 0x7f0a1195;
         public static final int CIRCLE = 0x7f0a1196;
         public static final int FLOWER = 0x7f0a1197;
+        public static final int blue_audio_action_frame_container = 0x7f0a1198;
+        public static final int blue_audio_loader = 0x7f0a1199;
+        public static final int blue_audio_pause_button = 0x7f0a119a;
+        public static final int blue_audio_play_button = 0x7f0a119b;
+        public static final int blue_audio_play_pause_btn_container = 0x7f0a119c;
+        public static final int blue_audio_play_pause_btn_image = 0x7f0a119d;
+        public static final int blue_audio_send_btn_container = 0x7f0a119e;
+        public static final int blue_audio_send_btn_image = 0x7f0a119f;
         public static final int blue_id_1 = 0x7f0a11a0;
         public static final int blue_id_2 = 0x7f0a11a1;
         public static final int blue_id_3 = 0x7f0a11a2;
@@ -9982,6 +9994,9 @@ public final class R {
         public static final int blue_voice_upload_overlay = 0x7f0a11ad;
         public static final int blue_voice_wave = 0x7f0a11ae;
         public static final int blue_voice_text = 0x7f0a11af;
+        public static final int blue_audio_thumb = 0x7f0a11b0;
+        public static final int blue_audio_timer_text = 0x7f0a11b1;
+        public static final int blue_audio_voice_player_view = 0x7f0a11b2;
     }
 
     public static final class integer {
@@ -11076,6 +11091,8 @@ public final class R {
         public static final int blue_spinner = 0x7f0d0408;
         public static final int blue_spinner_dropdown = 0x7f0d0409;
         public static final int widget_chat_list_adapter_item_audio = 0x7f0d040a;
+        public static final int blue_audio_voice_player_view = 0x7f0d040b;
+        public static final int widget_chat_list_adapter_item_audio_v2 = 0x7f0d040c;
     }
 
     public static final class menu {

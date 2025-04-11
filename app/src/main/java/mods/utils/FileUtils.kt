@@ -54,6 +54,10 @@ object FileUtils {
     val tempDir: File
         get() = File(cacheDir, "bluecord_temp").apply { mkdirs() }
 
+    @JvmStatic
+    val voiceCacheDir: File
+        get() = File(tempDir, "voice_cache").apply { mkdirs() }
+
     /**
      * Returns true if we have to use the shitty SAF system.
      *

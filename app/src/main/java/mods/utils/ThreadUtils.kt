@@ -3,6 +3,7 @@ package mods.utils
 import android.os.Handler
 import android.os.Looper
 import mods.promise.runCatchingOrLog
+import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -50,6 +51,11 @@ object ThreadUtils {
     @JvmStatic
     fun runInBackground(runnable: Runnable) {
         sharedExecutor.execute(SafeRunnable(runnable))
+    }
+
+    @JvmStatic
+    fun runOn(executor: Executor, runnable: Runnable) {
+        executor.execute(SafeRunnable(runnable))
     }
 
     @JvmStatic
@@ -109,6 +115,11 @@ object ThreadUtils {
         return Executors.newCachedThreadPool {
             Thread(it, "$name-${threadNumber.incrementAndGet()}")
         }
+    }
+
+    @JvmStatic
+    fun startThread(name: String, runnable: Runnable) {
+        Thread(runnable, name).start()
     }
 
     private class SafeRunnable(private val target: Runnable): Runnable {

@@ -11,4 +11,7 @@ public class MessageAttachment {
     public Integer height;
     public Integer width;
 
+    public boolean h() {
+        return false;
+    }
 }
