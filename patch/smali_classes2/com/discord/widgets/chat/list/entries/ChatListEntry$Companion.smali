@@ -641,7 +641,6 @@
 
     check-cast v7, Lcom/discord/api/message/attachment/MessageAttachment;
 
-    # TODO audio messages
 	invoke-static {v7}, Lmods/audio/utils/AudioMessageUtils;->isAudioMessage(Lcom/discord/api/message/attachment/MessageAttachment;)Z
 	move-result v10
 	if-nez v10, :cond_100
@@ -677,7 +676,6 @@
     .line 18
     invoke-direct/range {v1 .. v11}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;-><init>(IJLcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;Lcom/discord/api/message/attachment/MessageAttachment;ZZZZ)V
 
-    # END TODO audio messages
 	goto :goto_101
 	:cond_100
 

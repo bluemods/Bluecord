@@ -4219,4 +4219,5 @@
     <item type="id" name="blue_audio_play_pause_btn_image" />
     <item type="id" name="blue_audio_send_btn_container" />
     <item type="id" name="blue_audio_send_btn_image" />
+    <item type="id" name="blue_audio_delete_btn_image" />
 </resources>

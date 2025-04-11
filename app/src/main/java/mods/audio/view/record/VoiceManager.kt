@@ -3,7 +3,8 @@ package mods.audio.view.record
 import android.Manifest.permission.RECORD_AUDIO
 import android.content.Context
 import android.content.pm.PackageManager
-import android.media.MediaMetadataRetriever
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -13,9 +14,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.bluecord.R
 import com.discord.models.domain.NonceGenerator
@@ -24,7 +28,6 @@ import com.discord.widgets.chat.input.WidgetChatInput
 import com.discord.widgets.chat.input.WidgetChatInputTruncatedHint
 import com.lytefast.flexinput.fragment.FlexInputFragment
 import com.lytefast.flexinput.viewmodel.FlexInputState
-import mods.DiscordTools
 import mods.ThemingTools
 import mods.audio.converters.AudioConstants
 import mods.audio.utils.AudioMessageUtils
@@ -52,6 +55,8 @@ import org.json.JSONObject
 import java.io.File
 import java.util.TimerTask
 import java.util.concurrent.atomic.AtomicBoolean
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.drawable.toDrawable
 
 @RequiresApi(Build.VERSION_CODES.Q)
 class VoiceManager(
@@ -62,12 +67,13 @@ class VoiceManager(
     private val audioSendBtnImage = rootView.findViewById<ImageView>(R.id.blue_audio_send_btn_image)
 
     private val playPauseBtnImage = rootView.findViewById<AppCompatImageButton>(R.id.blue_audio_play_pause_btn_image)
+    private val deleteBtnImage = rootView.findViewById<AppCompatImageButton>(R.id.blue_audio_delete_btn_image)
 
     private val galleryBtn = rootView.findViewById<AppCompatImageButton>(R.id.gallery_btn)
-    private var galleryBtnVis = View.GONE
+    private var galleryBtnVis = -1
 
     private val giftBtn = rootView.findViewById<AppCompatImageButton>(R.id.gift_btn)
-    private var giftBtnVis = View.GONE
+    private var giftBtnVis = -1
 
     private val etInputText = rootView.findViewById<EditText>(R.id.text_input)
 
@@ -78,10 +84,25 @@ class VoiceManager(
     private var updateTimerTask: UpdateTimerTask? = null
 
     private lateinit var latestState: FlexInputState
+    private var lastChannelId: Long = -1L
     private var truncatedHint: WidgetChatInputTruncatedHint? = null
+
+    @get:DrawableRes
+    private val audioSendBtnResource: Int
+        get() = if (ThemingTools.isDarkModeOn()) {
+            R.drawable.ic_mic_interactivenormal_light_24dp
+        } else {
+            R.drawable.ic_mic_interactivenormal_dark_24dp
+        }
 
     fun updateState(state: FlexInputState) {
         latestState = state
+        val channelId = state.l
+        if (channelId != null && lastChannelId != channelId) {
+            // Channel has changed, kill the recorder
+            finishRecording(delete = true)
+            lastChannelId = channelId
+        }
         val enableButton = state.a.isNullOrEmpty() && state.c.isNullOrEmpty()
         if (enableButton) {
             enableVoiceButton()
@@ -96,11 +117,7 @@ class VoiceManager(
         audioSendBtnContainer.isEnabled = true
         audioSendBtnImage.isVisible = true
         audioSendBtnImage.isEnabled = true
-        audioSendBtnImage.setImageResource(if (ThemingTools.isDarkModeOn()) {
-            R.drawable.ic_mic_interactivenormal_light_24dp
-        } else {
-            R.drawable.ic_mic_interactivenormal_dark_24dp
-        })
+        audioSendBtnImage.setImageResource(audioSendBtnResource)
         audioSendBtnContainer.setOnClickListener {
             if (isRecording.get()) {
                 finishRecording()
@@ -120,9 +137,13 @@ class VoiceManager(
         audioSendBtnContainer.isEnabled = false
         audioSendBtnImage.isVisible = false
         audioSendBtnImage.isEnabled = false
-        audioSendBtnImage.setOnClickListener(null)
         playPauseBtnImage.isVisible = false
         playPauseBtnImage.isEnabled = false
+        playPauseBtnImage.setOnClickListener(null)
+        deleteBtnImage.isVisible = false
+        deleteBtnImage.isEnabled = false
+        deleteBtnImage.setOnClickListener(null)
+        finishRecording(delete = true)
     }
 
     private fun onRecordingStart() {
@@ -157,25 +178,29 @@ class VoiceManager(
         if (AudioRecorder.isPausingSupported()) {
             playPauseBtnImage.isVisible = true
             playPauseBtnImage.isEnabled = true
-            playPauseBtnImage.setImageResource(R.drawable.exo_controls_pause)
+            playPauseBtnImage.setImageDrawable(loadDrawable(R.drawable.exo_controls_pause))
             playPauseBtnImage.setOnClickListener {
                 if (recorder.isPaused()) {
                     if (recorder.resume()) {
                         updateTimerTask.resumeTimer()
-                        playPauseBtnImage.setImageResource(R.drawable.exo_controls_pause)
+                        playPauseBtnImage.setImageDrawable(loadDrawable(R.drawable.exo_controls_pause))
                     } else {
                         ToastUtil.toastShort("Failed to resume!")
                     }
                 } else {
                     if (recorder.pause()) {
                         updateTimerTask.pauseTimer()
-                        playPauseBtnImage.setImageResource(R.drawable.exo_controls_play)
+                        playPauseBtnImage.setImageDrawable(loadDrawable(R.drawable.exo_controls_play))
                     } else {
                         ToastUtil.toastShort("Failed to pause!")
                     }
                 }
             }
         }
+        deleteBtnImage.isVisible = true
+        deleteBtnImage.isEnabled = true
+        deleteBtnImage.setImageResource(R.drawable.ic_delete_white_24dp)
+        deleteBtnImage.setOnClickListener { finishRecording(delete = true) }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getVibrator().vibrate(VibrationEffect.createOneShot(75, (255 * 0.5).toInt()))
@@ -206,21 +231,26 @@ class VoiceManager(
         playPauseBtnImage.isVisible = false
         playPauseBtnImage.isEnabled = false
         playPauseBtnImage.setOnClickListener(null)
+        deleteBtnImage.isVisible = false
+        deleteBtnImage.isEnabled = false
+        deleteBtnImage.setOnClickListener(null)
+
         giftBtn.isClickable = true
-        giftBtn.visibility = giftBtnVis
+        if (giftBtnVis != -1) giftBtn.visibility = giftBtnVis
+        giftBtnVis = -1
+
         galleryBtn.isClickable = true
-        galleryBtn.visibility = galleryBtnVis
+        if (galleryBtnVis != -1) galleryBtn.visibility = galleryBtnVis
+        galleryBtnVis = -1
+
         etInputText.isClickable = true
         etInputText.isFocusableInTouchMode = true
         audioSendBtnContainer.isClickable = true
-        audioSendBtnImage.setImageResource(if (ThemingTools.isDarkModeOn()) {
-            R.drawable.ic_mic_interactivenormal_light_24dp
-        } else {
-            R.drawable.ic_mic_interactivenormal_dark_24dp
-        })
+        audioSendBtnImage.setImageResource(audioSendBtnResource)
 
         if (isFailed) {
             oggFile.delete()
+            restoreHint()
             return
         }
 
@@ -250,7 +280,7 @@ class VoiceManager(
                             put(JSONObject().apply {
                                 put("filename", "voice-message.ogg")
                                 put("file_size", oggFile.length())
-                                // TODO this increments. How to get it? put("id")
+                                // TODO this increments. How to get it? put("id", 0)
                             })
                         })
                     },
@@ -301,17 +331,19 @@ class VoiceManager(
         }
     }
 
-    private fun finishRecording() {
+    // Called with delete = true if the fragment is destroyed or recreated
+    fun finishRecording(delete: Boolean = false) {
         rootView.post {
             isRecording.set(false)
             audioSendBtnContainer.isClickable = false
+            cancelTimer()
             val task = updateTimerTask
-            if (task != null && task.secondsElapsed() <= 1) {
+            if (delete) {
+                recorder.stopRecording(true)
+            } else if (task != null && task.secondsElapsed() < 1) {
                 ToastUtil.toastShort("Please record for at least 1 second.")
-                cancelTimer()
                 recorder.stopRecording(true)
             } else {
-                cancelTimer()
                 recorder.stopRecording(false)
             }
         }
@@ -349,9 +381,27 @@ class VoiceManager(
         }
     }
 
-    fun restoreHint() {
+    private fun restoreHint() {
         val hint = truncatedHint ?: return
         WidgetChatInputTruncatedHint.`access$syncHint`(hint)
+    }
+
+    // Fixes the drawable to match the size of the gift button
+    private fun loadDrawable(@DrawableRes targetId: Int): Drawable {
+        val context = fragment.requireContext()
+        val boundsSrc = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_gift_24dp, null)!!
+
+        val width = boundsSrc.intrinsicWidth
+        val height = boundsSrc.intrinsicHeight
+
+        val drawable = ContextCompat.getDrawable(context, targetId)!!
+
+        val bitmap = createBitmap(width, height)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, width, height)
+        drawable.draw(canvas)
+
+        return bitmap.toDrawable(context.resources)
     }
 
     companion object {

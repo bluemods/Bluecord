@@ -9971,13 +9971,13 @@ public final class R {
         public static final int CIRCLE = 0x7f0a1196;
         public static final int FLOWER = 0x7f0a1197;
         public static final int blue_audio_action_frame_container = 0x7f0a1198;
-        public static final int blue_audio_loader = 0x7f0a1199;
-        public static final int blue_audio_pause_button = 0x7f0a119a;
-        public static final int blue_audio_play_button = 0x7f0a119b;
-        public static final int blue_audio_play_pause_btn_container = 0x7f0a119c;
-        public static final int blue_audio_play_pause_btn_image = 0x7f0a119d;
-        public static final int blue_audio_send_btn_container = 0x7f0a119e;
-        public static final int blue_audio_send_btn_image = 0x7f0a119f;
+        public static final int blue_audio_delete_btn_image = 0x7f0a1199;
+        public static final int blue_audio_loader = 0x7f0a119a;
+        public static final int blue_audio_pause_button = 0x7f0a119b;
+        public static final int blue_audio_play_button = 0x7f0a119c;
+        public static final int blue_audio_play_pause_btn_container = 0x7f0a119d;
+        public static final int blue_audio_play_pause_btn_image = 0x7f0a119e;
+        public static final int blue_audio_send_btn_container = 0x7f0a119f;
         public static final int blue_id_1 = 0x7f0a11a0;
         public static final int blue_id_2 = 0x7f0a11a1;
         public static final int blue_id_3 = 0x7f0a11a2;
@@ -9994,9 +9994,10 @@ public final class R {
         public static final int blue_voice_upload_overlay = 0x7f0a11ad;
         public static final int blue_voice_wave = 0x7f0a11ae;
         public static final int blue_voice_text = 0x7f0a11af;
-        public static final int blue_audio_thumb = 0x7f0a11b0;
-        public static final int blue_audio_timer_text = 0x7f0a11b1;
-        public static final int blue_audio_voice_player_view = 0x7f0a11b2;
+        public static final int blue_audio_send_btn_image = 0x7f0a11b0;
+        public static final int blue_audio_thumb = 0x7f0a11b1;
+        public static final int blue_audio_timer_text = 0x7f0a11b2;
+        public static final int blue_audio_voice_player_view = 0x7f0a11b3;
     }
 
     public static final class integer {

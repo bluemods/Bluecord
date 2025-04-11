@@ -874,7 +874,7 @@
 .end method
 
 .method public onDestroyView()V
-    .locals 1
+    .locals 2
 
     .line 1
     invoke-super {p0}, Landroidx/fragment/app/Fragment;->onDestroyView()V
@@ -884,11 +884,16 @@
 
     invoke-virtual {v0, p0}, Lcom/discord/utilities/view/text/TextWatcher$Companion;->reset(Landroidx/fragment/app/Fragment;)V
 
+    iget-object v0, p0, Lcom/lytefast/flexinput/fragment/FlexInputFragment;->voiceManager:Lmods/audio/view/record/VoiceManager;
+    if-eqz v0, :cond_0
+    const/4 v1, 0x1
+    invoke-virtual {v0, v1}, Lmods/audio/view/record/VoiceManager;->finishRecording(Z)V
+    :cond_0
     return-void
 .end method
 
 .method public onPause()V
-    .locals 1
+    .locals 2
 
     .line 1
     iget-object v0, p0, Lcom/lytefast/flexinput/fragment/FlexInputFragment;->s:Lcom/lytefast/flexinput/viewmodel/FlexInputViewModel;
@@ -923,6 +928,11 @@
 
     .line 5
     :cond_3
+    iget-object v0, p0, Lcom/lytefast/flexinput/fragment/FlexInputFragment;->voiceManager:Lmods/audio/view/record/VoiceManager;
+    if-eqz v0, :cond_4
+    const/4 v1, 0x1
+    invoke-virtual {v0, v1}, Lmods/audio/view/record/VoiceManager;->finishRecording(Z)V
+    :cond_4
     invoke-super {p0}, Landroidx/fragment/app/Fragment;->onPause()V
 
     return-void
