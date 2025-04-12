@@ -7,7 +7,7 @@ import com.discord.models.message.Message
 
 object AudioMessageUtils {
     private val AUDIO_EXTENSIONS = setOf(
-        "opus", "ogg", "webm", "mp3", "aac", "m4a", "wav", "flac", "wma"
+        "opus", "ogg", "mp3", "aac", "m4a", "wav", "flac", "wma"
     )
 
     @JvmStatic
