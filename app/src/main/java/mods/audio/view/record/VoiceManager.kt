@@ -43,7 +43,6 @@ import mods.extensions.setHeader
 import mods.extensions.toRequestBody
 import mods.extensions.url
 import mods.extensions.use
-import mods.net.Net
 import mods.net.Net.client
 import mods.rn.ReactNativeSpoof
 import mods.utils.LogUtils
@@ -57,6 +56,13 @@ import java.util.TimerTask
 import java.util.concurrent.atomic.AtomicBoolean
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
+import mods.events.EventTracker
+import mods.extensions.code
+import mods.extensions.headers
+import mods.extensions.isSuccessful
+import mods.extensions.post
+import mods.extensions.string
+import java.io.IOException
 
 @RequiresApi(Build.VERSION_CODES.Q)
 class VoiceManager(
@@ -236,11 +242,11 @@ class VoiceManager(
         deleteBtnImage.setOnClickListener(null)
 
         giftBtn.isClickable = true
-        if (giftBtnVis != -1) giftBtn.visibility = giftBtnVis
+        setVisibilityIfValid(giftBtn, giftBtnVis)
         giftBtnVis = -1
 
         galleryBtn.isClickable = true
-        if (galleryBtnVis != -1) galleryBtn.visibility = galleryBtnVis
+        setVisibilityIfValid(galleryBtn, galleryBtnVis)
         galleryBtnVis = -1
 
         etInputText.isClickable = true
@@ -254,28 +260,31 @@ class VoiceManager(
             return
         }
 
-        val durationSecs = MediaMetadataRetrieverCompat().use {
-            it.setDataSource(oggFile.absolutePath)
-            it.extractMetadata(MediaMetadataRetrieverCompat.METADATA_KEY_DURATION)!!
-                .toLong()
-                .div(1000.0)
-                .times(100.0)
-                .toLong()
-                .div(100.0)
-        }
-
         setHint("Uploading...")
         ThreadUtils.runOnIOThread {
             try {
+                // Should always succeed because we encoded the file
+                val durationSecs = MediaMetadataRetrieverCompat().use {
+                    it.setDataSource(oggFile.absolutePath)
+                    it.extractMetadata(MediaMetadataRetrieverCompat.METADATA_KEY_DURATION)!!
+                        .toLong()
+                        .div(1000.0)
+                        .times(100.0)
+                        .toLong()
+                        .div(100.0)
+                }
+
                 val authHeaders = ReactNativeSpoof.makeHeaderMap(StoreUtils.getAuthToken())
 
-                val channelId = latestState.l
+                val channelId = latestState.l ?: error("No channel ID!")
                 val baseUrl = "https://discord.com/api/v9/channels/$channelId"
 
                 // 1) Get attachment upload URL
-                val (uploadUrl, uploadFilename) = Net.doPost(
-                    url = "$baseUrl/attachments",
-                    data = JSONObject().apply {
+                val (uploadUrl, uploadFilename) = client.newCall(RequestBuilder().apply {
+                    url("$baseUrl/attachments")
+                    headers(authHeaders)
+                    setHeader("Content-Type", "application/json")
+                    post(JSONObject().apply {
                         put("files", JSONArray().apply {
                             put(JSONObject().apply {
                                 put("filename", "voice-message.ogg")
@@ -283,11 +292,14 @@ class VoiceManager(
                                 // TODO this increments. How to get it? put("id", 0)
                             })
                         })
-                    },
-                    headers = authHeaders
-                )!!.use {
-                    val attachments =
-                        JSONObject(it.p.d()).getJSONArray("attachments").getJSONObject(0)
+                    }.toRequestBody())
+                }.build()).execute().use {
+                    if (!it.isSuccessful) {
+                        throw IOException("bad response code ${it.code}: ${it.string()}")
+                    }
+                    val attachments = JSONObject(it.p.d())
+                        .getJSONArray("attachments")
+                        .getJSONObject(0)
                     attachments.getString("upload_url") to attachments.getString("upload_filename")
                 }
 
@@ -299,14 +311,15 @@ class VoiceManager(
                 }.build()).execute().use {}
 
                 // 3) Send attachment
-
-                Net.doPost(
-                    url = "$baseUrl/messages",
-                    data = JSONObject().apply {
+                client.newCall(RequestBuilder().apply {
+                    url("$baseUrl/messages")
+                    headers(authHeaders)
+                    setHeader("Content-Type", "application/json")
+                    post(JSONObject().apply {
                         put("content", "")
                         put("channel_id", channelId.toString())
                         put("type", 0)
-                        put("flags", 8192)
+                        put("flags", 8192) // IS_VOICE_MESSAGE
                         put("attachments", JSONArray().apply {
                             put(JSONObject().apply {
                                 put("id", "0")
@@ -317,16 +330,17 @@ class VoiceManager(
                             })
                         })
                         put("nonce", NonceGenerator.computeNonce(ClockFactory.get()).toString())
-                    },
-                    headers = authHeaders
-                )!!.use {}
-            } catch (e: Throwable) {
-                LogUtils.logException(TAG, e)
-                ToastUtil.toastShort("Upload failed")
-            } finally {
-                rootView.post {
-                    restoreHint()
+                    }.toRequestBody())
+                }.build()).execute().use {
+                    if (!it.isSuccessful) {
+                        throw IOException("bad response code ${it.code}: ${it.string()}")
+                    }
                 }
+            } catch (e: Throwable) {
+                EventTracker.trackException(e)
+                ToastUtil.toastShort("Upload failed: ${e.message}")
+            } finally {
+                restoreHint()
             }
         }
     }
@@ -382,8 +396,10 @@ class VoiceManager(
     }
 
     private fun restoreHint() {
-        val hint = truncatedHint ?: return
-        WidgetChatInputTruncatedHint.`access$syncHint`(hint)
+        rootView.post {
+            val hint = truncatedHint ?: return@post
+            WidgetChatInputTruncatedHint.`access$syncHint`(hint)
+        }
     }
 
     // Fixes the drawable to match the size of the gift button
@@ -402,6 +418,14 @@ class VoiceManager(
         drawable.draw(canvas)
 
         return bitmap.toDrawable(context.resources)
+    }
+
+    private fun setVisibilityIfValid(view: View, visibility: Int) {
+        when (visibility) {
+            View.VISIBLE,
+            View.INVISIBLE,
+            View.GONE -> view.visibility = visibility
+        }
     }
 
     companion object {

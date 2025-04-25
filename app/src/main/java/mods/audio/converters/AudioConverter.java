@@ -27,7 +27,7 @@ public class AudioConverter {
     private static final String TAG = AudioConverter.class.getSimpleName();
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    public static void convertPCM16toOggNative(File pcm16Input, File effectFileOggOutput, TranscodingProgressListener listener) throws IOException {
+    public static void convertPCM16toOggNative(File pcm16Input, File oggOutput, TranscodingProgressListener listener) throws IOException {
         // 1. Configure MediaCodec encoder
         final long start = SystemClock.elapsedRealtime();
         MediaFormat outputFormat = MediaFormat.createAudioFormat(MediaFormat.MIMETYPE_AUDIO_OPUS, SAMPLE_RATE, CHANNEL_COUNT);
@@ -39,7 +39,7 @@ public class AudioConverter {
         codec.start();
 
         // 2. Configure MediaMuxer
-        final MediaMuxer muxer = new MediaMuxer(effectFileOggOutput.getAbsolutePath(), MediaMuxer.OutputFormat.MUXER_OUTPUT_OGG);
+        final MediaMuxer muxer = new MediaMuxer(oggOutput.getAbsolutePath(), MediaMuxer.OutputFormat.MUXER_OUTPUT_OGG);
 
         // 3. Process PCM16 data
         ByteBuffer[] inputBuffers = codec.getInputBuffers();
