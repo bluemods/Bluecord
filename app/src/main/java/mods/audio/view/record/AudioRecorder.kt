@@ -1,9 +1,9 @@
 package mods.audio.view.record
 
 import android.os.Build
-import androidx.annotation.RequiresApi
 import mods.audio.converters.AudioConverter
 import mods.audio.converters.TranscodingProgressListener
+import mods.audio.utils.AudioMessageUtils
 import mods.audio.view.record.impl.AbstractAudioRecorder
 import mods.audio.view.record.impl.BasicAudioRecorder
 import mods.audio.view.record.impl.Pcm16AudioRecorder
@@ -21,7 +21,7 @@ class AudioRecorder(private val manager: VoiceManager) {
         private val TAG = AudioRecorder::class.java.simpleName
 
         // If enabled, records a PCM16 stream
-        const val USE_PCM16_RECORDER = true
+        val USE_PCM16_RECORDER = AudioMessageUtils.isOpusSupported()
 
         @JvmStatic
         fun isPausingSupported(): Boolean {
@@ -60,7 +60,6 @@ class AudioRecorder(private val manager: VoiceManager) {
         return runCatching { recorder?.isPaused() == true }.getOrElse { false }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     fun stopRecording(discardAudio: Boolean) {
         recorder?.finishRecording()
         if (discardAudio) {
@@ -70,13 +69,21 @@ class AudioRecorder(private val manager: VoiceManager) {
             return
         }
         PromiseUtils.doInBackground {
-            AudioConverter.convertPCM16toOggNative(audioOutputFile, oggFile, object : TranscodingProgressListener {
+            val listener = object : TranscodingProgressListener {
                 override fun onTranscodingProgress(progress: Int) {
                     manager.setHint("Transcoding ($progress%)")
                 }
-            })
+            }
+
+            if (AudioMessageUtils.isOpusSupported()) {
+                AudioConverter.convertPCM16toOggNative(audioOutputFile, oggFile, listener)
+            }
         }.runOnMainThread().subscribe({
-            manager.onRecordingComplete(oggFile, false)
+            if (AudioMessageUtils.isOpusSupported()) {
+                manager.onRecordingComplete(oggFile, false)
+            } else {
+                manager.onRecordingComplete(audioOutputFile, false)
+            }
         }, {
             EventTracker.trackException(it)
             manager.onRecordingComplete(audioOutputFile, true)

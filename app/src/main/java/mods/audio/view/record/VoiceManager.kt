@@ -15,7 +15,6 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -64,7 +63,6 @@ import mods.extensions.post
 import mods.extensions.string
 import java.io.IOException
 
-@RequiresApi(Build.VERSION_CODES.Q)
 class VoiceManager(
     private val fragment: FlexInputFragment,
     private val rootView: View
@@ -231,8 +229,8 @@ class VoiceManager(
         }
     }
 
-    fun onRecordingComplete(oggFile: File, isFailed: Boolean) {
-        LogUtils.log(TAG, "onRecordingComplete(oggFile=$oggFile, isFailed=$isFailed)")
+    fun onRecordingComplete(audioFile: File, isFailed: Boolean) {
+        LogUtils.log(TAG, "onRecordingComplete(audioFile=$audioFile, isFailed=$isFailed)")
         cancelTimer()
         playPauseBtnImage.isVisible = false
         playPauseBtnImage.isEnabled = false
@@ -255,7 +253,7 @@ class VoiceManager(
         audioSendBtnImage.setImageResource(audioSendBtnResource)
 
         if (isFailed) {
-            oggFile.delete()
+            audioFile.delete()
             restoreHint()
             return
         }
@@ -263,9 +261,20 @@ class VoiceManager(
         setHint("Uploading...")
         ThreadUtils.runOnIOThread {
             try {
+                val filename = if (AudioMessageUtils.isOpusSupported()) {
+                    "voice-message.ogg"
+                } else {
+                    "voice-message.m4a"
+                }
+                val mimeType = if (AudioMessageUtils.isOpusSupported()) {
+                    "audio/ogg"
+                } else {
+                    "audio/aac"
+                }
+
                 // Should always succeed because we encoded the file
                 val durationSecs = MediaMetadataRetrieverCompat().use {
-                    it.setDataSource(oggFile.absolutePath)
+                    it.setDataSource(audioFile.absolutePath)
                     it.extractMetadata(MediaMetadataRetrieverCompat.METADATA_KEY_DURATION)!!
                         .toLong()
                         .div(1000.0)
@@ -287,8 +296,8 @@ class VoiceManager(
                     post(JSONObject().apply {
                         put("files", JSONArray().apply {
                             put(JSONObject().apply {
-                                put("filename", "voice-message.ogg")
-                                put("file_size", oggFile.length())
+                                put("filename", filename)
+                                put("file_size", audioFile.length())
                                 // TODO this increments. How to get it? put("id", 0)
                             })
                         })
@@ -306,7 +315,7 @@ class VoiceManager(
                 // 2) Upload attachment
                 client.newCall(RequestBuilder().apply {
                     url(uploadUrl)
-                    put(oggFile.toRequestBody("audio/ogg"))
+                    put(audioFile.toRequestBody(mimeType))
                     setHeader("User-Agent", ReactNativeSpoof.userAgent())
                 }.build()).execute().use {}
 
@@ -323,7 +332,7 @@ class VoiceManager(
                         put("attachments", JSONArray().apply {
                             put(JSONObject().apply {
                                 put("id", "0")
-                                put("filename", "voice-message.ogg")
+                                put("filename", filename)
                                 put("uploaded_filename", uploadFilename)
                                 put("duration_secs", durationSecs)
                                 put("waveform", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==")
@@ -434,7 +443,6 @@ class VoiceManager(
         @JvmStatic
         fun setup(fragment: FlexInputFragment, state: FlexInputState) {
             if (!AudioMessageUtils.isRecordingSupported()) {
-                // Sorry
                 return
             }
             if (fragment.voiceManager == null) {

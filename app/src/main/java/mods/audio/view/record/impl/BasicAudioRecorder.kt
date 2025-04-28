@@ -23,8 +23,8 @@ class BasicAudioRecorder(
         fun start(outputFile: File): BasicAudioRecorder {
             val recorder = newMediaRecorder().apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
-                setOutputFormat(MediaRecorder.OutputFormat.OGG)
-                setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
+                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
                 setAudioEncodingBitRate(AudioConstants.BITRATE)
                 setAudioSamplingRate(AudioConstants.SAMPLE_RATE)
                 setAudioChannels(AudioConstants.CHANNEL_COUNT)

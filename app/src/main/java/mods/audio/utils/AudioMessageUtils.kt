@@ -28,8 +28,13 @@ object AudioMessageUtils {
     }
 
     @JvmStatic
-    @ChecksSdkIntAtLeast(Build.VERSION_CODES.Q)
     fun isRecordingSupported(): Boolean {
+        return true
+    }
+
+    @JvmStatic
+    @ChecksSdkIntAtLeast(Build.VERSION_CODES.Q)
+    fun isOpusSupported(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
     }
 }

@@ -1,3 +1,9 @@
+lib/armeabi/libiconv.so
+lib/armeabi/libzbarjni.so
+lib/mips64/libiconv.so
+lib/mips64/libzbarjni.so
+lib/mips/libiconv.so
+lib/mips/libzbarjni.so
 res/values-ku/strings.xml
 smali/z/g.smali
 smali/z/b$a.smali

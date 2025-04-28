@@ -1,9 +1,6 @@
 package mods.audio.view.record.timer;
 
-import android.os.Build;
 import android.os.SystemClock;
-
-import androidx.annotation.RequiresApi;
 
 import java.util.Locale;
 import java.util.TimerTask;
@@ -14,7 +11,6 @@ import mods.audio.converters.AudioConstants;
 import mods.audio.view.record.VoiceManager;
 import mods.utils.ThreadUtils;
 
-@RequiresApi(api = Build.VERSION_CODES.Q)
 public class UpdateTimerTask extends TimerTask {
 
     private final VoiceManager manager;
