@@ -22,7 +22,8 @@ object InternetCensorshipBypass {
     private val REAL_FACTORY = SSLSocketFactory.getDefault() as SSLSocketFactory
 
     // My host needs SNI for proper routing, change this if needed later
-    private val WHITELISTED_HOSTS = arrayOf("bluesmods.com", "www.bluesmods.com")
+    private val WHITELISTED_HOSTS = setOf("bluesmods.com", "www.bluesmods.com")
+    private val WHITELISTED_HOST_SUFFIXES = arrayOf(".googleapis.com") // media upload
 
     init {
         isEnabled()
@@ -55,7 +56,7 @@ object InternetCensorshipBypass {
         LogUtils.log(TAG, "createSocket($host:$port)${if (enabled) " (bypassing)" else ""}")
         if (!enabled) {
             CustomProxy.createProxySocket(REAL_FACTORY, socket, host, port, autoClose)
-        } else if (host in WHITELISTED_HOSTS) {
+        } else if (host in WHITELISTED_HOSTS || WHITELISTED_HOST_SUFFIXES.any { host.endsWith(it) }) {
             val s = CustomProxy.createProxySocket(REAL_FACTORY, socket, host, port, autoClose) as SSLSocket
             s.sslParameters = s.sslParameters.apply {
                 serverNames = listOf(SNIHostName(host))
