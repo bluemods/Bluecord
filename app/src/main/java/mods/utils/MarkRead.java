@@ -1,9 +1,12 @@
 package mods.utils;
 
+import android.content.Context;
+
 import com.discord.stores.StoreStream;
 import com.discord.utilities.rest.RestAPI;
 import com.discord.utilities.rx.ObservableExtensionsKt;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +23,6 @@ public class MarkRead {
     // TODO: maybe if someone requests it
     // public static void markDMsRead() {}
 
-    @SuppressWarnings("unchecked")
     public static void markGuildsRead() {
         StoreStream.getReadStates().getUnreadGuildIds().Z(1).U(new b<>(unreadIds -> {
             if (unreadIds.isEmpty()) {
@@ -36,43 +38,48 @@ public class MarkRead {
             for (Long id : unreadIds) {
                 observableChain.add(ObservableExtensionsKt.restSubscribeOn$default(RestAPI.getApi().ackGuild(id), false, 1, null));
             }
-            Class<?> function1;
-            try {
-                function1 = Class.forName("kotlin.jvm.functions.Function1");
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
 
-            Object proxy = Proxy.newProxyInstance(
-                    MarkRead.class.getClassLoader(),
-                    new Class[]{function1},
-                    (o, method, objects) -> {
-                        switch (method.getName()) {
-                            case "invoke": {
-                                // onNext (all ackGuild requests done)
-                                int size = ((List<?>)objects[0]).size();
-                                ToastUtil.toast(String.format("Marked %s %s read", size, StringUtils.plural("guild", size)));
-                                return null;
-                            }
-                            default: {
-                                throw new NoSuchMethodError();
+            try {
+                Class<?> function0 = Class.forName("kotlin.jvm.functions.Function0");
+                Class<?> function1 = Class.forName("kotlin.jvm.functions.Function1");
+
+                Object proxy = Proxy.newProxyInstance(
+                        MarkRead.class.getClassLoader(),
+                        new Class[]{function1},
+                        (o, method, objects) -> {
+                            switch (method.getName()) {
+                                case "invoke": {
+                                    // onNext (all ackGuild requests done)
+                                    int size = ((List<?>)objects[0]).size();
+                                    ToastUtil.toast(String.format("Marked %s %s read", size, StringUtils.plural("guild", size)));
+                                    return null;
+                                }
+                                default: {
+                                    throw new NoSuchMethodError();
+                                }
                             }
                         }
-                    }
-            );
+                );
 
-            ObservableExtensionsKt.appSubscribe$default(
-                    ObservableExtensionsKt.restSubscribeOn$default(Observable.H(Observable.h0(new q<>(observableChain))).f0(), false, 1, null),
-                    MarkRead.class,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    (Function1) proxy,
-                    0x3e,
-                    null
-            );
+                Class<?> cls = Class.forName("com.discord.utilities.rx.ObservableExtensionsKt");
+                Method m = cls.getMethod("appSubscribe$default", Observable.class, Class.class, Context.class, function1, function1, function0, function0, function1, int.class, Object.class);
+
+                m.invoke(
+                        null,
+                        ObservableExtensionsKt.restSubscribeOn$default(Observable.H(Observable.h0(new q<>(observableChain))).f0(), false, 1, null),
+                        MarkRead.class,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        proxy,
+                        0x3e,
+                        null
+                );
+            } catch (Throwable e) {
+                LogUtils.log(TAG, "reflection failed", e);
+            }
         }, throwable -> {
             LogUtils.log(TAG, "failed", throwable);
         }, () -> {}));

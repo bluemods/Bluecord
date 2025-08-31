@@ -108,12 +108,13 @@ public class StoreUtils {
                     (o, unused, objects) -> null
             );
 
-            ObservableExtensionsKt.appSubscribe$default(
+            m.invoke(
+                    null,
                     ObservableExtensionsKt.restSubscribeOn$default(observable, false, 1, null),
                     DiscordTools.getContext(),
                     "javaClass",
                     null,
-                    (Function1) proxy,
+                    proxy,
                     null,
                     null,
                     null,
