@@ -54,6 +54,28 @@
 
 # virtual methods
 .method public invoke()Ljava/lang/Object;
+    .locals 2
+
+    :try_start_0
+    invoke-direct {p0}, Lb/a/q/n0/a$j;->invokeReal()Ljava/lang/Object;
+
+    move-result-object v0
+    :try_end_0
+    .catchall {:try_start_0 .. :try_end_0} :catchall_0
+
+    return-object v0
+
+    :catchall_0
+    move-exception v0
+
+    invoke-static {v0}, Lmods/events/EventTracker;->trackException(Ljava/lang/Throwable;)V
+
+    sget-object v1, Lkotlin/Unit;->a:Lkotlin/Unit;
+
+    return-object v1
+.end method
+
+.method private invokeReal()Ljava/lang/Object;
     .locals 10
 
     .line 1

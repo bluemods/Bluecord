@@ -97,7 +97,7 @@ public class SpoofUtils {
                 ).U(new j0.l.e.b<>(
                         sticker -> LogUtils.log(TAG, "sticker sent: " + sticker),
                         throwable -> LogUtils.log(TAG, "sticker failed to send", throwable),
-                        ToastUtil::cancelAll
+                        ToastUtil::cancel
                 ));
             });
         }, th -> {

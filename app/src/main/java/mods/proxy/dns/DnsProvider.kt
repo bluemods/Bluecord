@@ -49,6 +49,10 @@ abstract class DnsProvider {
         for (i in 0..maxAttempts) {
             try {
                 val results = hostForNameImpl(host)
+                if (results.isEmpty()) {
+                    LogUtils.log(TAG, "${javaClass.simpleName}: no results for $host")
+                    return null
+                }
                 lock.withLock {
                     cacheMap[host] = results
                     return RandomUtils.shuffledIterator(results).next().host

@@ -1,5 +1,7 @@
 package mods.constants;
 
+import android.graphics.Canvas;
+
 public final class Constants {
 
     // used to make it easier to find
@@ -9,8 +11,8 @@ public final class Constants {
 
     // Version number. This is changed on release
     // and is used for checking if Bluecord needs an update
-    public static final int    VERSION_CODE = 24200;
-    public static final String VERSION_NAME = "2.4.2";
+    public static final int    VERSION_CODE = 25000;
+    public static final String VERSION_NAME = "2.5.0";
 
     // Adds support for Bluecord emotes and other systems that use a '.'
     public static final String VALID_UNICODE_EMOJI_PATTERN = "^<&?\u200b?(a)?[:|\\.]([a-zA-Z_0-9]+)[:|\\.](\\d+)>";
@@ -20,4 +22,12 @@ public final class Constants {
     public static final String GOOGLE_TRANSLATE_API_KEY = "";
 
     public static final int CODE_RECORD_ACCESS = 7019;
+
+    public void draw(Canvas canvas) {
+        try {
+            drawActual(canvas);
+        } catch (Throwable ignore) {}
+    }
+
+    private void drawActual(Canvas canvas) {}
 }

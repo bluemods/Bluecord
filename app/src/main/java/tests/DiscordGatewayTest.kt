@@ -1,12 +1,8 @@
-package mods.proxy
+package tests
 
 import android.util.Log
-import mods.extensions.OkHttpClientBuilder
-import mods.extensions.RequestBuilder
-import mods.extensions.build
-import mods.extensions.newWebSocket
-import mods.extensions.sslSocketFactory
-import mods.extensions.url
+import mods.extensions.*
+import mods.proxy.Interceptor
 import mods.utils.LogUtils
 import okhttp3.Response
 import okhttp3.WebSocket

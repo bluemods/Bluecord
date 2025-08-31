@@ -294,4 +294,8 @@ public class StringUtils {
             return String.format(Locale.US, "%s KB", kb);
         }
     }
+
+    public static CharSequence trimCharSequence(CharSequence c) {
+        return c instanceof String ? ((String) c).trim() : c;
+    }
 }

@@ -22,7 +22,7 @@ object EventTracker {
     fun trackException(t: Throwable?) {
         val ts = SystemClock.elapsedRealtime()
 
-        if (totalTracked >= 25) {
+        if (totalTracked >= 20) {
             LogUtils.log(TAG, "not uploading, max request limit hit", t)
         } else if (totalTracked >= 5 && ts - lastTracked <= 10000) {
             LogUtils.log(TAG, "not uploading, multiple requests in 10s window", t)

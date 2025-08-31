@@ -116,10 +116,10 @@ object CustomProxy {
         val payload = buildString {
             append("CONNECT $host:$port HTTP/1.1")
             append("\r\n")
-            append("hOsT: $host:$port")
+            append("Host: $host:$port")
             if (config.hasCredentials) {
                 append("\r\n")
-                append("pRoXy-AuThOrIZaTiOn: Basic ")
+                append("Proxy-Authorization: Basic ")
                 append(Base64.encodeToString("$proxyUsername:$proxyPassword".toByteArray(), Base64.NO_WRAP))
             }
             append("\r\n")
@@ -164,18 +164,20 @@ object CustomProxy {
 
     @JvmStatic
     fun testProxyIp(config: HttpProxyConfig? = loadConfig()): String {
+        val host = "checkip.amazonaws.com"
+        val port = 443
         return createProxySocket(
             factory = SSLSocketFactory.getDefault() as SSLSocketFactory,
             socket = Socket(),
-            host = "checkip.amazonaws.com",
-            port = 443,
+            host = host,
+            port = port,
             autoClose = true,
             config = config
         ).use { socket ->
             socket.getOutputStream().apply {
                 write(buildString {
                     append("GET / HTTP/1.0\r\n")
-                    append("Host: checkip.amazonaws.com\r\n")
+                    append("Host: $host\r\n")
                     append("Connection: close\r\n")
                     append("\r\n")
                 }.toByteArray())

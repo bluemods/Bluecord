@@ -1,39 +1,50 @@
-package mods.utils;
+package mods.utils
 
-import android.os.StrictMode;
+import android.os.StrictMode
+import android.os.StrictMode.VmPolicy
+import mods.DiscordTools
+import mods.promise.runCatchingOrLog
+import java.io.File
 
-public class DebugUtils {
+object DebugUtils {
 
-    public static boolean showDebugMenu(boolean isStaff) {
-         return true;
+    @JvmStatic
+    fun showDebugMenu(isStaff: Boolean): Boolean {
+        return true
     }
 
-    public static void dumpStack() {
-        StringBuilder sb = new StringBuilder("Blue Stack\n------------------");
-        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
-            sb.append(element.toString()
+    @JvmStatic
+    fun dumpStack() {
+        val sb = StringBuilder("Blue Stack\n------------------")
+        for (element in Thread.currentThread().getStackTrace()) {
+            sb.append(
+                element.toString()
                     .replace("[", "")
                     .replace("]", "")
                     .replace(",", "\n")
-            );
+            )
         }
-        LogUtils.log("Blue Stack", sb.toString().trim());
+        LogUtils.log("Blue Stack", sb.toString().trim { it <= ' ' })
     }
 
-    public static void logRecursively(String tag, String content) {
-        if (content.length() > 4000) {
-            LogUtils.log(tag, content.substring(0, 4000));
-            logRecursively(tag, content.substring(4000));
+    @JvmStatic
+    fun logRecursively(tag: String, content: String) {
+        if (content.length > 4000) {
+            LogUtils.log(tag, content.substring(0, 4000))
+            logRecursively(tag, content.substring(4000))
         } else {
-            LogUtils.log(tag, content);
+            LogUtils.log(tag, content)
         }
     }
 
-    public static void enableLogging() {
-        ToastUtil.toast("StrictMode is enabled. Remove before release!");
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+    @JvmStatic
+    fun enableLogging() {
+        ToastUtil.toast("StrictMode is enabled. Remove before release!")
+        StrictMode.setVmPolicy(
+            VmPolicy.Builder()
                 .detectAll()
                 .penaltyLog()
-                .build());
+                .build()
+        )
     }
 }

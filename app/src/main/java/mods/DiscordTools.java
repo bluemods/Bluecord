@@ -37,8 +37,10 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import kotlin.Unit;
 import mods.activity.ProcessPhoenix;
 import mods.constants.PreferenceKeys;
+import mods.events.EventTracker;
 import mods.preference.Prefs;
 import mods.utils.LogUtils;
 import mods.utils.RefreshUtils;
@@ -57,17 +59,16 @@ public class DiscordTools {
     public static Context getContext() {
         if (App.app != null) {
             return App.app;
-        } else {
-            try {
-                return ApplicationProvider.INSTANCE.get();
-            } catch (Throwable ignore) {
-                // If we get here, we were likely launched from Firebase, as it has the highest init order.
-                // Try to get the context from there.
-                return Objects.requireNonNull(
-                        FirebaseInitProvider.context,
-                        "Could not get context from anywhere!"
-                );
-            }
+        }
+        try {
+            return ApplicationProvider.INSTANCE.get();
+        } catch (Throwable ignore) {
+            // If we get here, we were likely launched from Firebase, as it has the highest init order.
+            // Try to get the context from there.
+            return Objects.requireNonNull(
+                    FirebaseInitProvider.context,
+                    "Could not get context from anywhere!"
+            );
         }
     }
 
@@ -167,5 +168,18 @@ public class DiscordTools {
             } catch (Throwable ignore) {}
         }
         return ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+    }
+
+    public Object invoke() {
+        try {
+            return invokeReal();
+        } catch (Throwable e) {
+            EventTracker.trackException(e);
+            return Unit.INSTANCE;
+        }
+    }
+
+    private Object invokeReal() {
+        return Unit.INSTANCE;
     }
 }
