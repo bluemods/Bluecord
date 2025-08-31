@@ -35,7 +35,7 @@ object QuickAccessPrefs {
         isBetterStatusIndicatorEnabled = Prefs.getBoolean(BETTER_STATUS_INDICATOR, false)
         isShowHiddenChannelsEnabled = Prefs.getBoolean(REVEAL_HIDDEN_CHANNELS, false)
         isAttachmentFileSizeEnabled = Prefs.getBoolean(SHOW_FILE_SIZES, false)
-        isNitroStickerEnabled = Prefs.getBoolean(STICKER_SPOOF, false)
+        isNitroStickerEnabled = Prefs.getBoolean(STICKER_SPOOF, true)
         isEditTimestampEnabled = Prefs.getBoolean(SHOW_EDIT_TIMESTAMP, false)
         isTextCharCountEnabled = Prefs.getBoolean(SHOW_TEXT_CHAR_COUNT, false)
         emoteMode = EmoteMode(Prefs.getString(EMOTE_MODE, "Off"))

@@ -1594,7 +1594,7 @@
 
     invoke-static {p2, v0}, Ld0/z/d/m;->checkNotNullParameter(Ljava/lang/Object;Ljava/lang/String;)V
 
-    invoke-static {p1}, Lmods/parser/WebSocketHelper;->onWebSocketReceive(Ljava/lang/String;)V
+    invoke-static {p2}, Lmods/parser/WebSocketHelper;->onWebSocketReceive(Ljava/lang/String;)V
 
     .line 1
     iget-object v0, p0, Lb/a/q/n0/a;->n:Lcom/google/gson/Gson;

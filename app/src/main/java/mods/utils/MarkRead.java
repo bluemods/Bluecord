@@ -13,7 +13,6 @@ import java.util.List;
 
 import j0.l.a.q;
 import j0.l.e.b;
-import kotlin.jvm.functions.Function1;
 import rx.Observable;
 
 public class MarkRead {

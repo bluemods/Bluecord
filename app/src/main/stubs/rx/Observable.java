@@ -30,4 +30,9 @@ public class Observable<T> {
     public Observable<T> Z(int number) {
         return this;
     }
+
+    /** subscribe */
+    public final Subscription W(Action1<? super T> onNext, Action1<Throwable> onError) {
+        return null;
+    }
 }

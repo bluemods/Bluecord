@@ -153,6 +153,7 @@
 
     .line 9
     sget-object v4, Lb/a/q/n0/a;->k:Ljava/lang/reflect/Type;
+    const-class v4, Lmods/parser/MediaSinkWantsPayload;
 
     .line 10
     invoke-static {v1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
@@ -169,7 +170,7 @@
 
     invoke-direct {v5, v2}, Lb/i/d/q/x/a;-><init>(Lcom/google/gson/JsonElement;)V
 
-    invoke-virtual {v1, v5, v4}, Lcom/google/gson/Gson;->d(Lcom/google/gson/stream/JsonReader;Ljava/lang/reflect/Type;)Ljava/lang/Object;
+    invoke-virtual {v1, v5, v4}, Lcom/google/gson/Gson;->d(Lcom/google/gson/stream/JsonReader;Ljava/lang/Class;)Ljava/lang/Object;
 
     move-result-object v1
 
@@ -179,7 +180,10 @@
     .line 12
     invoke-static {v1, v2}, Ld0/z/d/m;->checkNotNullExpressionValue(Ljava/lang/Object;Ljava/lang/String;)V
 
-    check-cast v1, Ljava/util/Map;
+    # check-cast v1, Ljava/util/Map;
+    check-cast v1, Lmods/parser/MediaSinkWantsPayload;
+    invoke-virtual {v1}, Lmods/parser/MediaSinkWantsPayload;->getPixelCounts()Ljava/util/Map;
+    move-result-object v1
 
     .line 13
     iget-object v2, v0, Lb/a/q/n0/a;->H:Lb/a/q/c;
