@@ -67,7 +67,7 @@ class VoiceManager(
     private val fragment: FlexInputFragment,
     private val rootView: View
 ) {
-    private val audioSendBtnContainer = rootView.findViewById<FrameLayout>(R.id.blue_audio_send_btn_container)
+    private val audioSendBtnContainer = rootView.findViewById<FrameLayout>(R.id.send_btn_container)
     private val audioSendBtnImage = rootView.findViewById<ImageView>(R.id.blue_audio_send_btn_image)
 
     private val playPauseBtnImage = rootView.findViewById<AppCompatImageButton>(R.id.blue_audio_play_pause_btn_image)
@@ -122,7 +122,7 @@ class VoiceManager(
         audioSendBtnImage.isVisible = true
         audioSendBtnImage.isEnabled = true
         audioSendBtnImage.setImageResource(audioSendBtnResource)
-        audioSendBtnContainer.setOnClickListener {
+        audioSendBtnImage.setOnClickListener {
             if (isRecording.get()) {
                 finishRecording()
             } else if (checkAudioPermissions()) {
@@ -137,8 +137,6 @@ class VoiceManager(
 
     private fun disableVoiceButton() {
         LogUtils.log(TAG, "disableVoiceButton()")
-        audioSendBtnContainer.isVisible = false
-        audioSendBtnContainer.isEnabled = false
         audioSendBtnImage.isVisible = false
         audioSendBtnImage.isEnabled = false
         playPauseBtnImage.isVisible = false
@@ -249,7 +247,7 @@ class VoiceManager(
 
         etInputText.isClickable = true
         etInputText.isFocusableInTouchMode = true
-        audioSendBtnContainer.isClickable = true
+        audioSendBtnImage.isClickable = true
         audioSendBtnImage.setImageResource(audioSendBtnResource)
 
         if (isFailed) {
@@ -358,7 +356,7 @@ class VoiceManager(
     fun finishRecording(delete: Boolean = false) {
         rootView.post {
             isRecording.set(false)
-            audioSendBtnContainer.isClickable = false
+            audioSendBtnImage.isClickable = false
             cancelTimer()
             val task = updateTimerTask
             if (delete) {

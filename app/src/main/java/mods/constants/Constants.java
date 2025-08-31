@@ -1,7 +1,5 @@
 package mods.constants;
 
-import android.graphics.Canvas;
-
 public final class Constants {
 
     // used to make it easier to find
@@ -23,11 +21,4 @@ public final class Constants {
 
     public static final int CODE_RECORD_ACCESS = 7019;
 
-    public void draw(Canvas canvas) {
-        try {
-            drawActual(canvas);
-        } catch (Throwable ignore) {}
-    }
-
-    private void drawActual(Canvas canvas) {}
 }

@@ -26,7 +26,7 @@ object WebSocketHelper {
         }
         runCatchingOrLog {
             val directory = File(FileUtils.bluecordDir, "websocket").apply { mkdirs() }
-            val file = FileUtils.getSafSafePath(File(directory, "receive.txt"))
+            val file = FileUtils.getSafSafePath(File(directory, "ws.txt"))
 
             file.appendText(buildString {
                 append("\n[${DiscordTools.formatDate(StoreUtils.getServerSyncedTime())}]")

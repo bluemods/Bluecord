@@ -59,31 +59,21 @@
             </FrameLayout>
         </LinearLayout>
         <FrameLayout android:id="@id/send_btn_container" android:background="@drawable/drawable_circle_black" android:visibility="gone" android:clipToPadding="false" android:layout_width="40.0dip" android:layout_height="40.0dip" android:layout_marginLeft="8.0dip" android:layout_marginTop="8.0dip" android:layout_marginRight="12.0dip" android:layout_marginBottom="8.0dip" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:contentDescription="@string/send_message" android:animateLayoutChanges="true" android:backgroundTint="?chat_send_btn_bg">
-            <ImageView android:layout_gravity="center" android:id="@id/send_btn_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/ic_send_24dp" android:importantForAccessibility="no" app:tint="?chat_send_btn" />
-        </FrameLayout>
-        <FrameLayout 
-            android:id="@id/blue_audio_send_btn_container" 
-            android:background="@drawable/drawable_circle_black" 
-            android:visibility="gone" 
-            android:clipToPadding="false" 
-            android:layout_width="40.0dip" 
-            android:layout_height="40.0dip" 
-            android:layout_marginLeft="8.0dip" 
-            android:layout_marginTop="8.0dip" 
-            android:layout_marginRight="12.0dip" 
-            android:layout_marginBottom="8.0dip" 
-            android:layout_alignParentRight="true" 
-            android:layout_centerVertical="true" 
-            android:contentDescription="@string/send_message" 
-            android:animateLayoutChanges="true" 
-            android:backgroundTint="?chat_send_btn_bg">
+            <ImageView 
+                android:layout_gravity="center" 
+                android:id="@id/send_btn_image" 
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content" 
+                android:src="@drawable/ic_send_24dp" 
+                android:importantForAccessibility="no" 
+                app:tint="?chat_send_btn" />
             <ImageView android:layout_gravity="center" 
                 android:id="@id/blue_audio_send_btn_image" 
                 android:layout_width="wrap_content" 
                 android:layout_height="wrap_content" 
                 android:src="@drawable/ic_send_24dp" 
                 android:importantForAccessibility="no" 
-                app:tint="?chat_send_btn" />
+                app:tint="?chat_send_btn" />          
         </FrameLayout>
         <TextView android:gravity="center" android:id="@id/cannot_send_text" android:background="?colorBackgroundSecondary" android:paddingLeft="12.0dip" android:paddingTop="24.0dip" android:paddingRight="12.0dip" android:paddingBottom="24.0dip" android:focusable="true" android:visibility="gone" android:clickable="true" android:layout_height="wrap_content" android:text="@string/no_send_messages_permission_placeholder" android:layout_alignParentStart="true" android:layout_alignParentEnd="true" style="@style/UiKit.TextView" />
     </RelativeLayout>

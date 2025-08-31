@@ -169,17 +169,4 @@ public class DiscordTools {
         }
         return ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
     }
-
-    public Object invoke() {
-        try {
-            return invokeReal();
-        } catch (Throwable e) {
-            EventTracker.trackException(e);
-            return Unit.INSTANCE;
-        }
-    }
-
-    private Object invokeReal() {
-        return Unit.INSTANCE;
-    }
 }
