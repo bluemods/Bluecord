@@ -8,7 +8,7 @@ import java.io.File
 
 object WebSocketHelper {
 
-    private const val LOG_WS = true // TODO set to false
+    private const val LOG_WS = false
 
     @JvmStatic
     fun onWebSocketSend(data: String) {

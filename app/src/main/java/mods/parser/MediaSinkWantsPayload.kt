@@ -7,5 +7,5 @@ import b.i.d.p.SerializedName
  */
 data class MediaSinkWantsPayload(
     @SerializedName("pixelCounts") val pixelCounts: Map<String, Int>,
-    @SerializedName("any") val any: Int
+    @SerializedName("any") val any: Long
 )
