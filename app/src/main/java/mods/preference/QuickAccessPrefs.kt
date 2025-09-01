@@ -24,6 +24,8 @@ object QuickAccessPrefs {
         private set
     @JvmStatic var tagMode: String = ""
         private set
+    @JvmStatic var disableTyping: Boolean = false
+        private set
 
     init {
         reload()
@@ -40,5 +42,6 @@ object QuickAccessPrefs {
         isTextCharCountEnabled = Prefs.getBoolean(SHOW_TEXT_CHAR_COUNT, false)
         emoteMode = EmoteMode(Prefs.getString(EMOTE_MODE, "Off"))
         tagMode = Prefs.getString(SHOW_TAG_V2, "Off")
+        disableTyping = Prefs.getBoolean(DISABLE_TYPING, false)
     }
 }

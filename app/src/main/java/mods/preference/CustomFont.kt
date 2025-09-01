@@ -13,6 +13,7 @@ import android.text.Spanned
 import android.text.style.TypefaceSpan
 import android.util.AttributeSet
 import mods.DiscordTools
+import mods.DiscordTools.extractActivity
 import mods.activity.BlueSettingsActivity
 import mods.constants.PreferenceKeys.CUSTOM_FONT_PATH
 import mods.constants.PreferenceKeys.CUSTOM_FONT
@@ -55,7 +56,8 @@ class CustomFont(context: Context?, attrs: AttributeSet?)
                             },
                             extraMimeTypes = arrayOf("font/ttf", "font/otf")
                         )
-                        DiscordTools.getActivity(context).startActivityForResult(intent, BlueSettingsActivity.REQUEST_CODE_PICK_FONT_FILE)
+                        context.extractActivity!!
+                            .startActivityForResult(intent, BlueSettingsActivity.REQUEST_CODE_PICK_FONT_FILE)
                     }
                     2 -> reset()
                 }
@@ -164,7 +166,7 @@ class CustomFont(context: Context?, attrs: AttributeSet?)
                 try {
                     synchronized(fontCache) {
                         fontCache.getOrPut(font) {
-                            Typeface.createFromAsset(DiscordTools.getContext().assets, font)
+                            Typeface.createFromAsset(DiscordTools.context.assets, font)
                         }
                     }
                 } catch (e: Exception) {

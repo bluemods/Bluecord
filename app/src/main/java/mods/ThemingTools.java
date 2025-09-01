@@ -57,7 +57,6 @@ import java.util.Map;
 
 import b.f.g.f.a;
 import b.f.g.f.c;
-import mods.activity.update.Updater;
 import mods.audio.view.player.headphone.HeadphoneUnpluggedReceiver;
 import mods.constants.PreferenceKeys;
 import mods.constants.URLConstants;
@@ -86,8 +85,7 @@ public class ThemingTools {
     private static Typeface typeface;
     public static final int KIK_BLUE_COLOR = Color.parseColor("#ff26beff");
 
-    public static void init(Activity activity, boolean relaunch) {
-        // DebugUtils.enableLogging();
+    public static void init(Activity activity) {
         Prefs.migrateLegacyPrefs();
         Colors.init();
         QuickAccessPrefs.reload();
@@ -95,8 +93,6 @@ public class ThemingTools {
         EventTracker.flushEvents();
         setupExperiments();
         setupWindowColors(activity);
-
-        if (!relaunch) Updater.checkFromLaunch(activity);
 
         if (Prefs.getBoolean(PreferenceKeys.WAS_TOKEN_LOGIN, false)) {
             ToastUtil.customToast(activity, "Token login was successful");

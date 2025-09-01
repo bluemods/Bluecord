@@ -40,7 +40,7 @@ public final class ToastUtil {
                 return;
             }
             if (lastToast != null) lastToast.cancel();
-            lastToast = makeSafeToast(DiscordTools.getApplication(), trimmedText, length);
+            lastToast = makeSafeToast(DiscordTools.getApp(), trimmedText, length);
             lastToast.show();
         });
     }
@@ -50,7 +50,7 @@ public final class ToastUtil {
         if (StringUtils.isEmpty(trimmedText)) return;
         if (lastToast != null) lastToast.cancel();
         toastsBlockedUntil = SystemClock.elapsedRealtime() + 5000;
-        uiHandler.post(() -> makeSafeToast(DiscordTools.getApplication(), trimmedText, Toast.LENGTH_LONG).show());
+        uiHandler.post(() -> makeSafeToast(DiscordTools.getApp(), trimmedText, Toast.LENGTH_LONG).show());
     }
 
     /*public static void toastAboveKeyboard(@NotNull final String text) {

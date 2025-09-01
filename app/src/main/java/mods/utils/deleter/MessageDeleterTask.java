@@ -72,7 +72,7 @@ public class MessageDeleterTask {
         this.guildId = guildId;
         this.minTimestamp = minTimestamp;
         this.limit = limit;
-        this.builder = new Notification.Builder(DiscordTools.getApplication())
+        this.builder = new Notification.Builder(DiscordTools.getApp())
                 .setOngoing(true)
                 .setSmallIcon(R.drawable.ic_notification_24dp)
                 .setContentTitle("Message Deleter")
@@ -151,7 +151,7 @@ public class MessageDeleterTask {
         } catch (NoConnectionException e) {
             LogUtils.log(TAG, "NoConnectionException", e);
 
-            if (++connectionFails >= 3 || !DiscordTools.isConnected()) {
+            if (++connectionFails >= 3 || !DiscordTools.isNetworkConnected()) {
                 Notifications.showNotification(
                         NOTIFICATIONS_DELETE_TASK_ID,
                         "Message Delete Error",

@@ -102,7 +102,7 @@ public class LoginPageOptions {
                             return;
                         }
 
-                        TokenChecker.check(activity, token, result -> {
+                        TokenChecker.check(activity, token).subscribe(result -> {
                             switch (result) {
                                 case OK: {
                                     AuthenticationUtils.restoreToken(activity, token);

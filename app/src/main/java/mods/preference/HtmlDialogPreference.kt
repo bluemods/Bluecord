@@ -10,6 +10,7 @@ import mods.dialog.Dialogs
 import mods.extensions.string
 import mods.net.Net
 import mods.dialog.SimpleLoadingSpinner
+import mods.promise.hideSpinner
 import mods.utils.ToastUtil
 
 class HtmlDialogPreference(
@@ -30,12 +31,11 @@ class HtmlDialogPreference(
 
     @Deprecated("Deprecated in Java")
     override fun onPreferenceClick(preference: Preference?): Boolean {
-        val spinner = SimpleLoadingSpinner(context).show("Loading...")
-        Net.doGetAsync(URLConstants.phpLink(query), onSuccess = {
-            spinner.hide()
+        Net.doGetAsync(URLConstants.phpLink(query)).hideSpinner(
+            SimpleLoadingSpinner(context).show("Loading...")
+        ).subscribe ({
             Dialogs.basicAlertLinkify(context, title, it.string())
-        }, onError = {
-            spinner.hide()
+        }, {
             ToastUtil.toast("Failed to load, check your Internet and retry.")
         })
         return true

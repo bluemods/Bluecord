@@ -13,7 +13,7 @@ object ClipboardUtil {
     fun copy(data: String?, toastMessage: String? = null) {
         if (data.isNullOrEmpty()) return
 
-        val cm = DiscordTools.getApplication().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val cm = DiscordTools.app.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         cm.setPrimaryClip(ClipData.newPlainText("", data))
 
         if (toastMessage?.isNotEmpty() == true && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {

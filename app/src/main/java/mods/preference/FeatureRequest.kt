@@ -4,19 +4,19 @@ package mods.preference
 import android.annotation.SuppressLint
 import android.content.Context
 import android.preference.Preference
-import android.preference.Preference.OnPreferenceClickListener
 import android.text.InputType
 import android.util.AttributeSet
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import mods.DiscordTools
+import mods.DiscordTools.extractActivity
 import mods.constants.URLConstants
 import mods.dialog.Dialogs
 import mods.extensions.json
 import mods.net.Net
 import mods.dialog.SimpleLoadingSpinner
+import mods.promise.hideSpinner
 import mods.utils.ClipboardUtil
 import mods.utils.StoreUtils
 import mods.utils.StringUtils
@@ -63,7 +63,7 @@ class FeatureRequest @SuppressLint("SetTextI18n") constructor(
 
                     if (feedbackText.isEmpty()) {
                         ToastUtil.customToast(
-                            DiscordTools.getActivity(context),
+                            getContext().extractActivity!!,
                             "Please write something!"
                         )
                     } else {
@@ -85,23 +85,17 @@ class FeatureRequest @SuppressLint("SetTextI18n") constructor(
             }
         }
 
-        val spinner = SimpleLoadingSpinner(context).apply {
-            show("Sending feedback...")
-        }
-
         Net.doPostAsync(
             url = URLConstants.phpLink("feature_v2"),
-            data = payload,
-            onSuccess = {
-                spinner.hide()
-                val msg = it.json().getString("message")
-                Dialogs.basicAlert(context, "Success", msg)
-            },
-            onError = {
-                spinner.hide()
-                ClipboardUtil.copy(feedbackText)
-                Dialogs.basicAlert(context, "Error", ERROR_MESSAGE)
-            }
-        )
+            data = payload
+        ).hideSpinner(
+            SimpleLoadingSpinner(context).show("Sending feedback...")
+        ).subscribe({
+            val msg = it.json().getString("message")
+            Dialogs.basicAlert(context, "Success", msg)
+        }, {
+            ClipboardUtil.copy(feedbackText)
+            Dialogs.basicAlert(context, "Error", ERROR_MESSAGE)
+        })
     }
 }

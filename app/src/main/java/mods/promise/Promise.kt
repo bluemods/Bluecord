@@ -4,6 +4,7 @@ package mods.promise
 
 import mods.utils.LogUtils
 import mods.dialog.SimpleLoadingSpinner
+import mods.events.EventTracker
 import mods.utils.ThreadUtils
 
 fun <T> Promise<T>.subscribe(onSuccess: (T) -> Unit = {}, onError: (Throwable) -> Unit = {}) {
@@ -103,5 +104,29 @@ inline fun <T, R> T.runCatchingOrLog(block: T.() -> R): Result<R> {
     } catch (e: Throwable) {
         LogUtils.logException(e)
         Result.failure(e)
+    }
+}
+
+inline fun <R, T : R> Result<T>.recoverCatchingOrLog(transform: (exception: Throwable) -> R): Result<R> {
+    return when (val exception = exceptionOrNull()) {
+        null -> this
+        else -> runCatchingOrLog { transform(exception) }
+    }
+}
+
+inline fun <T, R> T.runCatchingOrTrack(block: T.() -> R): Result<R> {
+    return try {
+        Result.success(block())
+    } catch (e: Throwable) {
+        EventTracker.trackException(e)
+        Result.failure(e)
+    }
+}
+
+inline fun <T, R> T.runCatchingToPromise(block: T.() -> R): Promise<R> {
+    return try {
+        block().asResolvedPromise()
+    } catch (e: Throwable) {
+        e.asFailedPromise()
     }
 }

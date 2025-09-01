@@ -1,8 +1,9 @@
 package mods.net
 
 import mods.extensions.*
+import mods.promise.Promise
+import mods.promise.runOnMainThread
 import mods.utils.LogUtils
-import mods.utils.ThreadUtils
 import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONObject
@@ -34,15 +35,13 @@ object Net {
     @JvmOverloads
     fun doGetAsync(
         url: String,
-        headers: Map<String, String> = emptyMap(),
-        onSuccess: (Response) -> Unit,
-        onError: (IOException) -> Unit
-    ) {
+        headers: Map<String, String> = emptyMap()
+    ): Promise<Response> {
         val request = RequestBuilder()
             .get(url)
             .headers(headers)
             .build()
-        doAsyncCall(request, onSuccess, onError)
+        return doAsyncCall(request)
     }
 
     @JvmStatic
@@ -70,38 +69,29 @@ object Net {
     fun doPostAsync(
         url: String,
         data: JSONObject,
-        headers: Map<String, String> = emptyMap(),
-        onSuccess: (Response) -> Unit,
-        onError: (IOException) -> Unit
-    ) {
+        headers: Map<String, String> = emptyMap()
+    ): Promise<Response> {
         val request = RequestBuilder()
             .url(url)
             .post(data.toRequestBody())
             .setHeader("Content-Type", "application/json; charset=UTF-8")
             .headers(headers)
             .build()
-        doAsyncCall(request, onSuccess, onError)
+        return doAsyncCall(request)
     }
 
-    private fun doAsyncCall(
-        request: Request,
-        onSuccess: (Response) -> Unit,
-        onError: (IOException) -> Unit
-    ) {
+    private fun doAsyncCall(request: Request): Promise<Response> {
+        val p = Promise<Response>()
         client.newCall(request).enqueue({ (_, response) ->
-            ThreadUtils.runOnUiThread {
-                runCatching {
-                    if (!response.isSuccessful) {
-                        onError.invoke(IOException("bad response code " + response.code))
-                    }
-                    onSuccess.invoke(response)
-                }.onFailure {
-                    onError.invoke(it as? IOException ?: IOException(it))
-                }
+            if (!response.isSuccessful) {
+                p.fail(IOException("bad response code " + response.code))
+            } else {
+                p.resolve(response)
             }
-        }, {
-            ThreadUtils.runOnUiThread { runCatching { onError.invoke(it.second) } }
+        }, { (_, e) ->
+            p.fail(e)
         })
+        return p.runOnMainThread()
     }
 
     @JvmStatic

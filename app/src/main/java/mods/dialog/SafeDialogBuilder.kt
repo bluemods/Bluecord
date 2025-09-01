@@ -1,6 +1,5 @@
 package mods.dialog
 
-import android.R
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -12,7 +11,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ListAdapter
 import android.widget.TextView
-import mods.DiscordTools
+import mods.DiscordTools.extractActivity
 import mods.utils.FileUtils
 import mods.utils.LogUtils
 import mods.utils.StringUtils
@@ -317,7 +316,7 @@ class SafeDialogBuilder @JvmOverloads constructor(
             try {
                 val d = super.create()
                 d.setOnShowListener {
-                    d.findViewById<TextView>(R.id.message).movementMethod = LinkMovementMethod.getInstance()
+                    d.findViewById<TextView>(android.R.id.message).movementMethod = LinkMovementMethod.getInstance()
                 }
                 d.show()
             } catch (e: Throwable) {
@@ -405,7 +404,7 @@ class SafeDialogBuilder @JvmOverloads constructor(
                                 "To fix this issue, please grant access to all files."
                     )
                     .setPositiveButton("Grant Access") { _, _ ->
-                        FileUtils.requestStorageManagerPermission(DiscordTools.getActivity(context))
+                        FileUtils.requestStorageManagerPermission(context.extractActivity!!)
                     }.showSafely()
             }
         }

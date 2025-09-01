@@ -40,7 +40,7 @@ class EventSink {
         // server defines it as 132k, use 100k to be safe on client side
         private const val MAX_PAYLOAD_SIZE = 100_000
 
-        private val eventDb = DiscordTools.getContext().openOrCreateDatabase(EVENTS_TABLE_NAME, 0, null).apply {
+        private val eventDb = DiscordTools.context.openOrCreateDatabase(EVENTS_TABLE_NAME, 0, null).apply {
             runCatchingOrLog {
                 execSQL("CREATE TABLE IF NOT EXISTS $EVENTS_TABLE_NAME(event_id INTEGER PRIMARY KEY AUTOINCREMENT, event_data TEXT)")
             }

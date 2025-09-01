@@ -176,7 +176,7 @@ public class SheetConfig {
         View tagView = binding.getRoot().findViewById(R.id.bluecord_text);
 
         if (tagView.getTag() instanceof SearchKey && searchKey.equals(tagView.getTag())) {
-            LogUtils.log(TAG, "UserDetails have already been set for this user. Dropping addUserDetails()");
+            // LogUtils.log(TAG, "UserDetails have already been set for this user. Dropping addUserDetails()");
             return;
         }
 

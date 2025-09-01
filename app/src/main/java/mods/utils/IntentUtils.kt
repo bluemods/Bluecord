@@ -173,7 +173,7 @@ object IntentUtils {
     private fun tryFindFromQuery(intent: Intent): File? {
         val data = intent.data ?: return null
         try {
-            DiscordTools.getApplication().contentResolver.query(data, arrayOf("_data"), null, null, null)?.use { cursor ->
+            DiscordTools.app.contentResolver.query(data, arrayOf("_data"), null, null, null)?.use { cursor ->
                 if (cursor.moveToNext()) {
                     return File(cursor.getString(cursor.getColumnIndexOrThrow("_data")))
                 }

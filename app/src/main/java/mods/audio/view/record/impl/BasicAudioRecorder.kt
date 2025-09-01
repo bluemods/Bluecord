@@ -37,7 +37,7 @@ class BasicAudioRecorder(
 
         private fun newMediaRecorder(): MediaRecorder {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                MediaRecorder(DiscordTools.getContext())
+                MediaRecorder(DiscordTools.context)
             } else {
                 @Suppress("DEPRECATION")
                 MediaRecorder()

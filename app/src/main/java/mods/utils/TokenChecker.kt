@@ -4,6 +4,10 @@ import android.content.Context
 import mods.dialog.SimpleLoadingSpinner
 import mods.extensions.code
 import mods.net.Net
+import mods.promise.Promise
+import mods.promise.hideSpinner
+import mods.promise.mapError
+import mods.promise.runOnMainThread
 import mods.rn.ReactNativeSpoof
 
 object TokenChecker {
@@ -16,20 +20,22 @@ object TokenChecker {
     }
 
     @JvmStatic
-    fun check(context: Context, token: String, callback: Callback<Result>) {
-        val spinner = SimpleLoadingSpinner(context).apply {
-            show("Bluecord", "Checking if token is valid...")
-        }
-        Net.doGetAsync(TEST_URL, ReactNativeSpoof.makeHeaderMap(token), {
-            spinner.hide()
-            val result = when (it.code) {
+    fun check(context: Context, token: String): Promise<Result> {
+        return Net.doGetAsync(
+            url = TEST_URL,
+            headers = ReactNativeSpoof.makeHeaderMap(token)
+        ).hideSpinner(
+            SimpleLoadingSpinner(context).show(
+                Strings.getAppName(),
+                "Checking if token is valid..."
+            )
+        ).map {
+            when (it.code) {
                 200, 204 -> Result.OK
                 else -> Result.INVALID_NOT_AUTHORIZED
             }
-            callback.onResult(result)
-        }, {
-            spinner.hide()
-            callback.onResult(Result.INVALID_NO_CONNECTION)
-        })
+        }.mapError {
+            Result.INVALID_NO_CONNECTION
+        }.runOnMainThread()
     }
 }
