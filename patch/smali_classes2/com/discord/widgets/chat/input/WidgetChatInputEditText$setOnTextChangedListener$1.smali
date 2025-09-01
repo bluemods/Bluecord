@@ -191,7 +191,7 @@
     invoke-static {p1, v0, v1}, Lcom/discord/widgets/chat/input/WidgetChatInputEditText;->access$setLastTypingEmissionMillis$p(Lcom/discord/widgets/chat/input/WidgetChatInputEditText;J)V
 
     .line 11
-	invoke-static {}, Lmods/DiscordTools;->disableTyping()Z
+	invoke-static {}, Lmods/preference/QuickAccessPrefs;->getDisableTyping()Z
 
     move-result v0
 

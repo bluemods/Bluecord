@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.charset.StandardCharsets;
 
 import mods.DiscordTools;
-import mods.activity.update.UpdateResult;
+import mods.activity.update.ServerConfigStorage;
 
 public final class URLConstants {
 
@@ -37,9 +37,7 @@ public final class URLConstants {
     @NotNull
     public static String apiLink(@NotNull String function) {
         String url = BASE_URL + "/" + bluecord + "/api/v1/" + function;
-        if (IS_BETA) {
-            url += "?beta=1";
-        }
+        if (IS_BETA) url += "?beta=1";
         return url;
     }
 
@@ -48,7 +46,7 @@ public final class URLConstants {
                 ? BASE_URL + "/" + bluecord + "/beta.php"
                 : BASE_URL + "/" + bluecord + ".php";
 
-        url += "?" + type + "&ts=" + (System.currentTimeMillis() / UpdateResult.getPollingInterval());
+        url += "?" + type + "&ts=" + (System.currentTimeMillis() / ServerConfigStorage.getPollingIntervalMs());
 
         return url;
     }

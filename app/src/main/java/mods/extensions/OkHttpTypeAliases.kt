@@ -4,6 +4,7 @@ import okhttp3.*
 import org.json.*
 import java.io.File
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.*
 
 typealias OkHttpClient = f0.x
@@ -14,6 +15,21 @@ typealias CacheControl = f0.x.d
 typealias RequestBuilder = Request.a
 typealias Address = f0.a
 
+fun OkHttpClient.callTimeout(timeout: Long, unit: TimeUnit) = apply {
+    I = unit.toMillis(timeout).toInt()
+}
+fun OkHttpClient.connectTimeout(timeout: Long, unit: TimeUnit) = apply {
+    J = unit.toMillis(timeout).toInt()
+}
+fun OkHttpClient.readTimeout(timeout: Long, unit: TimeUnit) = apply {
+    K = unit.toMillis(timeout).toInt()
+}
+fun OkHttpClient.writeTimeout(timeout: Long, unit: TimeUnit) = apply {
+    L = unit.toMillis(timeout).toInt()
+}
+fun OkHttpClientBuilder.retryOnConnectionFailure(retry: Boolean) = apply {
+    f = retry
+}
 fun OkHttpClientBuilder.addInterceptor(interceptor: Interceptor) = apply {
     c.add(interceptor)
 }
@@ -105,3 +121,4 @@ fun OkHttpClient.newWebSocket(request: Request, listener: WebSocketListener): We
 fun File.toRequestBody(mimeType: String): RequestBody = RequestBody.create(this, MediaType.b(mimeType))
 fun JSONObject.toRequestBody(): RequestBody = toString().toRequestBody()
 fun String?.toRequestBody(): RequestBody = RequestBody.create(orEmpty().toByteArray(), null)
+fun ByteArray.toRequestBody(): RequestBody = RequestBody.create(this, null)

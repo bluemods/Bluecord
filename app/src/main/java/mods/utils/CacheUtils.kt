@@ -1,5 +1,6 @@
 package mods.utils
 
+import mods.activity.update.ApkInstaller
 import java.io.File
 
 object CacheUtils {
@@ -20,7 +21,9 @@ object CacheUtils {
     fun clearBluecordCache() {
         val files = ArrayList<File>()
         listFiles(FileUtils.tempDir, files)
-
+        if (!ApkInstaller.isDownloading) {
+            listFiles(FileUtils.apkDownloadDir, files)
+        }
         val bytesDeleted = files.sumOf(::deleteQuietly)
         LogUtils.log(TAG, "Deleted ${files.size} files (${StringUtils.toMB(bytesDeleted)})")
         files.clear()

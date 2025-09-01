@@ -10,3 +10,7 @@ indent_size = 4
 ij_continuation_indent_size = 8
 insert_final_newline = false
 trim_trailing_whitespace = true
+
+[*.proto]
+indent_style = space
+indent_size = 2

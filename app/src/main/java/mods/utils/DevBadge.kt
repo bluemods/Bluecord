@@ -5,13 +5,16 @@ import android.view.View
 import androidx.annotation.DrawableRes
 import com.bluecord.R
 import com.discord.views.UsernameView
+import mods.activity.update.ServerConfigStorage
 
 object DevBadge {
 
     @DrawableRes
     const val VERIFIED_DEV_BADGE = R.drawable.ic_verified_10dp
 
-    private var badgeList = LongArray(0)
+    private val badgeList = OnceFunc {
+        ServerConfigStorage.loadNow().devIdsList.toLongArray()
+    }
 
     @JvmStatic
     @SuppressLint("SetTextI18n")
@@ -31,12 +34,11 @@ object DevBadge {
 
     @JvmStatic
     fun needsBadge(id: Long): Boolean {
-        return id in badgeList
+        return id in badgeList.get()
     }
 
     @JvmStatic
-    @Synchronized
-    fun setBadgeList(ids: LongArray) {
-        badgeList = ids
+    fun update() {
+        badgeList.reset()
     }
 }

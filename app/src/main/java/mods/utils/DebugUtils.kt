@@ -2,9 +2,6 @@ package mods.utils
 
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
-import mods.DiscordTools
-import mods.promise.runCatchingOrLog
-import java.io.File
 
 object DebugUtils {
 
@@ -24,7 +21,7 @@ object DebugUtils {
                     .replace(",", "\n")
             )
         }
-        LogUtils.log("Blue Stack", sb.toString().trim { it <= ' ' })
+        LogUtils.log("Blue Stack", sb.toString().trim())
     }
 
     @JvmStatic

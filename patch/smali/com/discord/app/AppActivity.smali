@@ -1273,9 +1273,7 @@
     .line 1
     invoke-super {p0, p1}, Landroidx/appcompat/app/AppCompatActivity;->onCreate(Landroid/os/Bundle;)V
 
-	const/4 v0, 0x0
-
-    invoke-static {p0, v0}, Lmods/ThemingTools;->init(Landroid/app/Activity;Z)V
+    invoke-static {p0}, Lmods/ThemingTools;->init(Landroid/app/Activity;)V
 
     .line 2
     new-instance p1, Lcom/discord/app/AppActivity$a;
@@ -1567,6 +1565,7 @@
     invoke-super {p0}, Lcom/discord/app/AppTransitionActivity;->onResume()V
 
     invoke-static {p0}, Lmods/activity/BlueSettingsActivity;->refreshIfNeeded(Landroid/app/Activity;)V
+    invoke-static {p0}, Lmods/activity/update/BluecordUpdater;->checkFromLaunch(Landroid/app/Activity;)V
 
     .line 2
     sget-object v0, Lb/a/d/j;->g:Lb/a/d/j;

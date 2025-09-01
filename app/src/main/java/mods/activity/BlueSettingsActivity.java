@@ -23,6 +23,7 @@ import mods.dialog.Dialogs;
 import mods.preference.CustomFont;
 import mods.preference.Prefs;
 import mods.ucrop.UCropUtils;
+import mods.utils.FileUtils;
 import mods.utils.IntentUtils;
 import mods.utils.LogUtils;
 import mods.utils.StoragePermissionUtils;
@@ -63,7 +64,7 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
     public static void refreshIfNeeded(final Activity activity) {
         if (needsActivityRefresh) {
             needsActivityRefresh = false;
-            ThemingTools.init(activity, true);
+            ThemingTools.init(activity);
             ThreadUtils.runOnUiThread(activity::recreate);
         }
     }
@@ -104,7 +105,7 @@ public class BlueSettingsActivity extends AppCompatActivity implements SharedPre
             }
             try {
                 String newPath = UCropUtils.getCroppedImagePath(false).getAbsolutePath();
-                DiscordTools.copyFile(output.getPath(), newPath);
+                FileUtils.copyFile(output.getPath(), newPath);
                 Prefs.setString(PreferenceKeys.BACKGROUND_PATH, newPath);
                 Prefs.setBoolean(PreferenceKeys.BACKGROUND_UCROP_UPGRADED, true);
                 ToastUtil.customToast(this, "Background changed successfully");

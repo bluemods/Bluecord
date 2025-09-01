@@ -98,10 +98,6 @@ public class Prefs {
         editor.commit();
     }
 
-    public static SharedPreferences getUpdatePrefs() {
-        return getByName("update");
-    }
-
     public static SharedPreferences getCustomCommandPrefs() {
         return getByName("CustomCommands");
     }

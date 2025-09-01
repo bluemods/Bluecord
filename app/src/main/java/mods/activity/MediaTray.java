@@ -307,7 +307,7 @@ public class MediaTray {
                     ToastUtil.toast("Use a number between 1-" + MessageDeleterTask.DELETE_LIMIT_UPPER_BOUND);
                 } else if (channelId == null) {
                     ToastUtil.toast("Could not locate the current channel. Restart Bluecord and retry.");
-                } else if (!DiscordTools.isConnected()) {
+                } else if (!DiscordTools.isNetworkConnected()) {
                     ToastUtil.toast("You don't appear to be connected to the Internet. Check your connection and retry.");
                 } else {
                     long authorId = StoreUtils.getSelf().getId();

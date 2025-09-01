@@ -16,6 +16,12 @@ import okhttp3.WebSocketListener;
 /** OkHttpClient */
 public class x {
 
+    public int I;
+    public int J;
+    public int K;
+    public int L;
+    public int M;
+
     public x() {}
     public x(a builder) {}
 
@@ -36,6 +42,13 @@ public class x {
 
         /** networkInterceptors */
         public final List<Interceptor> d = new ArrayList<>();
+
+        /** retryOnConnectionFailure */
+        public boolean f;
+
+        public int x;
+        public int y;
+        public int z;
 
         public a b(SSLSocketFactory factory, X509TrustManager x509) {
             return this;

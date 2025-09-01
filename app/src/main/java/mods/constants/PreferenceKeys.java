@@ -108,6 +108,12 @@ public final class PreferenceKeys {
     public static final String HIDE_PRONOUNS = "blue.hide.pronouns";
     public static final String SNI_CHECK_BYPASS = "blue.sni.bypass";
     public static final String HTTP_PROXY_CONFIG = "blue.http.proxy.config";
+    public static final String MODDED = "modded";
+    public static final String WEBSITE_LAST_FETCHED_TIMESTAMP = "website.last.fetched.ts";
+
+    public static final String ALERT_UPDATE = "blue.update.dismissed";
+    public static final String ALERT_UPDATE_LAST_SHOWN = "blue.update.ts";
+    public static final String ALERT_UPDATE_LAST_SHOWN_NOTIFICATION = "blue.update.notification.ts";
 
     // Dead preference keys that should NOT be reused
 

@@ -14,6 +14,10 @@ import mods.preference.Prefs
 import java.io.File
 import java.security.SecureRandom
 import androidx.core.net.toUri
+import mods.promise.runCatchingOrLog
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 
 object FileUtils {
 
@@ -36,11 +40,11 @@ object FileUtils {
 
     @JvmStatic
     val appDataDir: File
-        get() = File(DiscordTools.getContext().applicationInfo.dataDir)
+        get() = File(DiscordTools.context.applicationInfo.dataDir)
 
     @JvmStatic
     val cacheDir: File
-        get() = DiscordTools.getContext().cacheDir
+        get() = DiscordTools.app.cacheDir
 
     @JvmStatic
     val appCacheSafDir: File
@@ -57,6 +61,16 @@ object FileUtils {
     @JvmStatic
     val voiceCacheDir: File
         get() = File(cacheDir, "voice_cache").apply { mkdirs() }
+
+    @JvmStatic
+    val apkDownloadDir: File
+        get() = File(cacheDir, "apk_updates").apply { mkdirs() }
+
+    @JvmStatic
+    val freeSpace: Long
+        get() = runCatchingOrLog {
+            DiscordTools.app.getExternalFilesDir(null)?.getFreeSpace() ?: -1
+        }.getOrElse { -1 }
 
     /**
      * Returns true if we have to use the shitty SAF system.
@@ -78,7 +92,7 @@ object FileUtils {
         if (isUsingSaf) {
             val intent = Intent(
                 Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                "package:${DiscordTools.getApplication().packageName}".toUri()
+                "package:${DiscordTools.app.packageName}".toUri()
             )
             activity.startActivityForResult(intent, CODE_R_STORAGE_ACCESS)
         }
@@ -100,7 +114,7 @@ object FileUtils {
             return file
         }
 
-        val isInMediaStore = DiscordTools.getContext().contentResolver.query(
+        val isInMediaStore = DiscordTools.context.contentResolver.query(
             MediaStore.Files.getContentUri("external"),
             arrayOf("_data"),
             "_data=?",
@@ -145,6 +159,22 @@ object FileUtils {
             val key = SecureRandom().nextInt(Int.MAX_VALUE)
             sp.edit().putInt("media_unique_key", key).apply()
             key
+        }
+    }
+
+    @JvmStatic
+    @Throws(IOException::class)
+    fun copyFile(pathFrom: String, pathTo: String) {
+        if (pathFrom.equals(pathTo, ignoreCase = true)) return
+
+        FileInputStream(pathFrom).use { fis ->
+            FileOutputStream(pathTo, false).use { fos ->
+                fis.channel.use { inputChannel ->
+                    fos.channel.use { outputChannel ->
+                        inputChannel.transferTo(0, inputChannel.size(), outputChannel)
+                    }
+                }
+            }
         }
     }
 }

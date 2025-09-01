@@ -10,7 +10,7 @@ public final class Constants {
     // Version number. This is changed on release
     // and is used for checking if Bluecord needs an update
     public static final int    VERSION_CODE = 25000;
-    public static final String VERSION_NAME = "2.5.0";
+    public static final String VERSION_NAME = "2.5";
 
     // Adds support for Bluecord emotes and other systems that use a '.'
     public static final String VALID_UNICODE_EMOJI_PATTERN = "^<&?\u200b?(a)?[:|\\.]([a-zA-Z_0-9]+)[:|\\.](\\d+)>";
@@ -20,5 +20,5 @@ public final class Constants {
     public static final String GOOGLE_TRANSLATE_API_KEY = "";
 
     public static final int CODE_RECORD_ACCESS = 7019;
-
+    public static final int CODE_INSTALL_APK_UPDATE = 7020;
 }
