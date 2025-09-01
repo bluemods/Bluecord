@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package mods.proto;
+
+option java_package = "mods.proto";
+option java_multiple_files = true;
+
+option go_package = "github.com/bluemods/bluecord/generated/go/proto/bluecord/v1;bluecord_proto";
+
+import "google/protobuf/duration.proto";
+
+service BluecordService {
+  // Polls the server for new configuration information such as checking for updates.
+  rpc Poll(PollRequest) returns (PollResponse);
+}
+
+message PollRequest {
+  // Currently empty, we have what we need in the headers
+}
+
+message PollResponse {
+  // Update info
+  UpdateInfo update_info = 1;
+
+  // Discord user IDs that are developers of Bluecord
+  repeated uint64 dev_ids = 2;
+
+  // After receiving this message, how long should we wait until automatically trying to call Poll again?
+  // Note: if the user checks for an update manually, the polling_interval is ignored by the client and it will check again.
+  google.protobuf.Duration polling_interval = 3;
+
+  // If true, crash logs and other exceptions may be sent to the /bluecord/api/v1/events endpoint.
+  bool enable_events = 4;
+}
+
+// See blue.activity.updater.UpdateData and blue.activity.updater.ApkInstaller
+message UpdateInfo {
+  enum UpdateAction {
+    // No update; all other fields are unset
+    NOT_NEEDED = 0;
+
+    // Update available; all fields are set
+    UPDATE = 1;
+  }
+
+  // The action to perform; is there an update?
+  UpdateAction action = 1;
+
+  // The new version code.
+  // This can be used to ignore the update if the one installed
+  // is higher or equal to it, to resolve caching issues.
+  uint64 new_version_code = 2;
+
+  // Update message to display in the dialog
+  string update_message = 3;
+
+  // File URL where the APK is hosted and will be downloaded from to be installed.
+  // Server must support ranged requests on this URL.
+  string file_url = 4;
+
+  // Where the home page of the website is located to download it from there manually instead.
+  // Initially expected to be https://bluesmods.com/bluecord
+  string home_page_url = 5;
+
+  // SHA-384 hash of the APK, converted to hex.
+  // This allows the client to verify the contents match what's expected before installing.
+  string file_sha_384_hash = 6;
+
+  // File size of the APK.
+  uint64 file_size = 7;
+}
