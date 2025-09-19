@@ -54,6 +54,10 @@ public class StoreStream {
         return new StoreExperiments();
     }
 
+    public static StoreMessagesLoader getMessagesLoader() {
+        return null;
+    }
+
     public void handleGuildApplicationCommands(GuildApplicationCommands commands) {}
 
     public static void access$handleGuildApplicationCommands(@NotNull StoreStream storeStream, @Nullable GuildApplicationCommands guildAppCommands) {

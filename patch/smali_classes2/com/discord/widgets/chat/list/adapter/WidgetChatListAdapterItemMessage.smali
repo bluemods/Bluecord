@@ -170,51 +170,51 @@
 
 
 # instance fields
-.field private final backgroundHighlight:Landroid/view/View;
+.field public final backgroundHighlight:Landroid/view/View;
 
-.field private final communicationDisabledIcon:Landroid/widget/ImageView;
+.field public final communicationDisabledIcon:Landroid/widget/ImageView;
 
-.field private final failedUploadList:Lcom/discord/views/FailedUploadList;
+.field public final failedUploadList:Lcom/discord/views/FailedUploadList;
 
-.field private final gutterHighlight:Landroid/view/View;
+.field public final gutterHighlight:Landroid/view/View;
 
-.field private final itemAlertText:Landroid/widget/TextView;
+.field public final itemAlertText:Landroid/widget/TextView;
 
-.field private final itemAvatar:Landroid/widget/ImageView;
+.field public final itemAvatar:Landroid/widget/ImageView;
 
-.field private final itemLoadingText:Landroid/widget/TextView;
+.field public final itemLoadingText:Landroid/widget/TextView;
 
-.field private final itemName:Landroid/widget/TextView;
+.field public final itemName:Landroid/widget/TextView;
 
-.field private final itemRoleIcon:Lcom/discord/widgets/roles/RoleIconView;
+.field public final itemRoleIcon:Lcom/discord/widgets/roles/RoleIconView;
 
-.field private final itemTag:Landroid/widget/TextView;
+.field public final itemTag:Landroid/widget/TextView;
 
-.field private final itemText:Lcom/discord/utilities/view/text/SimpleDraweeSpanTextView;
+.field public final itemText:Lcom/discord/utilities/view/text/SimpleDraweeSpanTextView;
 
-.field private final itemTimestamp:Landroid/widget/TextView;
+.field public final itemTimestamp:Landroid/widget/TextView;
 
-.field private final loadingDots:Lcom/discord/views/typing/TypingDots;
+.field public final loadingDots:Lcom/discord/views/typing/TypingDots;
 
-.field private final replyAvatar:Landroid/widget/ImageView;
+.field public final replyAvatar:Landroid/widget/ImageView;
 
-.field private final replyHolder:Landroid/view/View;
+.field public final replyHolder:Landroid/view/View;
 
-.field private final replyIcon:Landroid/widget/ImageView;
+.field public final replyIcon:Landroid/widget/ImageView;
 
-.field private final replyLeadingViewsHolder:Landroid/view/View;
+.field public final replyLeadingViewsHolder:Landroid/view/View;
 
-.field private final replyLinkItem:Landroid/view/View;
+.field public final replyLinkItem:Landroid/view/View;
 
-.field private final replyName:Landroid/widget/TextView;
+.field public final replyName:Landroid/widget/TextView;
 
-.field private final replyText:Lcom/discord/utilities/view/text/SimpleDraweeSpanTextView;
+.field public final replyText:Lcom/discord/utilities/view/text/SimpleDraweeSpanTextView;
 
-.field private final sendError:Landroid/widget/ImageView;
+.field public final sendError:Landroid/widget/ImageView;
 
-.field private final threadEmbedSpine:Landroid/widget/ImageView;
+.field public final threadEmbedSpine:Landroid/widget/ImageView;
 
-.field private final threadStarterMessageHeader:Landroid/view/View;
+.field public final threadStarterMessageHeader:Landroid/view/View;
 
 
 # direct methods
@@ -3443,6 +3443,8 @@
 
     .line 28
     invoke-direct {v0, v1}, Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapterItemMessage;->configureReplyPreview(Lcom/discord/widgets/chat/list/entries/MessageEntry;)V
+
+    invoke-static {v0, v1}, Lmods/utils/ForwardedMessageConfigurer;->configureForwardUi(Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapterItemMessage;Lcom/discord/widgets/chat/list/entries/MessageEntry;)V
 
     .line 29
     iget-object v4, v0, Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapterItemMessage;->itemAvatar:Landroid/widget/ImageView;
