@@ -12,7 +12,7 @@ import com.discord.api.message.call.MessageCall;
 import com.discord.api.message.embed.MessageEmbed;
 import com.discord.api.message.reaction.MessageReaction;
 import com.discord.api.message.role_subscription.RoleSubscriptionData;
-import com.discord.api.reference.MessageReference;
+import com.discord.api.message.MessageReference;
 import com.discord.api.sticker.Sticker;
 import com.discord.api.sticker.StickerPartial;
 import com.discord.api.user.User;

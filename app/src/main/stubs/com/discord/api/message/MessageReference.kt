@@ -1,6 +1,4 @@
-@file:Suppress("unused")
-
-package com.discord.api.reference
+package com.discord.api.message
 
 /**
  * https://discord.com/developers/docs/resources/message#message-reference-types
@@ -19,4 +17,9 @@ data class MessageReference(
 
     val isForward: Boolean
         get() = type == 1
+
+    fun a(): Long? = this.channelId
+    fun b(): Long? = this.guildId
+    fun c(): Long? = this.messageId
+
 }
