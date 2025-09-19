@@ -62,10 +62,10 @@ message UpdateInfo {
   // Initially expected to be https://bluesmods.com/bluecord
   string home_page_url = 5;
 
-  // SHA-384 hash of the APK, converted to hex.
+  // SHA-384 hash of the APK at `file_url`, converted to hex (lowercase).
   // This allows the client to verify the contents match what's expected before installing.
   string file_sha_384_hash = 6;
 
-  // File size of the APK.
+  // File size of the APK, in bytes.
   uint64 file_size = 7;
 }

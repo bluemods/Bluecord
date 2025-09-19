@@ -46,7 +46,12 @@ object ServerConfigStorage {
 
     @JvmStatic
     fun loadNow(): PollResponse {
-        return config.get() ?: DEFAULT_CONFIG
+        return loadNowOrNull() ?: DEFAULT_CONFIG
+    }
+
+    @JvmStatic
+    fun loadNowOrNull(): PollResponse? {
+        return config.get()
     }
 
     @JvmStatic

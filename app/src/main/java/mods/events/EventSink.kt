@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.os.Build
 import mods.DiscordTools
 import mods.activity.CrashHandler
+import mods.activity.update.ServerConfigStorage
 import mods.constants.Constants
 import mods.constants.PreferenceKeys
 import mods.constants.URLConstants
@@ -53,6 +54,11 @@ class EventSink {
 
     fun putEvent(event: Event): Promise<Unit> {
         try {
+            val config = ServerConfigStorage.loadNowOrNull()
+            if (config != null && !config.enableEvents) {
+                LogUtils.log(TAG, "dropping event, server indicates event logging is disabled")
+                return Unit.asResolvedPromise()
+            }
             val cv = ContentValues().apply { put("event_data", event.toJson()) }
             eventDb.insert(EVENTS_TABLE_NAME, null, cv)
             return flush()
