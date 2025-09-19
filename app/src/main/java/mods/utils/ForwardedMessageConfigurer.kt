@@ -23,19 +23,25 @@ object ForwardedMessageConfigurer {
         val message = entry.message ?: return
         if (!message.forwarded) return
 
-        replyAvatar?.visibility = View.GONE
-        replyIcon?.visibility = View.VISIBLE
-        replyIcon?.scaleX = -1f
-        replyHolder?.visibility = View.VISIBLE
-        replyLeadingViewsHolder?.visibility = View.VISIBLE
-        replyHolder?.setOnClickListener {
+        val listener = fun(_: View) {
             runCatchingOrLog {
-                val cid = message.messageReference?.channelId ?: return@setOnClickListener
-                val mid = message.messageReference?.channelId ?: return@setOnClickListener
+                val cid = message.messageReference?.channelId ?: return
+                val mid = message.messageReference?.channelId ?: return
                 StoreStream.getMessagesLoader().jumpToMessage(cid, mid)
             }
         }
+
+        replyAvatar?.visibility = View.GONE
+        replyIcon?.visibility = View.VISIBLE
+        replyIcon?.scaleX = -1f
+        replyIcon?.setOnClickListener(listener)
+
+        replyHolder?.visibility = View.VISIBLE
+        replyHolder?.setOnClickListener(listener)
+        replyLeadingViewsHolder?.visibility = View.VISIBLE
+        replyLeadingViewsHolder?.setOnClickListener(listener)
         replyLinkItem?.visibility = View.VISIBLE
+        replyLinkItem?.setOnClickListener(listener)
 
         if (replyName != null) {
             val sb = SpannableStringBuilder("Forwarded ")
@@ -45,7 +51,7 @@ object ForwardedMessageConfigurer {
                 sb.append(' ').append(sentAt)
             }
             replyName.text = sb
-            replyName.setOnClickListener(null)
+            replyName.setOnClickListener(listener)
             replyName.visibility = View.VISIBLE
             ThemingTools.setFont(replyName)
         }
