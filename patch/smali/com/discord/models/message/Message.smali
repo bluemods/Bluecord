@@ -283,15 +283,15 @@
 
 
 # instance fields
-.field public final activity:Lcom/discord/api/message/activity/MessageActivity;
+.field public activity:Lcom/discord/api/message/activity/MessageActivity;
 
-.field public final allowedMentions:Lcom/discord/api/message/allowedmentions/MessageAllowedMentions;
+.field public allowedMentions:Lcom/discord/api/message/allowedmentions/MessageAllowedMentions;
 
-.field public final application:Lcom/discord/api/application/Application;
+.field public application:Lcom/discord/api/application/Application;
 
-.field public final applicationId:Ljava/lang/Long;
+.field public applicationId:Ljava/lang/Long;
 
-.field public final attachments:Ljava/util/List;
+.field public attachments:Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/List<",
@@ -301,7 +301,7 @@
     .end annotation
 .end field
 
-.field public final author:Lcom/discord/api/user/User;
+.field public author:Lcom/discord/api/user/User;
 
 .field private cachedReactionsMap:Ljava/util/Map;
     .annotation system Ldalvik/annotation/Signature;
@@ -314,13 +314,13 @@
     .end annotation
 .end field
 
-.field public final call:Lcom/discord/api/message/call/MessageCall;
+.field public call:Lcom/discord/api/message/call/MessageCall;
 
-.field public final captchaPayload:Lcom/discord/utilities/captcha/CaptchaHelper$CaptchaPayload;
+.field public captchaPayload:Lcom/discord/utilities/captcha/CaptchaHelper$CaptchaPayload;
 
-.field public final channelId:J
+.field public channelId:J
 
-.field public final components:Ljava/util/List;
+.field public components:Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/List<",
@@ -330,11 +330,11 @@
     .end annotation
 .end field
 
-.field public final content:Ljava/lang/String;
+.field public content:Ljava/lang/String;
 
-.field public final editedTimestamp:Lcom/discord/api/utcdatetime/UtcDateTime;
+.field public editedTimestamp:Lcom/discord/api/utcdatetime/UtcDateTime;
 
-.field public final embeds:Ljava/util/List;
+.field public embeds:Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/List<",
@@ -344,23 +344,23 @@
     .end annotation
 .end field
 
-.field public final flags:Ljava/lang/Long;
+.field public flags:Ljava/lang/Long;
 
-.field public final guildId:Ljava/lang/Long;
+.field public guildId:Ljava/lang/Long;
 
-.field public final transient hasLocalUploads:Z
+.field public transient hasLocalUploads:Z
 
-.field public final hit:Ljava/lang/Boolean;
+.field public hit:Ljava/lang/Boolean;
 
-.field public final id:J
+.field public id:J
 
-.field public final initialAttemptTimestamp:Ljava/lang/Long;
+.field public initialAttemptTimestamp:Ljava/lang/Long;
 
-.field public final interaction:Lcom/discord/api/interaction/Interaction;
+.field public interaction:Lcom/discord/api/interaction/Interaction;
 
-.field public final lastManualAttemptTimestamp:Ljava/lang/Long;
+.field public lastManualAttemptTimestamp:Ljava/lang/Long;
 
-.field public final localAttachments:Ljava/util/List;
+.field public localAttachments:Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/List<",
@@ -370,9 +370,9 @@
     .end annotation
 .end field
 
-.field public final mentionEveryone:Ljava/lang/Boolean;
+.field public mentionEveryone:Ljava/lang/Boolean;
 
-.field public final mentionRoles:Ljava/util/List;
+.field public mentionRoles:Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/List<",
@@ -382,7 +382,7 @@
     .end annotation
 .end field
 
-.field public final mentions:Ljava/util/List;
+.field public mentions:Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/List<",
@@ -392,15 +392,15 @@
     .end annotation
 .end field
 
-.field public final messageReference:Lcom/discord/api/message/MessageReference;
+.field public messageReference:Lcom/discord/api/message/MessageReference;
 
-.field public final nonce:Ljava/lang/String;
+.field public nonce:Ljava/lang/String;
 
-.field public final numRetries:Ljava/lang/Integer;
+.field public numRetries:Ljava/lang/Integer;
 
-.field public final pinned:Ljava/lang/Boolean;
+.field public pinned:Ljava/lang/Boolean;
 
-.field public final reactions:Ljava/util/List;
+.field public reactions:Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/List<",
@@ -410,11 +410,11 @@
     .end annotation
 .end field
 
-.field public final referencedMessage:Lcom/discord/api/message/Message;
+.field public referencedMessage:Lcom/discord/api/message/Message;
 
-.field public final roleSubscriptionData:Lcom/discord/api/message/role_subscription/RoleSubscriptionData;
+.field public roleSubscriptionData:Lcom/discord/api/message/role_subscription/RoleSubscriptionData;
 
-.field public final stickerItems:Ljava/util/List;
+.field public stickerItems:Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/List<",
@@ -424,7 +424,7 @@
     .end annotation
 .end field
 
-.field public final stickers:Ljava/util/List;
+.field public stickers:Ljava/util/List;
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "Ljava/util/List<",
@@ -434,21 +434,22 @@
     .end annotation
 .end field
 
-.field public final thread:Lcom/discord/api/channel/Channel;
+.field public thread:Lcom/discord/api/channel/Channel;
 
-.field public final timestamp:Lcom/discord/api/utcdatetime/UtcDateTime;
+.field public timestamp:Lcom/discord/api/utcdatetime/UtcDateTime;
 
-.field public final tts:Ljava/lang/Boolean;
+.field public tts:Ljava/lang/Boolean;
 
-.field public final type:Ljava/lang/Integer;
+.field public type:Ljava/lang/Integer;
 
-.field public final webhookId:Ljava/lang/Long;
+.field public webhookId:Ljava/lang/Long;
 
 .field public deleted:Z
-
 .field public interactionMetadata:Lmods/parser/InteractionMetadata;
 .field public messageSnapshots:Lmods/parser/MessageSnapshots;
-
+.field public forwarded:Z
+.field public forwardedMessageEditedTimestamp:Lcom/discord/api/utcdatetime/UtcDateTime;
+.field public forwardedMessageSentAt:Lcom/discord/api/utcdatetime/UtcDateTime;
 
 # direct methods
 .method public static constructor <clinit>()V
@@ -1399,18 +1400,6 @@
     move-object/from16 v14, v0
     move-object/from16 v15, p1
     invoke-direct {v14, v15}, Lcom/discord/models/message/Message;->thisIsFuckingStupid(Lcom/discord/api/message/Message;)V
-
-    return-void
-.end method
-
-.method private thisIsFuckingStupid(Lcom/discord/api/message/Message;)V
-    .locals 1
-
-    iget-object v0, p1, Lcom/discord/api/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
-    iput-object v0, p0, Lcom/discord/models/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
-
-    iget-object v0, p1, Lcom/discord/api/message/Message;->messageSnapshots:Lmods/parser/MessageSnapshots;
-    iput-object v0, p0, Lcom/discord/models/message/Message;->messageSnapshots:Lmods/parser/MessageSnapshots;
 
     return-void
 .end method
@@ -6083,3 +6072,105 @@
 
     return-object v0
 .end method
+
+.method private swapInForwardMessageInfo()V
+    .locals 4
+
+    iget-object v0, p0, Lcom/discord/models/message/Message;->messageReference:Lcom/discord/api/message/MessageReference;
+
+    if-eqz v0, :cond_3
+
+    invoke-virtual {v0}, Lcom/discord/api/message/MessageReference;->isForward()Z
+
+    move-result v1
+
+    if-nez v1, :cond_0
+
+    goto :goto_0
+
+    :cond_0
+    iget-object v1, p0, Lcom/discord/models/message/Message;->messageSnapshots:Lmods/parser/MessageSnapshots;
+
+    if-nez v1, :cond_1
+
+    return-void
+
+    :cond_1
+    invoke-virtual {v1}, Lmods/parser/MessageSnapshots;->getFirstMessage()Lcom/discord/api/message/Message;
+
+    move-result-object v2
+
+    if-nez v2, :cond_2
+
+    return-void
+
+    :cond_2
+    const/4 v3, 0x1
+
+    iput-boolean v3, p0, Lcom/discord/models/message/Message;->forwarded:Z
+
+    iget-object v3, v2, Lcom/discord/api/message/Message;->content:Ljava/lang/String;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->content:Ljava/lang/String;
+
+    iget-object v3, v2, Lcom/discord/api/message/Message;->embeds:Ljava/util/List;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->embeds:Ljava/util/List;
+
+    iget-object v3, v2, Lcom/discord/api/message/Message;->attachments:Ljava/util/List;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->attachments:Ljava/util/List;
+
+    iget-object v3, v2, Lcom/discord/api/message/Message;->timestamp:Lcom/discord/api/utcdatetime/UtcDateTime;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->forwardedMessageSentAt:Lcom/discord/api/utcdatetime/UtcDateTime;
+
+    iget-object v3, v2, Lcom/discord/api/message/Message;->editedTimestamp:Lcom/discord/api/utcdatetime/UtcDateTime;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->forwardedMessageEditedTimestamp:Lcom/discord/api/utcdatetime/UtcDateTime;
+
+    iget-object v3, v2, Lcom/discord/api/message/Message;->flags:Ljava/lang/Long;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->flags:Ljava/lang/Long;
+
+    iget-object v3, v2, Lcom/discord/api/message/Message;->mentions:Ljava/util/List;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->mentions:Ljava/util/List;
+
+    iget-object v3, v2, Lcom/discord/api/message/Message;->mentionRoles:Ljava/util/List;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->mentionRoles:Ljava/util/List;
+
+    iget-object v3, v2, Lcom/discord/api/message/Message;->stickers:Ljava/util/List;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->stickers:Ljava/util/List;
+
+    iget-object v3, v2, Lcom/discord/api/message/Message;->stickerItems:Ljava/util/List;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->stickerItems:Ljava/util/List;
+
+    iget-object v3, v2, Lcom/discord/api/message/Message;->components:Ljava/util/List;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->components:Ljava/util/List;
+
+    return-void
+
+    :cond_3
+    :goto_0
+    return-void
+.end method
+
+.method private thisIsFuckingStupid(Lcom/discord/api/message/Message;)V
+    .locals 1
+
+    iget-object v0, p1, Lcom/discord/api/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
+    iput-object v0, p0, Lcom/discord/models/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
+
+    iget-object v0, p1, Lcom/discord/api/message/Message;->messageSnapshots:Lmods/parser/MessageSnapshots;
+    iput-object v0, p0, Lcom/discord/models/message/Message;->messageSnapshots:Lmods/parser/MessageSnapshots;
+
+    invoke-direct {p0}, Lcom/discord/models/message/Message;->swapInForwardMessageInfo()V
+
+    return-void
+.end method
+

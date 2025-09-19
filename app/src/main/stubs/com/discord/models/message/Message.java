@@ -73,16 +73,18 @@ public class Message {
     public Integer type;
     public Long webhookId;
 
-    // Added by us
-    @Nullable
-    public InteractionMetadata interactionMetadata;
+    // BEGIN custom fields
 
-    // Added by us
-    @Nullable
-    public MessageSnapshots messageSnapshots;
+    @Nullable public InteractionMetadata interactionMetadata;
+    @Nullable public MessageSnapshots messageSnapshots;
 
-    // Added by us
+    public boolean forwarded;
+    @Nullable public UtcDateTime forwardedMessageSentAt;
+    @Nullable public UtcDateTime forwardedMessageEditedTimestamp;
+
     public boolean deleted;
+
+    // END custom fields
 
     public Message() {}
     public Message(com.discord.api.message.Message message) {}
@@ -103,5 +105,30 @@ public class Message {
 
     public final Message mergeInternal(com.discord.api.message.Message message) {
         return null;
+    }
+
+    private void swapInForwardMessageInfo() {
+        final MessageReference reference = this.messageReference;
+        if (reference == null || !reference.isForward()) return;
+
+        final MessageSnapshots snapshots = this.messageSnapshots;
+        if (snapshots == null) return;
+        final com.discord.api.message.Message forwarded = snapshots.getFirstMessage();
+        if (forwarded == null) return;
+
+        // This is a forwarded message, populate data
+        // See https://discord.com/developers/docs/resources/message#message-snapshot-object
+        this.forwarded = true;
+        this.content = forwarded.content;
+        this.embeds = forwarded.embeds;
+        this.attachments = forwarded.attachments;
+        this.forwardedMessageSentAt = forwarded.timestamp;
+        this.forwardedMessageEditedTimestamp = forwarded.editedTimestamp;
+        this.flags = forwarded.flags;
+        this.mentions = forwarded.mentions;
+        this.mentionRoles = forwarded.mentionRoles;
+        this.stickers = forwarded.stickers;
+        this.stickerItems = forwarded.stickerItems;
+        this.components = forwarded.components;
     }
 }
