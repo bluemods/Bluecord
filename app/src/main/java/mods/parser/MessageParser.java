@@ -28,13 +28,13 @@ public class MessageParser {
     }
 
     private static void antiGroupAdd(@NonNull Message message) {
-        Integer type = message.F();
+        Integer type = message.type;
 
         if (type != null && type == TYPE_RECIPIENT_ADD && Prefs.getBoolean(PreferenceKeys.DO_NOT_ADD, false)) {
             MeUser self = StoreUtils.getSelf();
-            if (self != null && message.e().getId() != self.getId()) {
-                LogUtils.log(TAG, "attempting to leave server " + message.g() + "\n\n" + message);
-                StoreUtils.leaveGroupDM(message.g());
+            if (self != null && message.author.getId() != self.getId()) {
+                LogUtils.log(TAG, "attempting to leave server " + message.channelId + "\n\n" + message);
+                StoreUtils.leaveGroupDM(message.channelId);
             }
         }
     }
@@ -58,5 +58,20 @@ public class MessageParser {
             Notifications.notify(message.g(), "Spam detected", "Blocked " + message.e().getUsername() + "#" + message.e().f() + " for spamming");
         }
     }
+    private static final long MAX_DIFFERENCE = TimeUnit.MINUTES.toMillis(2);
+
+    public static boolean isEligibleForAntiSpam(Message message) {
+        String content = message.i();
+
+        if (StringUtils.isEmpty(content)) return false;
+        if (isMessageEdited(message)) return false;
+        if (!isChannelDm(getChannelById(message.channelId))) return false;
+
+        long currentTs = getServerSyncedTime();
+        long messageTs = SnowflakeUtils.timestampForMessage(message);
+
+        return Math.abs(currentTs - messageTs) < MAX_DIFFERENCE;
+    }
+
      */
 }

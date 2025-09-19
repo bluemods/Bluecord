@@ -44,10 +44,10 @@ public class AntiDelete {
                 deletedMessages.add(message);
 
                 if (log) {
-                    if (!StringUtils.isEmpty(message.getContent())) {
-                        FileLogger.writeWithProfileInfo(message, "messages", message.getContent(), "Deleted Messages", "deleted");
+                    if (!StringUtils.isEmpty(message.content)) {
+                        FileLogger.writeWithProfileInfo(message, "messages", message.content, "Deleted Messages", "deleted");
                     } else if (message.hasAttachments()) {
-                        for (MessageAttachment attachment : message.getAttachments()) {
+                        for (MessageAttachment attachment : message.attachments) {
                             FileLogger.writeWithProfileInfo(message, "attachments", attachment.filename + (attachment.proxyUrl != null ? " (" + attachment.proxyUrl + ")" : ""), "Deleted Messages", "deleted");
                         }
                     }

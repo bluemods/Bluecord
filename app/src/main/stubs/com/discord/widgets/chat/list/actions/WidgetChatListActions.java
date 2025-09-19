@@ -9,14 +9,10 @@ public class WidgetChatListActions {
 
     public static void access$replyMessage(WidgetChatListActions actions, Message message, Channel channel) {}
 
-    // public final void editMessage(Message message) {}
-
-    // public final void replyMessage(Message message, Channel channel) {}
-
-    private void foobar() {}
+    private void notAUtilityClass() {}
 
     public static class Model {
-        public Message getMessage() { return new Message(); }
-        public Channel getChannel() { return new Channel(); }
+        public Message getMessage() { return null; }
+        public Channel getChannel() { return null; }
     }
 }

@@ -342,10 +342,10 @@ public class ThemingTools {
             @Override
             public void onDoubleClick(View view) {
                 MeUser self = StoreUtils.getSelf();
-                if (self != null && self.getId() == message.getAuthor().getId()) {
+                if (self != null && self.getId() == message.author.getId()) {
                     WidgetChatListActions.access$editMessage(new WidgetChatListActions(), message);
                 } else {
-                    Channel channel = StoreUtils.getChannelById(message.getChannelId());
+                    Channel channel = StoreUtils.getChannelById(message.channelId);
                     if (channel != null) {
                         WidgetChatListActions.access$replyMessage(new WidgetChatListActions(), message, channel);
                     } else {

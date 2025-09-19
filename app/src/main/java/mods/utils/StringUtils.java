@@ -220,7 +220,7 @@ public class StringUtils {
     }
 
     public static String quoteMessage(Channel channel, Message message) {
-        String text = message.getContent().trim();
+        String text = message.content.trim();
 
         if (text.isEmpty()) return "";
 
@@ -240,10 +240,10 @@ public class StringUtils {
 
         if (!StoreUtils.isChannelDm(channel)) {
             text = "```" +
-                    getUsernameWithDiscriminator(message.getAuthor())
+                    getUsernameWithDiscriminator(message.author)
                             // if for some reason the user has this in their name
                             .replace("```", "`\u200b``") +
-                    " | " + DiscordTools.formatDate(SnowflakeUtils.toTimestamp(message.getId())) +
+                    " | " + DiscordTools.formatDate(SnowflakeUtils.toTimestamp(message.id)) +
                     "```\n" + text;
         }
 

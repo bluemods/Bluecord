@@ -96,7 +96,7 @@ public class SearchUtils {
         if (EmptyUtils.isEmpty(response.getHits())) return null;
 
         for (Message hit : response.getHits()) {
-            Integer type = hit.F();
+            Integer type = hit.type;
             // Ignore joins and adds, they aren't messages in the way you'd expect
             if (type != null && type != MessageParserConstants.TYPE_USER_JOIN && type != MessageParserConstants.TYPE_RECIPIENT_ADD) {
                 return hit;

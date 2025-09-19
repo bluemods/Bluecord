@@ -117,7 +117,7 @@ public class Colors {
 
     private static boolean isMessageOutgoing(Message message) {
         MeUser self = StoreUtils.getSelf();
-        return self != null && self.getId() == message.getAuthor().getId();
+        return self != null && self.getId() == message.author.getId();
     }
 
     public static int getDeletedMessageColor() {

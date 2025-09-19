@@ -144,30 +144,15 @@ public class StoreUtils {
 
     public static boolean isMessageEdited(Message message) {
         UtcDateTime time;
-        return message != null && (time = message.j()) != null && time.g() != 0;
+        return message != null && (time = message.editedTimestamp) != null && time.g() != 0;
     }
 
     public static boolean isMessageEdited(com.discord.models.message.Message message) {
-        return message != null && message.getEditedTimestamp() != null && message.getEditedTimestamp().g() != 0;
+        return message != null && message.editedTimestamp != null && message.editedTimestamp.g() != 0;
     }
 
     public static boolean isChannelDm(Channel channel) {
         return channel != null && channel.D() == MessageChannelTypes.DM;
-    }
-
-    private static final long MAX_DIFFERENCE = TimeUnit.MINUTES.toMillis(2);
-
-    public static boolean isEligibleForAntiSpam(Message message) {
-        String content = message.i();
-
-        if (StringUtils.isEmpty(content)) return false;
-        if (isMessageEdited(message)) return false;
-        if (!isChannelDm(getChannelById(message.g()))) return false;
-
-        long currentTs = getServerSyncedTime();
-        long messageTs = SnowflakeUtils.timestampForMessage(message);
-
-        return Math.abs(currentTs - messageTs) < MAX_DIFFERENCE;
     }
 
     public static long getServerSyncedTime() {

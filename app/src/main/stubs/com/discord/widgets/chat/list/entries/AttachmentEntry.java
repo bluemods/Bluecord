@@ -33,7 +33,7 @@ public class AttachmentEntry extends ChatListEntry {
         this.autoPlayGifs = autoPlayGifs;
         this.isThreadStarterMessage = isThreadStarterMessage;
         this.type = 28;
-        this.key = String.valueOf(getType()) + message.getId();
+        this.key = String.valueOf(getType()) + message.id;
     }
 
     public final int component1() {

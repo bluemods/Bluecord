@@ -20,7 +20,7 @@ public class SnowflakeUtils {
     }
 
     public static long timestampForMessage(Message message) {
-        return toTimestamp(message.o());
+        return toTimestamp(message.id);
     }
 
 }

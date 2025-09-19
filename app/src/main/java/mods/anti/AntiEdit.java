@@ -31,7 +31,7 @@ public class AntiEdit {
         if (StoreUtils.isMessageEdited(message)) {
             // faster to use get and check for null
             // compared to containsKey() then get()
-            List<String> edits = editedMessages.get(message.getId());
+            List<String> edits = editedMessages.get(message.id);
 
             if (edits != null) {
                 List<String> copy = new ArrayList<>(edits);
@@ -53,27 +53,27 @@ public class AntiEdit {
 
         if (!"Off".equalsIgnoreCase(mode)) {
 
-            Message oldMessage = map.get(newMessage.o());
+            Message oldMessage = map.get(newMessage.id);
 
             if (oldMessage == null) {
-                LogUtils.log("AntiEdit", "edited message not found in cache:\n" + newMessage.toString());
+                LogUtils.log("AntiEdit", "edited message not found in cache:\n" + newMessage);
                 return;
             }
 
-            String previousContent = oldMessage.getContent();
-            String newContent = newMessage.i();
+            String previousContent = oldMessage.content;
+            String newContent = newMessage.content;
 
             LogUtils.log("AntiEdit", "edited message found:\n" + previousContent);
 
             synchronized (AntiEdit.class) {
                 // faster to use get and check for null
                 // compared to containsKey() then get()
-                List<String> edits = editedMessages.get(newMessage.o());
+                List<String> edits = editedMessages.get(newMessage.id);
 
                 if (edits == null) {
                     edits = new ArrayList<>(5);
                     edits.add(previousContent);
-                    editedMessages.put(newMessage.o(), edits);
+                    editedMessages.put(newMessage.id, edits);
                 } else {
                     if (edits.size() >= 5) {
                         edits.remove(0);
@@ -95,11 +95,11 @@ public class AntiEdit {
     }
 
     public static String getEditedStringWithTimestamp(Message message, Context context) {
-        if (!QuickAccessPrefs.isEditTimestampEnabled() || message.getEditedTimestamp() == null) return EditedMessageNode.Companion.getEditedString(context);
+        if (!QuickAccessPrefs.isEditTimestampEnabled() || message.editedTimestamp == null) return EditedMessageNode.Companion.getEditedString(context);
 
         return " (" +
                 context.getString(com.bluecord.R.string.message_edited) + ' ' +
-                TimeUtils.toReadableTimeString(context, message.getEditedTimestamp().g(), ClockFactory.get()) +
+                TimeUtils.toReadableTimeString(context, message.editedTimestamp.g(), ClockFactory.get()) +
                 ')';
     }
 

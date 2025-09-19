@@ -113,7 +113,7 @@ public class RefreshUtils {
             Object o = data.get(i);
             if (o instanceof MessageEntry) {
                 MessageEntry entry = (MessageEntry) o;
-                if (entry.getMessage().getId() == id) {
+                if (entry.getMessage().id == id) {
                     LogUtils.log(TAG, "message " + id + " invalidated");
                     adapter.notifyItemChanged(i);
                     return;

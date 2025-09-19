@@ -296,7 +296,7 @@ public class SheetConfig {
         Channel channel = model.getChannel();
         Message message = model.getMessage();
 
-        String messageText = message.getContent();
+        String messageText = message.content;
 
         // quoting, translating
         if (messageText == null) {
@@ -334,7 +334,7 @@ public class SheetConfig {
 
                     if (message.hasAttachments()) {
                         sb.append("Attachments:\n");
-                        for (MessageAttachment attachment : message.getAttachments()) {
+                        for (MessageAttachment attachment : message.attachments) {
                             sb.append("\n").append(attachment.proxyUrl);
                         }
                     }
