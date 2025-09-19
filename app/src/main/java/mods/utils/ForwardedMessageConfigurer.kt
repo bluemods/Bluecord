@@ -26,7 +26,7 @@ object ForwardedMessageConfigurer {
         val listener = fun(_: View) {
             runCatchingOrLog {
                 val cid = message.messageReference?.channelId ?: return
-                val mid = message.messageReference?.channelId ?: return
+                val mid = message.messageReference?.messageId ?: return
                 StoreStream.getMessagesLoader().jumpToMessage(cid, mid)
             }
         }
