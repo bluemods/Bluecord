@@ -9,7 +9,13 @@ import com.discord.api.utcdatetime.UtcDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import mods.parser.InteractionMetadata;
+
 public class Message {
+
+    // Added by us
+    @Nullable
+    public InteractionMetadata interactionMetadata;
 
     /** getAuthor() */
     public User e() { return null; }

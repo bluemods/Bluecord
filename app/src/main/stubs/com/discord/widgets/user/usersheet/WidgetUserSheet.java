@@ -3,8 +3,7 @@ package com.discord.widgets.user.usersheet;
 import androidx.fragment.app.FragmentManager;
 
 public class WidgetUserSheet {
-    /* renamed from: Companion, reason: from kotlin metadata */
-    public static final Companion INSTANCE = new Companion();
+    public static final Companion Companion = new Companion();
 
     public enum StreamPreviewClickBehavior {
         TARGET_AND_LAUNCH_SPECTATE,

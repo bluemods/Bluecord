@@ -1395,6 +1395,19 @@
     .line 35
     invoke-direct/range {v0 .. v44}, Lcom/discord/models/message/Message;-><init>(JJLjava/lang/Long;Lcom/discord/api/user/User;Ljava/lang/String;Lcom/discord/api/utcdatetime/UtcDateTime;Lcom/discord/api/utcdatetime/UtcDateTime;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/Integer;Lcom/discord/api/message/activity/MessageActivity;Lcom/discord/api/application/Application;Ljava/lang/Long;Lcom/discord/api/message/MessageReference;Ljava/lang/Long;Ljava/util/List;Ljava/util/List;Lcom/discord/api/message/Message;Lcom/discord/api/interaction/Interaction;Lcom/discord/api/channel/Channel;Ljava/util/List;Lcom/discord/api/message/call/MessageCall;Ljava/lang/Boolean;Lcom/discord/api/message/role_subscription/RoleSubscriptionData;ZLcom/discord/api/message/allowedmentions/MessageAllowedMentions;Ljava/lang/Integer;Ljava/lang/Long;Ljava/lang/Long;Ljava/util/List;Lcom/discord/utilities/captcha/CaptchaHelper$CaptchaPayload;IILkotlin/jvm/internal/DefaultConstructorMarker;)V
 
+    move-object/from16 v14, v0
+    move-object/from16 v15, p1
+    invoke-direct {v14, v15}, Lcom/discord/models/message/Message;->thisIsFuckingStupid(Lcom/discord/api/message/Message;)V
+
+    return-void
+.end method
+
+.method private thisIsFuckingStupid(Lcom/discord/api/message/Message;)V
+    .locals 1
+
+    iget-object v0, p1, Lcom/discord/api/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
+    iput-object v0, p0, Lcom/discord/models/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
+
     return-void
 .end method
 
@@ -4961,6 +4974,20 @@
 .end method
 
 .method public final merge(Lcom/discord/api/message/Message;)Lcom/discord/models/message/Message;
+    .locals 2
+
+    iget-object v0, p0, Lcom/discord/models/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
+
+    invoke-virtual {p0, p1}, Lcom/discord/models/message/Message;->mergeInternal(Lcom/discord/api/message/Message;)Lcom/discord/models/message/Message;
+
+    move-result-object v1
+
+    iput-object v0, v1, Lcom/discord/models/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
+
+    return-object v1
+.end method
+
+.method public final mergeInternal(Lcom/discord/api/message/Message;)Lcom/discord/models/message/Message;
     .locals 47
 
     move-object/from16 v15, p0
@@ -5550,6 +5577,20 @@
 .end method
 
 .method public final synthesizeApiMessage()Lcom/discord/api/message/Message;
+    .locals 5
+    
+    # Copy original fields
+    invoke-virtual {p0}, Lcom/discord/models/message/Message;->synthesizeApiMessageInternal()Lcom/discord/api/message/Message;
+    move-result-object v0
+
+    # Copy new fields
+    iget-object v1, p0, Lcom/discord/models/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
+    iput-object v1, v0, Lcom/discord/api/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
+
+    return-object v0
+.end method
+
+.method public final synthesizeApiMessageInternal()Lcom/discord/api/message/Message;
     .locals 41
 
     move-object/from16 v0, p0

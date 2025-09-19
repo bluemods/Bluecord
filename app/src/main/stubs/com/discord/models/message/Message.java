@@ -54,4 +54,15 @@ public class Message {
     public boolean isWebhook() {
         return false;
     }
+
+    public final Message merge(com.discord.api.message.Message other) {
+        InteractionMetadata metadata = this.interactionMetadata;
+        Message merged = mergeInternal(other);
+        merged.interactionMetadata = metadata;
+        return merged;
+    }
+
+    public final Message mergeInternal(com.discord.api.message.Message message) {
+        return null;
+    }
 }
