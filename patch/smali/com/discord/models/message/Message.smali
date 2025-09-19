@@ -446,6 +446,8 @@
 
 .field public deleted:Z
 
+.field public interactionMetadata:Lmods/parser/InteractionMetadata;
+
 
 # direct methods
 .method public static constructor <clinit>()V

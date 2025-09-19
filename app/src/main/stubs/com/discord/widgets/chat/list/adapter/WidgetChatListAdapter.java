@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.discord.models.guild.Guild;
+import com.discord.models.message.Message;
 import com.discord.utilities.mg_recycler.MGRecyclerAdapterSimple;
 import com.discord.utilities.mg_recycler.MGRecyclerViewHolder;
 import com.discord.widgets.chat.list.entries.ChatListEntry;
@@ -45,5 +46,9 @@ public class WidgetChatListAdapter extends MGRecyclerAdapterSimple<ChatListEntry
 
     public Data getData() {
         return null;
+    }
+
+    public interface EventHandler {
+        void onMessageAuthorAvatarClicked(Message message, long guildId);
     }
 }

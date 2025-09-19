@@ -4,10 +4,18 @@ import com.discord.api.message.attachment.MessageAttachment;
 import com.discord.api.user.User;
 import com.discord.api.utcdatetime.UtcDateTime;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import mods.parser.InteractionMetadata;
+
 public class Message {
+
+    // Added by us
+    @Nullable
+    public InteractionMetadata interactionMetadata;
 
     public Message() {}
 
@@ -36,6 +44,14 @@ public class Message {
     }
 
     public boolean isFailed() {
+        return false;
+    }
+
+    public boolean isCrosspost() {
+        return false;
+    }
+
+    public boolean isWebhook() {
         return false;
     }
 }

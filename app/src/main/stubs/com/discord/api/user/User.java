@@ -37,4 +37,8 @@ public class User {
     @Deprecated
     public String f() { return null; }
 
+    /** isBot */
+    public Boolean e() {
+        return null;
+    }
 }
