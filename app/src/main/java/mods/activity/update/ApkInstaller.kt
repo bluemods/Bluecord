@@ -275,10 +275,11 @@ object ApkInstaller {
     }
 
     @JvmStatic
-    fun checkPendingDownload(activity: Activity) {
-        pendingHandler.getAndSet(null)?.let { (handler, file) ->
+    fun checkPendingDownload(activity: Activity): Boolean {
+        return pendingHandler.getAndSet(null)?.let { (handler, file) ->
             install(activity, file, handler)
-        }
+            true
+        } ?: false
     }
 
     private fun install(activity: Activity, file: File, handler: DownloadHandler): Boolean {

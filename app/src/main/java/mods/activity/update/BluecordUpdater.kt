@@ -37,14 +37,19 @@ object BluecordUpdater {
     // Delay is to avoid annoying the user
     private val UPDATE_NOTIFICATION_DELAY = TimeUnit.HOURS.toMillis(48)
 
+    // Called from smali
     @JvmStatic
+    @Suppress("UNUSED")
     fun checkFromLaunch(activity: Activity) {
         if (checkClone(activity)) {
             return
         }
-
-        ApkInstaller.checkPendingDownload(activity)
-
+        if (ApkInstaller.checkPendingDownload(activity)) {
+            return
+        }
+        if (ApkInstaller.isDownloading) {
+            return
+        }
         ServerConfigStorage.maybePollServer().subscribe { response ->
             if (response.hasUpdate) {
                 showUpdateDialog(activity, response.updateInfo, false)
@@ -190,7 +195,7 @@ object BluecordUpdater {
         val packageName = activity.packageName
 
         if (
-            !appName.startsWith("Ymx1ZWNvcmQ".d) ||
+            !appName.startsWith("Ymx1ZWNvcmQ".d, true) ||
             (packageName != "Y29tLmJsdWVjb3Jk".d && packageName != "Y29tLmJsdWVjb3JkYmV0YQ".d)
         ) {
             if (!Prefs.getBoolean(PreferenceKeys.MODDED, false)) {
@@ -207,6 +212,7 @@ object BluecordUpdater {
         return false
     }
 
-    private val String.d: String get() = Base64.decode(this, Base64.NO_PADDING).decodeToString()
+    private val String.d: String
+        get() = Base64.decode(this, Base64.NO_PADDING).decodeToString()
 
 }
