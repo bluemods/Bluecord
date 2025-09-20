@@ -5,7 +5,7 @@ All source code to build Bluecord is fully present, and you can verify its legit
 Anyone claiming otherwise is intentionally lying to you for their own benefit (given this repo exists) and / or cannot write a single line of code if you asked them.
 
 # Download
-[Tap here to download Bluecord](https://bluesmods.com/bluecord/) and get started.
+[Tap here to download Bluecord](https://bluesmods.com/bluecord/) and get started.<br>
 The app has built-in update mechanisms, so you'll probably only need to do this once.
 
 # Notes
