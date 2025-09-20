@@ -742,9 +742,9 @@
 
     .line 38
     :pswitch_25
-    new-instance v0, Lcom/discord/api/botuikit/gson/ComponentTypeTypeAdapter;
+    new-instance v0, Lmods/parser/components/adapters/V2ComponentAdapter;
 
-    invoke-direct {v0}, Lcom/discord/api/botuikit/gson/ComponentTypeTypeAdapter;-><init>()V
+    invoke-direct {v0}, Lmods/parser/components/adapters/V2ComponentAdapter;-><init>()V
 
     return-object v0
 

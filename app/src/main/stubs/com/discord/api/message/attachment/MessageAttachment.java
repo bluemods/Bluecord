@@ -1,5 +1,8 @@
 package com.discord.api.message.attachment;
 
+/**
+ * https://discord.com/developers/docs/components/reference#unfurled-media-item
+ */
 public class MessageAttachment {
 
     public String filename;

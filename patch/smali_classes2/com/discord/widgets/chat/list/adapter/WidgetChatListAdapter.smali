@@ -348,7 +348,7 @@
     iput-object p6, p0, Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter;->clock:Lcom/discord/utilities/time/Clock;
 
     .line 3
-    new-instance p2, Lcom/discord/widgets/botuikit/ComponentProvider;
+    new-instance p2, Lmods/parser/components/adapters/V2ComponentProvider;
 
     invoke-virtual {p1}, Landroid/view/ViewGroup;->getContext()Landroid/content/Context;
 
@@ -358,7 +358,9 @@
 
     invoke-static {p1, p3}, Ld0/z/d/m;->checkNotNullExpressionValue(Ljava/lang/Object;Ljava/lang/String;)V
 
-    invoke-direct {p2, p1}, Lcom/discord/widgets/botuikit/ComponentProvider;-><init>(Landroid/content/Context;)V
+    invoke-direct {p2, p1}, Lmods/parser/components/adapters/V2ComponentProvider;-><init>(Landroid/content/Context;)V
+
+    check-cast p2, Lcom/discord/widgets/botuikit/ComponentProvider;
 
     iput-object p2, p0, Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter;->botUiComponentProvider:Lcom/discord/widgets/botuikit/ComponentProvider;
 
