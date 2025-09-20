@@ -35,6 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import mods.DiscordTools;
 import mods.ThemingTools;
+import mods.activity.update.BluecordUpdater;
 import mods.constants.PreferenceKeys;
 import mods.constants.URLConstants;
 import mods.dialog.Dialogs;
@@ -43,9 +44,11 @@ import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
 import mods.dialog.StandardAlerts;
 import mods.utils.AuthenticationUtils;
+import mods.utils.ClipboardUtil;
 import mods.utils.PatternUtils;
 import mods.utils.StoreUtils;
 import mods.utils.StringUtils;
+import mods.utils.Strings;
 import mods.utils.ToastUtil;
 import mods.utils.deleter.MessageDeleterTask;
 import mods.utils.translate.Translate;
@@ -150,6 +153,7 @@ public class MediaTray {
             addIfTyped("add", "adds a new custom command");
             addIfTyped("delete", "deletes a custom command");
             addIfTyped("tr ", "translate text into many languages\nExample: " + prefix + "tr hola");
+            addIfTyped("id", "Shows the IDs of the currently open chat");
             addIfTyped("purge ", "deletes your most recent messages in this channel\nExample: " + prefix + "purge 5");
             addIfTyped("prefix", "changes the command prefix\nExample: " + prefix + "prefix !");
             addIfTyped("ud ", "searches urban dictionary (Example: " + prefix + "ud blue)\nWarning: may be NSFW or offensive");
@@ -163,11 +167,11 @@ public class MediaTray {
             addIfTyped("owo", "ᵒʷᵒifies the message");
             addIfTyped("b", "makes text into a code block");
             addIfTyped("bold", "makes text bold");
-            addIfTyped("i", "makes text italic");
+            addIfTyped("italic", "makes text italic");
             addIfTyped("u", "underlines text");
             addIfTyped("s", "makes text strikethrough");
             addIfTyped("bluecord", "how this mod came to be");
-            addIfTyped("update", "update link for Bluecord");
+            addIfTyped("update", "update link for " + Strings.getAppName());
 
             addCustomCommands(commandsList);
 
@@ -226,14 +230,15 @@ public class MediaTray {
 
         return command.equals(ensurePrefix("add"))          || command.equals(ensurePrefix("delete"))       ||
                 command.startsWith(ensurePrefix("prefix ")) || command.startsWith(ensurePrefix("spoiler ")) ||
-                command.startsWith(ensurePrefix("i "))      || command.startsWith(ensurePrefix("uwu "))     ||
+                command.startsWith(ensurePrefix("italic ")) || command.startsWith(ensurePrefix("uwu "))     ||
                 command.startsWith(ensurePrefix("owo "))    || command.startsWith(ensurePrefix("lower "))   ||
                 command.startsWith(ensurePrefix("b "))      || command.startsWith(ensurePrefix("bold "))    ||
                 command.startsWith(ensurePrefix("s "))      || command.startsWith(ensurePrefix("u "))       ||
-                command.startsWith(ensurePrefix("tr "))     || // command.startsWith(ensurePrefix("read "))   ||
+                command.startsWith(ensurePrefix("tr "))     ||
                 command.equals(ensurePrefix("update"))      || command.startsWith(ensurePrefix("ud "))      ||
                 command.equals(ensurePrefix("bluecord"))    || command.startsWith(ensurePrefix("mock "))    ||
                 command.equals(ensurePrefix("upper "))      || command.equals(ensurePrefix("reverse "))     ||
+                command.equals(ensurePrefix("id"))          ||
                 command.equals(ensurePrefix("blank"))       || isExistingCustomCommand(text);
     }
 
@@ -321,7 +326,7 @@ public class MediaTray {
         else if (text.startsWith("b "))       text = "```\n" + text.substring(2) + "\n```";
         else if (text.startsWith("bold "))    text = "**"    + text.substring(2) + "**";
         else if (text.equals("blank"))        text = "\u200b";
-        else if (text.startsWith("i "))       text = "*"     + text.substring(2) + "*";
+        else if (text.startsWith("italic "))       text = "*"     + text.substring(2) + "*";
         else if (text.startsWith("u "))       text = "__"    + text.substring(2) + "__";
         else if (text.startsWith("s "))       text = "~~"    + text.substring(2) + "~~";
         else if (text.startsWith("mock "))    text = StringUtils.mock(text.substring(5));
@@ -345,7 +350,7 @@ public class MediaTray {
         }
 
         else if (text.equals("update")) {
-            DiscordTools.openUrlInBrowser(mFragment.requireActivity(), URLConstants.getBaseUrl());
+            BluecordUpdater.checkFromPreferences(mFragment.requireActivity());
         }
         else if (text.equals("bluecord")) {
             FragmentActivity activity = mFragment.getActivity();
@@ -353,8 +358,10 @@ public class MediaTray {
                 activity.runOnUiThread(() -> {
                     Dialogs.basicAlert(
                             mFragment.requireActivity(),
-                            "Bluecord",
-                            "The reason I started this project was that there were no other Discord mods available for Android where you can customize all the mods to your liking with a settings UI. " +
+                            Strings.getAppName(),
+                            "The reason I started this project was that there were no other " +
+                                    "Discord mods available for Android where you can customize all " +
+                                    "the mods to your liking with a settings UI.\n\n" +
                                     "The goal of this mod is to bring you all the mods you like, " +
                                     "but in a form factor that's customizable and easy to install and use with no coding or reversing required. " +
                                     "Hope you enjoy!\n\n" +
@@ -384,6 +391,21 @@ public class MediaTray {
                 //noinspection DataFlowIssue
                 x.getClass();
             });
+            text = "";
+        } else if (text.equals("id")) {
+            Long channelId = StoreUtils.getCurrentChannelId();
+            Long guildId = StoreUtils.getCurrentGuildId();
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Channel ID: " + channelId);
+            if (guildId != null) sb.append("\nGuild ID: " + guildId);
+
+            Dialogs.newBuilder(mediaTrayList.getContext())
+                    .setTitle("Chat IDs")
+                    .setMessage(sb)
+                    .setNeutralButton("Copy", (d, w) -> ClipboardUtil.copy(sb.toString(), "Copied"))
+                    .setPositiveButton("Exit")
+                    .showSafely();
             text = "";
         } else {
             text = customComs(original);
