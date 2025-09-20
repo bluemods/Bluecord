@@ -170,7 +170,7 @@
 
     invoke-direct {v5, v2}, Lb/i/d/q/x/a;-><init>(Lcom/google/gson/JsonElement;)V
 
-    invoke-virtual {v1, v5, v4}, Lcom/google/gson/Gson;->d(Lcom/google/gson/stream/JsonReader;Ljava/lang/Class;)Ljava/lang/Object;
+    invoke-virtual {v1, v5, v4}, Lcom/google/gson/Gson;->d(Lcom/google/gson/stream/JsonReader;Ljava/lang/reflect/Type;)Ljava/lang/Object;
 
     move-result-object v1
 
