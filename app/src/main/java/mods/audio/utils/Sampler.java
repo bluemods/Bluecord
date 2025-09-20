@@ -39,15 +39,8 @@ public class Sampler {
         while (i < sampleCount) {
             int i13 = i + 1;
             int rint = (int) Math.rint(i13 * length);
-            // q10 = cg.j.q(i12, Math.min(rint, data.length));
-            // Iterator<Integer> it = q10.iterator();
             int i14 = 0;
             int i15 = 0;
-            // while (it.hasNext()) {
-            //     i14 += getAbs(data[((p) it).nextInt()]);
-            //     i15++;
-            // }
-
             for (int j = i12; j < Math.min(rint, sampleData.length); j++) {
                 i14 += getAbs(sampleData[j]);
                 i15++;

@@ -51,4 +51,15 @@ public final class LogUtils {
     public static void logGatewaySocketData(@NotNull ByteArrayOutputStream stream) {
         // log("WSS", new String(stream.toByteArray(), StandardCharsets.UTF_8));
     }
+
+    public static Runnable wrapRunnable(Runnable r) {
+        return () -> {
+            try {
+                r.run();
+                log("RunWrapper", r.getClass().getName() + ": success");
+            } catch (Throwable e) {
+                log("RunWrapper", r.getClass().getName() + ": fail", e);
+            }
+        };
+    }
 }

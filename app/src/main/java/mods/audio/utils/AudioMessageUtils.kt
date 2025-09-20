@@ -4,6 +4,8 @@ import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import com.discord.api.message.attachment.MessageAttachment
 import com.discord.models.message.Message
+import mods.constants.PreferenceKeys
+import mods.preference.Prefs
 
 object AudioMessageUtils {
     private val AUDIO_EXTENSIONS = setOf(
@@ -29,7 +31,7 @@ object AudioMessageUtils {
 
     @JvmStatic
     fun isRecordingSupported(): Boolean {
-        return true
+        return Prefs.getBoolean(PreferenceKeys.ENABLE_OUTGOING_VOICE_MESSAGES, true)
     }
 
     @JvmStatic
