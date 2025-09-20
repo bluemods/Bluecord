@@ -29,9 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import kotlin.jvm.functions.Function1;
 import mods.DiscordTools;
 import mods.constants.Permission;
 import mods.parser.MessageChannelTypes;
@@ -177,7 +174,7 @@ public class StoreUtils {
         if (channel == null) return null;
         Guild guild = getGuildById(channel.i());
         if (guild == null) return null;
-        return guild.getId();
+        return guild.id;
     }
 
     @Nullable
@@ -211,7 +208,7 @@ public class StoreUtils {
             return -1;
         }
 
-        long maxFileSize = PremiumUtils.INSTANCE.getGuildMaxFileSizeMB(guild.getPremiumTier()) * 1048576L;
+        long maxFileSize = PremiumUtils.INSTANCE.getGuildMaxFileSizeMB(guild.premiumTier) * 1048576L;
 
         // LogUtils.log(TAG, "maxFileSize for guild " + guild.getName() + " : " + maxFileSize);
 
@@ -233,9 +230,9 @@ public class StoreUtils {
     public static long computePermissions(Guild guild, Channel channel, long guildMemberId) {
         long permission;
 
-        Map<Long, GuildMember> members = StoreStream.getGuilds().getGuildMembersComputedInternal$app_productionGoogleRelease().get(guild.getId());
-        Map<Long, GuildRole> roles = StoreStream.getGuilds().getGuildRolesInternal$app_productionGoogleRelease().get(guild.getId());
-        Map<Long, StageInstance> stageInstances = StoreStream.getStageInstances().getStageInstancesForGuildInternal(guild.getId());
+        Map<Long, GuildMember> members = StoreStream.getGuilds().getGuildMembersComputedInternal$app_productionGoogleRelease().get(guild.id);
+        Map<Long, GuildRole> roles = StoreStream.getGuilds().getGuildRolesInternal$app_productionGoogleRelease().get(guild.id);
+        Map<Long, StageInstance> stageInstances = StoreStream.getStageInstances().getStageInstancesForGuildInternal(guild.id);
         Channel guildChannel = StoreStream.getChannels().getGuildChannelInternal$app_productionGoogleRelease(channel.i(), channel.u());
         // boolean hasJoinedInternal = this.storeThreadsJoined.hasJoinedInternal(channel.h());
         boolean hasJoinedInternal = true;
@@ -247,7 +244,7 @@ public class StoreUtils {
                     guildMemberId,
                     channel,
                     guildChannel,
-                    guild.getOwnerId(),
+                    guild.ownerId,
                     members != null ? members.get(guildMemberId) : null,
                     roles,
                     stageInstances,

@@ -1,54 +1,63 @@
-package com.discord.models.guild;
+package com.discord.api.guild;
 
+import com.discord.api.channel.Channel;
 import com.discord.api.emoji.GuildEmoji;
 import com.discord.api.emoji.GuildExplicitContentFilter;
-import com.discord.api.guild.GuildFeature;
-import com.discord.api.guild.GuildHubType;
-import com.discord.api.guild.GuildMaxVideoChannelUsers;
-import com.discord.api.guild.GuildVerificationLevel;
 import com.discord.api.guild.welcome.GuildWelcomeScreen;
 import com.discord.api.role.GuildRole;
+import com.discord.api.stageinstance.StageInstance;
 import com.discord.api.sticker.Sticker;
+import com.discord.api.voice.state.VoiceState;
+import com.discord.models.member.GuildMember;
+import com.discord.models.presence.Presence;
 
 import java.util.List;
-import java.util.Set;
 
-public class Guild {
-
+public final class Guild {
     public Long afkChannelId;
     public int afkTimeout;
+    public int approximateMemberCount;
     public int approximatePresenceCount;
     public String banner;
-    public int defaultMessageNotifications;
+    public List<Channel> channelUpdates;
+    public List<Channel> channels;
+    public Integer defaultMessageNotifications;
     public String description;
+    // public List<EmbeddedActivityInGuild> embeddedActivities;
     public List<GuildEmoji> emojis;
     public GuildExplicitContentFilter explicitContentFilter;
-    public Set<GuildFeature> features;
+    public List<GuildFeature> features;
+    // public GuildHashes guildHashes;
+    // public List<GuildScheduledEvent> guildScheduledEvents;
     public GuildHubType hubType;
     public String icon;
     public long id;
     public String joinedAt;
     public GuildMaxVideoChannelUsers maxVideoChannelUsers;
     public int memberCount;
+    public List<GuildMember> members;
     public int mfaLevel;
     public String name;
     public boolean nsfw;
     public long ownerId;
+    public Long permissions;
     public String preferredLocale;
     public int premiumSubscriptionCount;
     public int premiumTier;
+    public List<Presence> presences;
     public Long publicUpdatesChannelId;
     public String region;
     public List<GuildRole> roles;
     public Long rulesChannelId;
-    public String shortName;
     public String splash;
+    public List<StageInstance> stageInstances;
     public List<Sticker> stickers;
     public int systemChannelFlags;
     public Long systemChannelId;
+    public List<Channel> threads;
     public boolean unavailable;
     public String vanityUrlCode;
     public GuildVerificationLevel verificationLevel;
+    public List<VoiceState> voiceStates;
     public GuildWelcomeScreen welcomeScreen;
-
 }
