@@ -8,6 +8,9 @@ import java.io.IOException
 import java.io.OutputStreamWriter
 import java.nio.charset.StandardCharsets
 
+/**
+ * TODO this kinda sucks
+ */
 object FileLogger {
     private val TAG = FileLogger::class.java.simpleName
 

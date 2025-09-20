@@ -26,6 +26,8 @@ object QuickAccessPrefs {
         private set
     @JvmStatic var disableTyping: Boolean = false
         private set
+    @JvmStatic var editMode: EditMode = EditMode.OFF
+        private set
 
     init {
         reload()
@@ -43,5 +45,6 @@ object QuickAccessPrefs {
         emoteMode = EmoteMode(Prefs.getString(EMOTE_MODE, "Off"))
         tagMode = Prefs.getString(SHOW_TAG_V2, "Off")
         disableTyping = Prefs.getBoolean(DISABLE_TYPING, false)
+        editMode = EditMode.parse(Prefs.getString(ANTI_EDIT_MODE, EditMode.OFF.prefsValue))
     }
 }

@@ -1,23 +1,20 @@
-package mods.db;
+package mods.db
 
-public class Databases {
+import android.database.sqlite.SQLiteException
+import mods.DiscordTools
 
-    /*
-    private static SQLiteDatabase db;
+object Databases {
 
-    private static final String DB_NAME = "Bluecord.db";
+    private const val DB_NAME = "Bluecord.db"
+    private var db: BluecordDatabase? = null
 
-    public static SQLiteDatabase getDb() throws SQLiteException {
-        if (db == null || !db.isOpen()) {
-            db = DiscordTools.getContext().openOrCreateDatabase(DB_NAME, 0, null);
-            try {
-                db.execSQL("CREATE TABLE IF NOT EXISTS DeletedMessageTable (id LONG, text VARCHAR, timestamp LONG)");
-                db.execSQL("CREATE TABLE IF NOT EXISTS EditedMessageTable (id LONG, old_text VARCHAR, new_text VARCHAR, timestamp LONG)");
-                upgradeDatabase(db);
-            } catch (Exception e) {
-            }
+    @JvmStatic
+    @Throws(SQLiteException::class)
+    fun get(): BluecordDatabase {
+        var db = this.db
+        if (db == null || !db.isHealthy) {
+            db = BluecordDatabase(DiscordTools.context.openOrCreateDatabase(DB_NAME, 0, null))
         }
-        return db;
+        return db
     }
-    */
 }
