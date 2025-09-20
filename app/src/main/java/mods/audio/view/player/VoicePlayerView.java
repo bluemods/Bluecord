@@ -91,7 +91,7 @@ public class VoicePlayerView extends RelativeLayout implements HeadphoneUnplugge
 
             if (audioUrl == null) {
                 this.failed = true;
-                this.setTimeText("Something went wrong");
+                this.setTimeTextWithFileName("Something went wrong");
                 toggleLoading(false);
                 return;
             }
@@ -102,7 +102,7 @@ public class VoicePlayerView extends RelativeLayout implements HeadphoneUnplugge
             FileDownloader.download(
                     Long.toString(model.getMessage().id),
                     audioUrl,
-                    (progress, message) -> post(() -> setTimeText(message))
+                    (progress, message) -> post(() -> setTimeTextWithFileName(message))
             ).add(new PromiseListener<File>() {
                 @Override
                 public void succeeded(File file) {
@@ -120,7 +120,7 @@ public class VoicePlayerView extends RelativeLayout implements HeadphoneUnplugge
                     post(() -> {
                         try {
                             failed = true;
-                            setTimeText("Failed to load");
+                            setTimeText(String.format("Failed to load %s", getFileName()));
                             toggleLoading(false);
                         } catch (Throwable e) {
                             LogUtils.log(TAG, "wtf", th);
@@ -157,7 +157,7 @@ public class VoicePlayerView extends RelativeLayout implements HeadphoneUnplugge
         } catch (Throwable t) {
             EventTracker.trackException(t);
             this.failed = true;
-            this.setTimeText("Failed to load");
+            this.setTimeText(String.format("Failed to load %s", getFileName()));
             toggleLoading(false);
         }
     }
@@ -167,7 +167,7 @@ public class VoicePlayerView extends RelativeLayout implements HeadphoneUnplugge
         this.duration = duration;
         onPlayStateChanged(false);
         this.seekBar.setDuration(this.duration);
-        this.setTimeText(String.format(Locale.US, "%d:%02d", duration / 1000 / 60, duration / 1000 % 60));
+        this.setTimeTextWithFileName(String.format(Locale.US, "%d:%02d", duration / 1000 / 60, duration / 1000 % 60));
     }
 
     public void setStyleColor(int color) {
@@ -183,7 +183,7 @@ public class VoicePlayerView extends RelativeLayout implements HeadphoneUnplugge
     public final void setTime(int msElapsed, boolean setSliderPosition) {
         this.seekBar.setDuration(this.duration);
 
-        this.setTimeText(String.format(Locale.US, "%d:%02d/%d:%02d",
+        this.setTimeTextWithFileName(String.format(Locale.US, "%d:%02d/%d:%02d",
                 msElapsed / 1000 / 60, msElapsed / 1000 % 60,
                 duration / 1000 / 60, duration / 1000 % 60
         ));
@@ -207,7 +207,7 @@ public class VoicePlayerView extends RelativeLayout implements HeadphoneUnplugge
     private void toggleLoading(boolean loading) {
         this.wheel.toggleWheel(loading);
         if (loading) {
-            setTimeText("Loading...");
+            setTimeText(String.format("Loading %s...", getFileName()));
             this.playButton.setVisibility(GONE);
             this.pauseButton.setVisibility(GONE);
         } else if (!this.failed) {
@@ -218,6 +218,19 @@ public class VoicePlayerView extends RelativeLayout implements HeadphoneUnplugge
 
     public void setTimeText(String text) {
         this.timeView.setText(text);
+    }
+
+    private String getFileName() {
+        String filename = model.getAttachment().filename;
+        if (filename.toLowerCase(Locale.ROOT).startsWith("voice-message.")) {
+            return "Voice message";
+        } else {
+            return filename;
+        }
+    }
+
+    public void setTimeTextWithFileName(String text) {
+        this.timeView.setText(getFileName().concat(" — ").concat(text));
     }
 
     @Override

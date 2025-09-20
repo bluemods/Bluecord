@@ -203,39 +203,39 @@
 # static fields
 .field public static final Companion:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$Companion;
 
-.field private static final NEW_MESSAGES_MAX_SCROLLBACK_COUNT:I = 0x1e
+.field public static final NEW_MESSAGES_MAX_SCROLLBACK_COUNT:I = 0x1e
 
-.field private static final NEW_MESSAGES_MIN_SCROLLBACK_COUNT:I = 0xa
+.field public static final NEW_MESSAGES_MIN_SCROLLBACK_COUNT:I = 0xa
 
 
 # instance fields
-.field private final appPermissionsRequests:Lcom/discord/app/AppPermissionsRequests;
+.field public final appPermissionsRequests:Lcom/discord/app/AppPermissionsRequests;
 
-.field private final botUiComponentProvider:Lcom/discord/widgets/botuikit/ComponentProvider;
+.field public final botUiComponentProvider:Lcom/discord/widgets/botuikit/ComponentProvider;
 
-.field private final clock:Lcom/discord/utilities/time/Clock;
+.field public final clock:Lcom/discord/utilities/time/Clock;
 
-.field private data:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$Data;
+.field public data:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$Data;
 
-.field private final eventHandler:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$EventHandler;
+.field public final eventHandler:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$EventHandler;
 
-.field private final flexInputViewModel:Lcom/discord/widgets/chat/input/AppFlexInputViewModel;
+.field public final flexInputViewModel:Lcom/discord/widgets/chat/input/AppFlexInputViewModel;
 
-.field private fragmentManager:Landroidx/fragment/app/FragmentManager;
+.field public fragmentManager:Landroidx/fragment/app/FragmentManager;
 
-.field private final handlerOfScrolls:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$HandlerOfScrolls;
+.field public final handlerOfScrolls:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$HandlerOfScrolls;
 
-.field private final handlerOfTouches:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$HandlerOfTouches;
+.field public final handlerOfTouches:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$HandlerOfTouches;
 
-.field private final handlerOfUpdates:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$HandlerOfUpdates;
+.field public final handlerOfUpdates:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$HandlerOfUpdates;
 
-.field private isTouchedSinceLastJump:Z
+.field public isTouchedSinceLastJump:Z
 
-.field private lastUpdateJob:Lkotlinx/coroutines/Job;
+.field public lastUpdateJob:Lkotlinx/coroutines/Job;
 
-.field private mentionMeMessageLevelHighlighting:Z
+.field public mentionMeMessageLevelHighlighting:Z
 
-.field private scrollToWithHighlight:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$ScrollToWithHighlight;
+.field public scrollToWithHighlight:Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter$ScrollToWithHighlight;
 
 
 # direct methods

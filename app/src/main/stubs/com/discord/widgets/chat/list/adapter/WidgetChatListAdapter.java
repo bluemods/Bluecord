@@ -1,5 +1,6 @@
 package com.discord.widgets.chat.list.adapter;
 
+import android.net.Uri;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class WidgetChatListAdapter extends MGRecyclerAdapterSimple<ChatListEntry> {
+
+    public EventHandler eventHandler;
+
     public interface Data {
         long getChannelId();
         Map<Long, String> getChannelNames();
@@ -50,5 +54,7 @@ public class WidgetChatListAdapter extends MGRecyclerAdapterSimple<ChatListEntry
 
     public interface EventHandler {
         void onMessageAuthorAvatarClicked(Message message, long guildId);
+        boolean onQuickDownloadClicked(Uri uri, String str);
+        void onMessageLongClicked(Message message, CharSequence charSequence, boolean z);
     }
 }

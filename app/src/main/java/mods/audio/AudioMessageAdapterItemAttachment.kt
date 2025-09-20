@@ -4,8 +4,10 @@ import android.graphics.Color
 import android.view.View
 import android.view.ViewPropertyAnimator
 import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.constraintlayout.widget.Barrier
 import androidx.constraintlayout.widget.Guideline
+import androidx.core.net.toUri
 import com.bluecord.R
 import com.discord.stores.StoreStream
 import com.discord.utilities.view.extensions.ViewExtensions
@@ -36,6 +38,7 @@ class AudioMessageAdapterItemAttachment(
     private val voicePlayerView: VoicePlayerView = itemView.findViewById(R.id.blue_audio_voice_player_view)
     private val chatListItemAttachmentBarrier: Barrier = itemView.findViewById(R.id.chat_list_item_attachment_barrier)
     private val chatListItemAttachmentSpoiler: FrameLayout = itemView.findViewById(R.id.chat_list_item_attachment_spoiler)
+    private val downloadButton = itemView.findViewById<ImageView>(R.id.chat_list_item_attachment_download)
 
     override fun onPause() {}
     override fun onResume() {}
@@ -65,6 +68,22 @@ class AudioMessageAdapterItemAttachment(
         chatListItemAttachmentCard.visibility = View.VISIBLE
         voicePlayerView.setStyleColor(Color.LTGRAY)
         voicePlayerView.setModel(entry)
+
+        downloadButton.isEnabled = true
+        downloadButton.alpha = 1.0f
+        downloadButton.setOnClickListener {
+            val eventHandler = adapter.eventHandler
+            val uri = entry.attachment.url.toUri()
+            val clicked = eventHandler.onQuickDownloadClicked(uri, entry.attachment.filename)
+            downloadButton.setEnabled(!clicked)
+            downloadButton.setAlpha(0.3f)
+        }
+
+        chatListItemAttachmentCard.setOnLongClickListener {
+            val eventHandler = adapter.eventHandler
+            eventHandler.onMessageLongClicked(entry.message, entry.message.content.orEmpty(), entry.isThreadStarterMessage)
+            true
+        }
     }
 
     private fun configureHiddenMsg(entry: AudioMessageEntry) {
