@@ -22,6 +22,7 @@ import java.util.List;
 
 import mods.parser.InteractionMetadata;
 import mods.parser.MessageSnapshots;
+import mods.parser.polls.MessagePoll;
 
 @SuppressWarnings("unused")
 public class Message {
@@ -69,5 +70,9 @@ public class Message {
 
     // Added by us
     public boolean deleted;
+
+    // Added by us
+    @Nullable
+    public MessagePoll poll;
 
 }

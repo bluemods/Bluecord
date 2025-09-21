@@ -443,7 +443,153 @@
     return-object p1
 .end method
 
+
 .method public final createEmbedEntries(Lcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;ZZZZZLcom/discord/api/channel/Channel;Lcom/discord/models/member/GuildMember;Ljava/util/Map;Ljava/util/Map;)Ljava/util/List;
+    .locals 19
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Lcom/discord/models/message/Message;",
+            "Lcom/discord/stores/StoreMessageState$State;",
+            "ZZZZZ",
+            "Lcom/discord/api/channel/Channel;",
+            "Lcom/discord/models/member/GuildMember;",
+            "Ljava/util/Map<",
+            "Ljava/lang/Long;",
+            "Lcom/discord/api/role/GuildRole;",
+            ">;",
+            "Ljava/util/Map<",
+            "Ljava/lang/Long;",
+            "Ljava/lang/String;",
+            ">;)",
+            "Ljava/util/List<",
+            "Lcom/discord/widgets/chat/list/entries/ChatListEntry;",
+            ">;"
+        }
+    .end annotation
+
+    move-object/from16 v0, p1
+
+    invoke-virtual/range {p0 .. p11}, Lcom/discord/widgets/chat/list/entries/ChatListEntry$Companion;->createEmbedEntriesInternal(Lcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;ZZZZZLcom/discord/api/channel/Channel;Lcom/discord/models/member/GuildMember;Ljava/util/Map;Ljava/util/Map;)Ljava/util/List;
+
+    move-result-object v1
+
+    iget-object v2, v0, Lcom/discord/models/message/Message;->poll:Lmods/parser/polls/MessagePoll;
+
+    if-eqz v2, :cond_0
+
+    new-instance v2, Lmods/parser/polls/PollEntry;
+
+    iget-object v3, v0, Lcom/discord/models/message/Message;->poll:Lmods/parser/polls/MessagePoll;
+
+    move-object/from16 v4, p2
+
+    move-object/from16 v5, p8
+
+    invoke-direct {v2, v5, v0, v4, v3}, Lmods/parser/polls/PollEntry;-><init>(Lcom/discord/api/channel/Channel;Lcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;Lmods/parser/polls/MessagePoll;)V
+
+    invoke-interface {v1, v2}, Ljava/util/List;->add(Ljava/lang/Object;)Z
+
+    goto :goto_0
+
+    :cond_0
+    move-object/from16 v4, p2
+
+    move-object/from16 v5, p8
+
+    :goto_0
+    invoke-interface {v1}, Ljava/util/List;->listIterator()Ljava/util/ListIterator;
+
+    move-result-object v2
+
+    :goto_1
+    invoke-interface {v2}, Ljava/util/ListIterator;->hasNext()Z
+
+    move-result v3
+
+    if-eqz v3, :cond_2
+
+    invoke-interface {v2}, Ljava/util/ListIterator;->next()Ljava/lang/Object;
+
+    move-result-object v3
+
+    check-cast v3, Lcom/discord/widgets/chat/list/entries/ChatListEntry;
+
+    instance-of v6, v3, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;
+
+    if-eqz v6, :cond_1
+
+    instance-of v6, v3, Lmods/audio/AudioMessageEntry;
+
+    if-nez v6, :cond_1
+
+    move-object v6, v3
+
+    check-cast v6, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;
+
+    invoke-virtual {v6}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;->getAttachment()Lcom/discord/api/message/attachment/MessageAttachment;
+
+    move-result-object v7
+
+    invoke-static {v7}, Lmods/audio/utils/AudioMessageUtils;->isAudioMessage(Lcom/discord/api/message/attachment/MessageAttachment;)Z
+
+    move-result v7
+
+    if-eqz v7, :cond_1
+
+    new-instance v7, Lmods/audio/AudioMessageEntry;
+
+    invoke-virtual {v6}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;->getEmbedIndex()I
+
+    move-result v9
+
+    invoke-virtual {v6}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;->getGuildId()J
+
+    move-result-wide v10
+
+    invoke-virtual {v6}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;->getMessage()Lcom/discord/models/message/Message;
+
+    move-result-object v12
+
+    invoke-virtual {v6}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;->getMessageState()Lcom/discord/stores/StoreMessageState$State;
+
+    move-result-object v13
+
+    invoke-virtual {v6}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;->getAttachment()Lcom/discord/api/message/attachment/MessageAttachment;
+
+    move-result-object v14
+
+    invoke-virtual {v6}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;->isBlockedExpanded()Z
+
+    move-result v15
+
+    invoke-virtual {v6}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;->isInExpandedBlockedMessageChunk()Z
+
+    move-result v16
+
+    invoke-virtual {v6}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;->getAutoPlayGifs()Z
+
+    move-result v17
+
+    invoke-virtual {v6}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;->isThreadStarterMessage()Z
+
+    move-result v18
+
+    move-object v8, v7
+
+    invoke-direct/range {v8 .. v18}, Lmods/audio/AudioMessageEntry;-><init>(IJLcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;Lcom/discord/api/message/attachment/MessageAttachment;ZZZZ)V
+
+    invoke-interface {v2, v7}, Ljava/util/ListIterator;->set(Ljava/lang/Object;)V
+
+    :cond_1
+    goto :goto_1
+
+    :cond_2
+    return-object v1
+.end method
+
+
+.method public final createEmbedEntriesInternal(Lcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;ZZZZZLcom/discord/api/channel/Channel;Lcom/discord/models/member/GuildMember;Ljava/util/Map;Ljava/util/Map;)Ljava/util/List;
     .locals 18
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -502,10 +648,8 @@
 
     .line 2
     :cond_0
-    invoke-static {}, Ld0/t/n;->emptyList()Ljava/util/List;
-
-    move-result-object v0
-
+    new-instance v0, Ljava/util/ArrayList;
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
     return-object v0
 
     .line 3
@@ -641,10 +785,6 @@
 
     check-cast v7, Lcom/discord/api/message/attachment/MessageAttachment;
 
-	invoke-static {v7}, Lmods/audio/utils/AudioMessageUtils;->isAudioMessage(Lcom/discord/api/message/attachment/MessageAttachment;)Z
-	move-result v10
-	if-nez v10, :cond_100
-
     .line 16
     new-instance v10, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;
 
@@ -676,42 +816,6 @@
     .line 18
     invoke-direct/range {v1 .. v11}, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;-><init>(IJLcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;Lcom/discord/api/message/attachment/MessageAttachment;ZZZZ)V
 
-	goto :goto_101
-	:cond_100
-
-    .line 69420
-    new-instance v10, Lmods/audio/AudioMessageEntry;
-
-    add-int/lit8 v17, v2, 0x1
-
-    .line 69421
-    invoke-virtual/range {p8 .. p8}, Lcom/discord/api/channel/Channel;->i()J
-
-    move-result-wide v3
-
-    move-object v1, v10
-
-    move-object/from16 v5, p1
-
-    move-object/from16 v6, p2
-
-    move/from16 v8, p3
-
-    move/from16 v9, p4
-
-    move-object v12, v10
-
-    move/from16 v10, p5
-
-    const/4 v13, 0x0
-
-    move/from16 v11, p7
-
-    .line 69422
-    invoke-direct/range {v1 .. v11}, Lmods/audio/AudioMessageEntry;-><init>(IJLcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;Lcom/discord/api/message/attachment/MessageAttachment;ZZZZ)V
-
-    .line 19
-	:goto_101
     invoke-interface {v0, v12}, Ljava/util/List;->add(Ljava/lang/Object;)Z
 
     move-object/from16 v12, p1
@@ -1710,11 +1814,8 @@
     if-nez p8, :cond_0
 
     .line 1
-    invoke-static {}, Ld0/t/n;->emptyList()Ljava/util/List;
-
-    move-result-object v0
-
-    return-object v0
+    new-instance v0, Ljava/util/ArrayList;
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
 
     .line 2
     :cond_0

@@ -292,6 +292,7 @@ public class SheetConfig {
         TextView tvCopy = binding.c;
         TextView tvQuote = binding.getRoot().findViewById(R.id.blue_id_1);
         TextView tvTranslate = binding.getRoot().findViewById(R.id.blue_id_2);
+        TextView tvForward = binding.getRoot().findViewById(R.id.blue_id_3);
 
         Channel channel = model.getChannel();
         Message message = model.getMessage();
@@ -317,6 +318,9 @@ public class SheetConfig {
                 Translate.showTranslateDialog(sheet.getActivity(), message);
                 sheet.dismiss();
             });
+            // TODO forward support
+            tvForward.setVisibility(View.GONE);
+            tvForward.setOnClickListener(v -> {});
         }
 
         // copy attachment urls

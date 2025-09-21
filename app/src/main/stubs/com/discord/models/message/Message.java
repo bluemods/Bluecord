@@ -27,6 +27,7 @@ import java.util.Map;
 
 import mods.parser.InteractionMetadata;
 import mods.parser.MessageSnapshots;
+import mods.parser.polls.MessagePoll;
 
 @SuppressWarnings("unused")
 public class Message {
@@ -83,6 +84,9 @@ public class Message {
     @Nullable public UtcDateTime forwardedMessageEditedTimestamp;
 
     public boolean deleted;
+
+    // Added by us
+    @Nullable public MessagePoll poll;
 
     // END custom fields
 

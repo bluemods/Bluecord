@@ -100,7 +100,7 @@ public class VoicePlayerView extends RelativeLayout implements HeadphoneUnplugge
 
             LogUtils.log(TAG, "downloading: " + audioUrl);
             FileDownloader.download(
-                    Long.toString(model.getMessage().id),
+                    audioUrl,
                     audioUrl,
                     (progress, message) -> post(() -> setTimeTextWithFileName(message))
             ).add(new PromiseListener<File>() {

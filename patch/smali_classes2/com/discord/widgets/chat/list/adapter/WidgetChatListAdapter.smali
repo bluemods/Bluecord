@@ -843,13 +843,21 @@
 
     invoke-static {p1, v0}, Ld0/z/d/m;->checkNotNullParameter(Ljava/lang/Object;Ljava/lang/String;)V
 
-    # TODO voice messages
+    # voice messages
 	const/16 v0, 0x2e
 	if-ne p2, v0, :cond_100
     new-instance v0, Lmods/audio/AudioMessageAdapterItemAttachment;
     invoke-direct {v0, p0}, Lmods/audio/AudioMessageAdapterItemAttachment;-><init>(Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter;)V
 	return-object v0
 	:cond_100
+
+    # poll messages
+	const/16 v0, 0x2f
+	if-ne p2, v0, :cond_101
+    new-instance v0, Lmods/parser/polls/PollMessageAdapterItemAttachment;
+    invoke-direct {v0, p0}, Lmods/parser/polls/PollMessageAdapterItemAttachment;-><init>(Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter;)V
+	return-object v0
+	:cond_101
 
     const/4 p1, 0x2
 

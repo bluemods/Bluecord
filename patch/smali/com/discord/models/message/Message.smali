@@ -450,6 +450,8 @@
 .field public forwarded:Z
 .field public forwardedMessageEditedTimestamp:Lcom/discord/api/utcdatetime/UtcDateTime;
 .field public forwardedMessageSentAt:Lcom/discord/api/utcdatetime/UtcDateTime;
+.field public poll:Lmods/parser/polls/MessagePoll;
+
 
 # direct methods
 .method public static constructor <clinit>()V
@@ -1399,7 +1401,7 @@
 
     move-object/from16 v14, v0
     move-object/from16 v15, p1
-    invoke-direct {v14, v15}, Lcom/discord/models/message/Message;->thisIsFuckingStupid(Lcom/discord/api/message/Message;)V
+    invoke-direct {v14, v15}, Lcom/discord/models/message/Message;->blazeIt(Lcom/discord/api/message/Message;)V
 
     return-void
 .end method
@@ -4971,12 +4973,14 @@
 
     iget-object v0, p0, Lcom/discord/models/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
     iget-object v1, p0, Lcom/discord/models/message/Message;->messageSnapshots:Lmods/parser/MessageSnapshots;
+    iget-object v2, p0, Lcom/discord/models/message/Message;->poll:Lmods/parser/polls/MessagePoll;
 
     invoke-virtual {p0, p1}, Lcom/discord/models/message/Message;->mergeInternal(Lcom/discord/api/message/Message;)Lcom/discord/models/message/Message;
     move-result-object v10
 
     iput-object v0, v10, Lcom/discord/models/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
     iput-object v1, v10, Lcom/discord/models/message/Message;->messageSnapshots:Lmods/parser/MessageSnapshots;
+    iput-object v2, v10, Lcom/discord/models/message/Message;->poll:Lmods/parser/polls/MessagePoll;
 
     return-object v10
 .end method
@@ -5580,8 +5584,12 @@
     # Copy new fields
     iget-object v1, p0, Lcom/discord/models/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
     iput-object v1, v0, Lcom/discord/api/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
+
     iget-object v1, p0, Lcom/discord/models/message/Message;->messageSnapshots:Lmods/parser/MessageSnapshots;
     iput-object v1, v0, Lcom/discord/api/message/Message;->messageSnapshots:Lmods/parser/MessageSnapshots;
+
+    iget-object v1, p0, Lcom/discord/models/message/Message;->poll:Lmods/parser/polls/MessagePoll;
+    iput-object v1, v0, Lcom/discord/api/message/Message;->poll:Lmods/parser/polls/MessagePoll;
 
     return-object v0
 .end method
@@ -6153,6 +6161,10 @@
 
     iput-object v3, p0, Lcom/discord/models/message/Message;->components:Ljava/util/List;
 
+    iget-object v3, v2, Lcom/discord/api/message/Message;->poll:Lmods/parser/polls/MessagePoll;
+
+    iput-object v3, p0, Lcom/discord/models/message/Message;->poll:Lmods/parser/polls/MessagePoll;
+
     return-void
 
     :cond_3
@@ -6160,7 +6172,7 @@
     return-void
 .end method
 
-.method private thisIsFuckingStupid(Lcom/discord/api/message/Message;)V
+.method private blazeIt(Lcom/discord/api/message/Message;)V
     .locals 1
 
     iget-object v0, p1, Lcom/discord/api/message/Message;->interactionMetadata:Lmods/parser/InteractionMetadata;
@@ -6168,6 +6180,9 @@
 
     iget-object v0, p1, Lcom/discord/api/message/Message;->messageSnapshots:Lmods/parser/MessageSnapshots;
     iput-object v0, p0, Lcom/discord/models/message/Message;->messageSnapshots:Lmods/parser/MessageSnapshots;
+
+    iget-object v0, p1, Lcom/discord/api/message/Message;->poll:Lmods/parser/polls/MessagePoll;
+    iput-object v0, p0, Lcom/discord/models/message/Message;->poll:Lmods/parser/polls/MessagePoll;
 
     invoke-direct {p0}, Lcom/discord/models/message/Message;->swapInForwardMessageInfo()V
 

@@ -11,8 +11,6 @@ object GuildJoinFix {
 
     @JvmStatic
     fun hasVerificationGate(guild: Guild?, modelInvite: ModelInvite?): Boolean {
-        LogUtils.log(TAG, "I'm here")
-
         val features = guild?.features.orEmpty().ifEmpty { modelInvite?.guild?.features }.orEmpty()
         val hasGate = if (GuildFeature.MEMBER_VERIFICATION_GATE_ENABLED in features) {
             GuildFeature.COMMUNITY in features || GuildFeature.MEMBER_VERIFICATION_MANUAL_APPROVAL in features

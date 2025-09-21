@@ -289,6 +289,7 @@
 
 .field public interactionMetadata:Lmods/parser/InteractionMetadata;
 .field public messageSnapshots:Lmods/parser/MessageSnapshots;
+.field public poll:Lmods/parser/polls/MessagePoll;
 
 
 # direct methods
