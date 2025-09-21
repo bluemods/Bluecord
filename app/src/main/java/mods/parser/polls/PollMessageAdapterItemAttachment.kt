@@ -9,7 +9,7 @@ import mods.utils.LogUtils
 
 class PollMessageAdapterItemAttachment(
     adapter: WidgetChatListAdapter?
-) : WidgetChatListItem(R.layout.widget_chat_list_adapter_item_audio_v2, adapter), FragmentLifecycleListener {
+) : WidgetChatListItem(R.layout.blue_poll_attachment, adapter), FragmentLifecycleListener {
 
     companion object {
         private const val TAG = "PollAttachment"
