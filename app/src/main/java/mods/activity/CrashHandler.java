@@ -6,13 +6,18 @@ import android.database.sqlite.SQLiteFullException;
 import android.os.Build;
 import android.os.DeadSystemException;
 import android.os.Process;
+import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import mods.events.EventTracker;
 import mods.utils.CacheUtils;
+import mods.utils.FileUtils;
 import mods.utils.LogUtils;
 
 @SuppressWarnings("unused")
@@ -68,6 +73,14 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             }
             if (!canIgnoreException(throwable)) {
                 EventTracker.trackAppCrash(throwable);
+            }
+
+            // Try to write it to disk so the user can submit it if uploading fails
+            try (FileOutputStream fos = new FileOutputStream(new File(FileUtils.getBluecordDir(), "last_crash.txt"))) {
+                fos.write(Log.getStackTraceString(throwable).getBytes(StandardCharsets.UTF_8));
+                fos.flush();
+            } catch (Throwable e) {
+                LogUtils.log(TAG, "failed to write crash log", e);
             }
         } catch (Throwable e) {
             LogUtils.log(TAG, "failed to upload", e);
