@@ -851,11 +851,11 @@
 	return-object v0
 	:cond_100
 
-    # poll messages
+    # components v2 messages
 	const/16 v0, 0x2f
 	if-ne p2, v0, :cond_101
-    new-instance v0, Lmods/parser/polls/PollMessageAdapterItemAttachment;
-    invoke-direct {v0, p0}, Lmods/parser/polls/PollMessageAdapterItemAttachment;-><init>(Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter;)V
+    new-instance v0, Lmods/parser/components/web/V2ComponentsAttachment;
+    invoke-direct {v0, p0}, Lmods/parser/components/web/V2ComponentsAttachment;-><init>(Lcom/discord/widgets/chat/list/adapter/WidgetChatListAdapter;)V
 	return-object v0
 	:cond_101
 
