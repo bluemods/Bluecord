@@ -1,5 +1,7 @@
 package com.discord.widgets.chat.list.entries;
 
+import com.discord.api.botuikit.Component;
+import com.discord.api.botuikit.UnknownComponent;
 import com.discord.api.channel.Channel;
 import com.discord.api.role.GuildRole;
 import com.discord.models.member.GuildMember;
@@ -8,14 +10,13 @@ import com.discord.stores.StoreMessageState;
 import com.discord.utilities.mg_recycler.MGRecyclerDataPayload;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
 import mods.audio.AudioMessageEntry;
 import mods.audio.utils.AudioMessageUtils;
-import mods.parser.polls.PollEntry;
+import mods.parser.components.web.V2ComponentStubEntry;
 
 @SuppressWarnings("all")
 public abstract class ChatListEntry implements MGRecyclerDataPayload {
@@ -66,7 +67,7 @@ public abstract class ChatListEntry implements MGRecyclerDataPayload {
     public static final int AUTOMOD_BLOCKED = 44;
     public static final int AUTOMOD_SYSTEM_MESSAGE = 45;
     public static final int AUDIO_MESSAGE = 46;
-    public static final int POLL_MESSAGE = 47;
+    public static final int COMPONENTS_V2_MESSAGE = 47;
 
     private boolean shouldShowThreadSpine;
 
@@ -85,16 +86,37 @@ public abstract class ChatListEntry implements MGRecyclerDataPayload {
     public static final class Companion {
         public final List<ChatListEntry> createEmbedEntries(Message message, StoreMessageState.State state, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, Channel channel, GuildMember guildMember, Map<Long, GuildRole> map, Map<Long, String> map2) {
             final List<ChatListEntry> entries = createEmbedEntriesInternal(message, state, z, z2, z3, z4, z5, channel, guildMember, map, map2);
-            if (message.poll != null) {
-                entries.add(new PollEntry(channel, message, state, message.poll));
+
+            // Add V2 Component stub (only 1 at most)
+            if (message.components != null) {
+                for (Component component : message.components) {
+                    if (component instanceof UnknownComponent) {
+                        entries.add(new V2ComponentStubEntry(channel, message, state));
+                        break;
+                    }
+                }
             }
+
+            // if (message.poll != null) {
+            //     entries.add(new PollEntry(channel, message, state, message.poll));
+            // }
             final ListIterator<ChatListEntry> i = entries.listIterator();
             while (i.hasNext()) {
                 ChatListEntry e = i.next();
                 if (e instanceof AttachmentEntry && !(e instanceof AudioMessageEntry)) {
                     AttachmentEntry ae = ((AttachmentEntry) e);
                     if (AudioMessageUtils.isAudioMessage(ae.getAttachment())) {
-                        i.set(new AudioMessageEntry(ae.getEmbedIndex(), ae.getGuildId(), ae.getMessage(), ae.getMessageState(), ae.getAttachment(), ae.isBlockedExpanded(), ae.isInExpandedBlockedMessageChunk(), ae.getAutoPlayGifs(), ae.isThreadStarterMessage()));
+                        i.set(new AudioMessageEntry(
+                                ae.getEmbedIndex(),
+                                ae.getGuildId(),
+                                ae.getMessage(),
+                                ae.getMessageState(),
+                                ae.getAttachment(),
+                                ae.isBlockedExpanded(),
+                                ae.isInExpandedBlockedMessageChunk(),
+                                ae.getAutoPlayGifs(),
+                                ae.isThreadStarterMessage()
+                        ));
                     }
                 }
             }

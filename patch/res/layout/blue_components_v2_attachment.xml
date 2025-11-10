@@ -3,5 +3,129 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/UiKit.ViewGroup"
     android:background="?selectableItemBackground">
+
+    <View
+        android:id="@id/chat_list_adapter_item_highlighted_bg"
+        android:layout_width="0.0dip"
+        android:layout_height="0.0dip"
+        android:background="?theme_chat_mentioned_me"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@id/chat_list_adapter_item_gutter_bg"
+        android:layout_width="2.0dip"
+        android:layout_height="0.0dip"
+        android:background="@color/status_yellow_500"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/chat_list_adapter_item_highlighted_bg" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@id/uikit_chat_guideline"
+        style="@style/UiKit.Chat.Guideline" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@id/chat_list_item_attachment_card"
+        style="@style/UiKit.Chat.Embed.CardView"
+        android:layout_width="0.0dip"
+        android:layout_marginTop="@dimen/chat_cell_vertical_spacing_padding"
+        android:layout_marginEnd="@dimen/chat_cell_horizontal_spacing_total"
+        android:layout_marginBottom="@dimen/chat_cell_vertical_spacing_padding"
+        android:transitionGroup="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/uikit_chat_guideline"
+        app:layout_constraintTop_toTopOf="parent">
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              style="@style/UiKit.ViewGroup.ConstraintLayout"
+              android:padding="4.0dip">
+
+            <TextView
+                android:id="@+id/blue_id_1"
+                style="@style/UiKit.TextView.H2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16.0dip"
+                android:layout_marginTop="16.0dip"
+                android:layout_marginEnd="16.0dip"
+                android:text="V2 Component"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/blue_id_2"
+                style="@style/UiKit.TextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16.0dip"
+                android:layout_marginTop="8.0dip"
+                android:layout_marginEnd="16.0dip"
+                android:text="To see V2 components you need to open the chat in web browser mode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/blue_id_1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/blue_id_3"
+                style="@style/UiKit.Material.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16.0dip"
+                android:layout_marginTop="16.0dip"
+                android:layout_marginBottom="16.0dip"
+                android:text="Open In Browser"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/blue_id_2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@id/chat_list_item_attachment_barrier"
+        android:layout_width="0.0dip"
+        android:layout_height="0.0dip"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="chat_list_item_attachment_card" />
+
+    <FrameLayout
+        android:id="@id/chat_list_item_attachment_spoiler"
+        android:layout_width="0.0dip"
+        android:layout_height="0.0dip"
+        android:background="?theme_chat_spoiler_bg"
+        android:elevation="@dimen/app_elevation"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/chat_list_item_attachment_barrier"
+        app:layout_constraintStart_toEndOf="@id/uikit_chat_guideline"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="@color/black_alpha_60"
+            app:cardCornerRadius="16.0dip"
+            app:cardElevation="@dimen/app_elevation">
+
+            <TextView
+                style="@style/UiKit.TextView.H2"
+                android:layout_gravity="center"
+                android:layout_marginLeft="4.0dip"
+                android:layout_marginRight="4.0dip"
+                android:paddingLeft="8.0dip"
+                android:paddingTop="4.0dip"
+                android:paddingRight="8.0dip"
+                android:paddingBottom="4.0dip"
+                android:text="@string/spoiler"
+                android:textAllCaps="true"
+                android:textColor="@color/primary_200" />
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

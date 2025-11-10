@@ -49,4 +49,8 @@ public enum ComponentType {
     public final int getType() {
         return this.type;
     }
+
+    public boolean isV2() {
+        return type > 4;
+    }
 }

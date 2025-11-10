@@ -443,7 +443,6 @@
     return-object p1
 .end method
 
-
 .method public final createEmbedEntries(Lcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;ZZZZZLcom/discord/api/channel/Channel;Lcom/discord/models/member/GuildMember;Ljava/util/Map;Ljava/util/Map;)Ljava/util/List;
     .locals 19
     .annotation system Ldalvik/annotation/Signature;
@@ -474,40 +473,75 @@
 
     move-result-object v1
 
-    iget-object v2, v0, Lcom/discord/models/message/Message;->poll:Lmods/parser/polls/MessagePoll;
+    iget-object v2, v0, Lcom/discord/models/message/Message;->components:Ljava/util/List;
 
-    if-eqz v2, :cond_0
+    if-eqz v2, :cond_2
 
-    new-instance v2, Lmods/parser/polls/PollEntry;
+    iget-object v2, v0, Lcom/discord/models/message/Message;->components:Ljava/util/List;
 
-    iget-object v3, v0, Lcom/discord/models/message/Message;->poll:Lmods/parser/polls/MessagePoll;
+    invoke-interface {v2}, Ljava/util/List;->iterator()Ljava/util/Iterator;
+
+    move-result-object v2
+
+    :goto_0
+    invoke-interface {v2}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v3
+
+    if-eqz v3, :cond_1
+
+    invoke-interface {v2}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v3
+
+    check-cast v3, Lcom/discord/api/botuikit/Component;
+
+    instance-of v4, v3, Lcom/discord/api/botuikit/UnknownComponent;
+
+    if-eqz v4, :cond_0
+
+    new-instance v2, Lmods/parser/components/web/V2ComponentStubEntry;
 
     move-object/from16 v4, p2
 
     move-object/from16 v5, p8
 
-    invoke-direct {v2, v5, v0, v4, v3}, Lmods/parser/polls/PollEntry;-><init>(Lcom/discord/api/channel/Channel;Lcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;Lmods/parser/polls/MessagePoll;)V
+    invoke-direct {v2, v5, v0, v4}, Lmods/parser/components/web/V2ComponentStubEntry;-><init>(Lcom/discord/api/channel/Channel;Lcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;)V
 
     invoke-interface {v1, v2}, Ljava/util/List;->add(Ljava/lang/Object;)Z
 
-    goto :goto_0
+    goto :goto_1
 
     :cond_0
     move-object/from16 v4, p2
 
     move-object/from16 v5, p8
 
-    :goto_0
+    goto :goto_0
+
+    :cond_1
+    move-object/from16 v4, p2
+
+    move-object/from16 v5, p8
+
+    goto :goto_1
+
+    :cond_2
+    move-object/from16 v4, p2
+
+    move-object/from16 v5, p8
+
+    :goto_1
     invoke-interface {v1}, Ljava/util/List;->listIterator()Ljava/util/ListIterator;
 
     move-result-object v2
 
-    :goto_1
+    :goto_2
     invoke-interface {v2}, Ljava/util/ListIterator;->hasNext()Z
 
     move-result v3
 
-    if-eqz v3, :cond_2
+    if-eqz v3, :cond_4
 
     invoke-interface {v2}, Ljava/util/ListIterator;->next()Ljava/lang/Object;
 
@@ -517,11 +551,11 @@
 
     instance-of v6, v3, Lcom/discord/widgets/chat/list/entries/AttachmentEntry;
 
-    if-eqz v6, :cond_1
+    if-eqz v6, :cond_3
 
     instance-of v6, v3, Lmods/audio/AudioMessageEntry;
 
-    if-nez v6, :cond_1
+    if-nez v6, :cond_3
 
     move-object v6, v3
 
@@ -535,7 +569,7 @@
 
     move-result v7
 
-    if-eqz v7, :cond_1
+    if-eqz v7, :cond_3
 
     new-instance v7, Lmods/audio/AudioMessageEntry;
 
@@ -581,13 +615,12 @@
 
     invoke-interface {v2, v7}, Ljava/util/ListIterator;->set(Ljava/lang/Object;)V
 
-    :cond_1
-    goto :goto_1
+    :cond_3
+    goto :goto_2
 
-    :cond_2
+    :cond_4
     return-object v1
 .end method
-
 
 .method public final createEmbedEntriesInternal(Lcom/discord/models/message/Message;Lcom/discord/stores/StoreMessageState$State;ZZZZZLcom/discord/api/channel/Channel;Lcom/discord/models/member/GuildMember;Ljava/util/Map;Ljava/util/Map;)Ljava/util/List;
     .locals 18
