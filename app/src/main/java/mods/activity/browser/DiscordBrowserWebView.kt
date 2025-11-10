@@ -162,7 +162,7 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
                         val functions = items.map { (key, value) ->
                             "javascript:window.localStorage.setItem(\"$key\", $value);"
                         }
-                        val latch = CountDownLatch(functions.size + 1)
+                        val latch = CountDownLatch(functions.size)
                         for (function in functions) {
                             evaluateJavascript(function) {
                                 // LogUtils.log(TAG, "function input: $function")
