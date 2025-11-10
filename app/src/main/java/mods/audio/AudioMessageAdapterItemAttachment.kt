@@ -31,14 +31,20 @@ class AudioMessageAdapterItemAttachment(
         private const val TAG = "AudioMessageAttachment"
     }
 
-    private val chatListAdapterItemHighlightedBg: View = itemView.findViewById(R.id.chat_list_adapter_item_highlighted_bg)
-    private val chatListAdapterItemGutterBg: View = itemView.findViewById(R.id.chat_list_adapter_item_gutter_bg)
-    private val uikitChatGuideline: Guideline = itemView.findViewById(R.id.uikit_chat_guideline)
-    private val chatListItemAttachmentCard: MaterialCardView = itemView.findViewById(R.id.chat_list_item_attachment_card)
-    private val voicePlayerView: VoicePlayerView = itemView.findViewById(R.id.blue_audio_voice_player_view)
-    private val chatListItemAttachmentBarrier: Barrier = itemView.findViewById(R.id.chat_list_item_attachment_barrier)
-    private val chatListItemAttachmentSpoiler: FrameLayout = itemView.findViewById(R.id.chat_list_item_attachment_spoiler)
-    private val downloadButton = itemView.findViewById<ImageView>(R.id.chat_list_item_attachment_download)
+    private val chatListAdapterItemHighlightedBg: View = findItemView(R.id.chat_list_adapter_item_highlighted_bg)
+    private val chatListAdapterItemGutterBg: View = findItemView(R.id.chat_list_adapter_item_gutter_bg)
+    private val uikitChatGuideline: Guideline = findItemView(R.id.uikit_chat_guideline)
+    private val chatListItemAttachmentCard: MaterialCardView = findItemView(R.id.chat_list_item_attachment_card)
+    private val voicePlayerView: VoicePlayerView = findItemView(R.id.blue_audio_voice_player_view)
+    private val chatListItemAttachmentBarrier: Barrier = findItemView(R.id.chat_list_item_attachment_barrier)
+    private val chatListItemAttachmentSpoiler: FrameLayout = findItemView(R.id.chat_list_item_attachment_spoiler)
+    private val downloadButton = findItemView<ImageView>(R.id.chat_list_item_attachment_download)
+
+    private inline fun <reified T : View> findItemView(id: Int): T {
+        return itemView.findViewById<T>(id)
+            as? T
+            ?: error("no view for 0x${Integer.toHexString(id)} (in 0x${Integer.toHexString(itemView.id)})")
+    }
 
     override fun onPause() {}
     override fun onResume() {}
