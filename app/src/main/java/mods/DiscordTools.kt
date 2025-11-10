@@ -27,7 +27,6 @@ import mods.utils.ToastUtil
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.Objects
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -48,19 +47,13 @@ object DiscordTools {
 
     @JvmStatic
     val context: Context
-        get() {
-            if (App.app != null) {
-                return App.app
-            }
-            return try {
-                ApplicationProvider.INSTANCE.get()
-            } catch (ignore: Throwable) {
-                // If we get here, we were likely launched from Firebase, as it has the highest init order.
-                // Try to get the context from there.
-                Objects.requireNonNull(
-                    FirebaseInitProvider.context,
-                    "Could not get context from anywhere!"
-                )
+        get() = App.app ?: try {
+            ApplicationProvider.INSTANCE.get()
+        } catch (ignore: Throwable) {
+            // If we get here, we were likely launched from Firebase, as it has the highest init order.
+            // Try to get the context from there.
+            requireNotNull(FirebaseInitProvider.context) {
+                "Could not get context from anywhere!"
             }
         }
 
@@ -75,7 +68,7 @@ object DiscordTools {
     @JvmStatic
     val currentLocale: Locale
         get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            context.resources.configuration.getLocales()[0]
+            context.resources.configuration.locales[0]
         } else {
             context.resources.configuration.locale
         }
@@ -136,7 +129,7 @@ object DiscordTools {
     @JvmStatic
     fun <T : Fragment?> findFragmentByClass(fragment: Fragment, cls: Class<T?>): T? {
         for (f in fragment.getParentFragmentManager().fragments) {
-            LogUtils.log("BlueFindFrag", "Found fragment: " + f.javaClass.getName())
+            LogUtils.log(TAG, "Found fragment: " + f.javaClass.getName())
             if (cls.isInstance(f)) {
                 return f as T
             }
@@ -175,15 +168,13 @@ object DiscordTools {
 
     @JvmStatic
     val versionCode: Long
-        get() {
-            try {
-                val ctx = context
-                val pm = ctx.packageManager
-                val pi = pm.getPackageInfo(ctx.packageName, 0)
-                return if (Build.VERSION.SDK_INT >= 28) pi.longVersionCode else pi.versionCode.toLong()
-            } catch (e: Throwable) {
-                LogUtils.logException("DiscordTools", e)
-                return -1
-            }
+        get() = try {
+            val ctx = context
+            val pm = ctx.packageManager
+            val pi = pm.getPackageInfo(ctx.packageName, 0)
+            if (Build.VERSION.SDK_INT >= 28) pi.longVersionCode else pi.versionCode.toLong()
+        } catch (e: Throwable) {
+            LogUtils.logException(TAG, e)
+            -1
         }
 }

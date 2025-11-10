@@ -11033,6 +11033,11 @@
     <public type="layout" name="blue_spinner" id="0x7f0d0408" />
     <public type="layout" name="blue_spinner_dropdown" id="0x7f0d0409" />
     <public type="layout" name="widget_chat_list_adapter_item_audio" id="0x7f0d040a" />
+    <public type="layout" name="blue_audio_voice_player_view" id="0x7f0d040b" />
+    <public type="layout" name="blue_poll_attachment" id="0x7f0d040c" />
+    <public type="layout" name="widget_chat_list_adapter_item_audio_v2" id="0x7f0d040d" />
+    <public type="layout" name="activity_bluecord_web_view" id="0x7f0d040e" />
+    <public type="layout" name="blue_components_v2_attachment" id="0x7f0d040f" />
 	
     <public type="menu" name="menu_add_member_continue" id="0x7f0e0000" />
     <public type="menu" name="menu_audit_log_sort" id="0x7f0e0001" />

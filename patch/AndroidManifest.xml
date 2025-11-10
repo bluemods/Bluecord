@@ -297,5 +297,6 @@
         <meta-data android:name="com.android.vending.derived.apk.id" android:value="1"/>
 		<activity android:name="mods.activity.BlueSettingsActivity" android:theme="@style/PrefsTheme" android:exported="false"/>
 		<activity android:name="mods.activity.ProcessPhoenix" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:process=":phoenix" android:exported="false"/>
+		<activity android:name="mods.activity.browser.DiscordBrowserActivity" android:exported="false"/>
     </application>
 </manifest>

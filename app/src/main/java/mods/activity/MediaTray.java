@@ -1,6 +1,8 @@
 package mods.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
@@ -35,9 +37,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import mods.DiscordTools;
 import mods.ThemingTools;
+import mods.activity.browser.DiscordBrowserActivity;
 import mods.activity.update.BluecordUpdater;
 import mods.constants.PreferenceKeys;
-import mods.constants.URLConstants;
 import mods.dialog.Dialogs;
 import mods.net.Urban;
 import mods.preference.Prefs;
@@ -172,6 +174,7 @@ public class MediaTray {
             addIfTyped("s", "makes text strikethrough");
             addIfTyped("bluecord", "how this mod came to be");
             addIfTyped("update", "update link for " + Strings.getAppName());
+            addIfTyped("web", "Opens this chat in a web browser to access missing features");
 
             addCustomCommands(commandsList);
 
@@ -234,7 +237,7 @@ public class MediaTray {
                 command.startsWith(ensurePrefix("owo "))    || command.startsWith(ensurePrefix("lower "))   ||
                 command.startsWith(ensurePrefix("b "))      || command.startsWith(ensurePrefix("bold "))    ||
                 command.startsWith(ensurePrefix("s "))      || command.startsWith(ensurePrefix("u "))       ||
-                command.startsWith(ensurePrefix("tr "))     ||
+                command.startsWith(ensurePrefix("tr "))     || command.startsWith(ensurePrefix("web"))      ||
                 command.equals(ensurePrefix("update"))      || command.startsWith(ensurePrefix("ud "))      ||
                 command.equals(ensurePrefix("bluecord"))    || command.startsWith(ensurePrefix("mock "))    ||
                 command.equals(ensurePrefix("upper "))      || command.equals(ensurePrefix("reverse "))     ||
@@ -407,6 +410,9 @@ public class MediaTray {
                     .setPositiveButton("Exit")
                     .showSafely();
             text = "";
+        } else if (text.equals("web")) {
+            final Context context = mediaTrayList.getContext();
+            context.startActivity(new Intent(context, DiscordBrowserActivity.class));
         } else {
             text = customComs(original);
         }

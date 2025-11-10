@@ -11094,6 +11094,8 @@ public final class R {
         public static final int blue_audio_voice_player_view = 0x7f0d040b;
         public static final int blue_poll_attachment = 0x7f0d040c;
         public static final int widget_chat_list_adapter_item_audio_v2 = 0x7f0d040d;
+        public static final int activity_bluecord_web_view = 0x7f0d040e;
+        public static final int blue_components_v2_attachment = 0x7f0d040f;
     }
 
     public static final class menu {
