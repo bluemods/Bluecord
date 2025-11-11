@@ -3,6 +3,7 @@ package mods.activity.browser
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import mods.ThemingTools
@@ -32,6 +33,7 @@ class DiscordBrowserActivity : AppCompatActivity() {
 
         if (ThemingTools.isDarkModeOn()) {
             runCatching {
+                window.setBackgroundDrawable(ColorDrawable(Color.BLACK))
                 window.statusBarColor = Color.BLACK
                 window.navigationBarColor = Color.BLACK
                 view.setBackgroundColor(Color.BLACK)
