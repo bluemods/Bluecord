@@ -49,6 +49,7 @@ import java.util.Date;
 import mods.DiscordTools;
 import mods.ThemingTools;
 import mods.activity.MediaTray;
+import mods.activity.browser.DiscordBrowserActivity;
 import mods.constants.PreferenceKeys;
 import mods.dialog.Dialogs;
 import mods.net.Net;
@@ -293,6 +294,7 @@ public class SheetConfig {
         TextView tvQuote = binding.getRoot().findViewById(R.id.blue_id_1);
         TextView tvTranslate = binding.getRoot().findViewById(R.id.blue_id_2);
         TextView tvForward = binding.getRoot().findViewById(R.id.blue_id_3);
+        TextView tvWebApp = binding.getRoot().findViewById(R.id.blue_id_4);
 
         Channel channel = model.getChannel();
         Message message = model.getMessage();
@@ -347,6 +349,8 @@ public class SheetConfig {
                 });
             }
         }
+
+        tvWebApp.setOnClickListener(v -> DiscordBrowserActivity.startForMessage(sheet.requireActivity(), message));
     }
 
     @SuppressLint("ResourceType")

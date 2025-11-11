@@ -412,6 +412,7 @@ public class MediaTray {
             text = "";
         } else if (text.equals("web")) {
             DiscordBrowserActivity.startForCurrentChat(mediaTrayList.getContext());
+            text = "";
         } else {
             text = customComs(original);
         }
