@@ -12,7 +12,7 @@ class VoiceSeekBar @JvmOverloads constructor(
 ) : AppCompatSeekBar(context, attributeSet), OnSeekBarChangeListener {
 
     companion object {
-        private const val PROGRESS_FRAMES = 5
+        private const val PROGRESS_FRAMES = 1
     }
 
     private var callback: PlayerCallback? = null

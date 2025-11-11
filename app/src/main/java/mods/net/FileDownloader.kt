@@ -1,5 +1,6 @@
 package mods.net
 
+import com.discord.api.message.attachment.MessageAttachment
 import mods.extensions.RequestBuilder
 import mods.extensions.build
 import mods.extensions.code
@@ -29,6 +30,7 @@ object FileDownloader {
     private val TAG = FileDownloader::class.java.simpleName
     private val executor = Executors.newFixedThreadPool(2)
     private val tasks = ConcurrentHashMap<String, Promise<File>>()
+
     private val fileQueue = LinkedList(
         runCatching {
             FileUtils.voiceCacheDir.listFiles()?.sortedByDescending { it.lastModified() }.orEmpty()
@@ -38,12 +40,25 @@ object FileDownloader {
     )
 
     @JvmStatic
+    fun download(attachment: MessageAttachment, progress: ProgressListener): Promise<File> {
+        return download(
+            key = attachment.id.toString(),
+            url = attachment.url,
+            progress = progress
+        )
+    }
+
+    @JvmStatic
     @Synchronized
     fun download(key: String, url: String, progress: ProgressListener): Promise<File> {
+        val file = File(FileUtils.voiceCacheDir, key)
+
         return tasks.getOrPut(key) {
-            val tmp = File(FileUtils.tempDir, key)
-            if (tmp.exists() && tmp.length() > 0) return tmp.asResolvedPromise()
-            downloadNoCache(tmp, url, progress).doOnSuccess {
+            if (file.exists() && file.length() > 0) {
+                return file.asResolvedPromise()
+            }
+
+            downloadNoCache(file, url, progress).doOnSuccess {
                 synchronized(fileQueue) {
                     fileQueue.addFirst(it)
                     while (fileQueue.size > 32) {

@@ -184,4 +184,12 @@ public class VoicePlayerInternal
             LogUtils.logException(e);
         }
     }
+
+    public int getCurrentTime() {
+        try {
+            return this.player.getCurrentPosition();
+        } catch (Throwable ignore) {
+            return 0;
+        }
+    }
 }
