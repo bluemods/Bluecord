@@ -1,11 +1,16 @@
 package mods.parser.components.web
 
+import android.content.Intent
+import android.view.View
 import com.bluecord.R
+import com.discord.utilities.intent.IntentUtils
 import com.discord.widgets.chat.list.FragmentLifecycleListener
 import com.discord.widgets.chat.list.adapter.WidgetChatListAdapter
 import com.discord.widgets.chat.list.adapter.WidgetChatListItem
 import com.discord.widgets.chat.list.entries.ChatListEntry
+import mods.activity.browser.DiscordBrowserActivity
 import mods.utils.LogUtils
+import mods.utils.RefreshUtils.WIDGET_CHAT_LIST
 
 /**
  * This is a lazy workaround for Components V2.
@@ -23,13 +28,33 @@ class V2ComponentsAttachment(
     adapter: WidgetChatListAdapter?
 ) : WidgetChatListItem(R.layout.blue_components_v2_attachment, adapter), FragmentLifecycleListener {
 
+    companion object {
+        private val TAG = V2ComponentsAttachment::class.java.simpleName
+    }
+
     override fun onPause() {}
     override fun onResume() {}
 
     override fun onConfigure(i: Int, entry: ChatListEntry?) {
-        LogUtils.log("V2ComponentsAttachment", "WE ARE HERE")
-        itemView.setOnClickListener {
-            // TODO
+        if (entry !is V2ComponentStubEntry) return
+
+        itemView.findViewById<View>(R.id.blue_id_3).setOnClickListener {
+            val intent = IntentUtils.INSTANCE.toExternalizedSend(
+                IntentUtils.RouteBuilders.selectChannel(
+                    entry.message.channelId,
+                    entry.message.guildId ?: 0,
+                    entry.message.id
+                )
+            )
+
+            val url = intent.data?.toString() ?: intent.getStringExtra(Intent.EXTRA_TEXT)
+
+            LogUtils.log(TAG, "launching: $intent ($url)")
+
+            DiscordBrowserActivity.start(
+                context = WIDGET_CHAT_LIST!!.requireActivity(),
+                initialUrl = url
+            )
         }
     }
 }

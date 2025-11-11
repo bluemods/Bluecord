@@ -25,6 +25,7 @@ import mods.DiscordTools.extractActivity
 import mods.utils.ClipboardUtil
 import mods.utils.LogUtils
 import mods.utils.StoreUtils
+import mods.utils.ToastUtil
 import org.json.JSONObject
 import java.util.Locale
 import java.util.concurrent.CountDownLatch
@@ -94,11 +95,8 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
             "https://.$BASE_DOMAIN",
             "locale=\"${Locale.getDefault()}\"; Domain=.$BASE_DOMAIN; Path=/;"
         )
-        // This is a really funny workaround.
-        // It's here because it's a plain text page that doesn't use react.
-        // React takes over the JS interpreter and blocks access to window.localStorage,
-        // but on a plain text page we have access and we can manipulate those while on that page.
-        loadUrl("https://discord.com/robots.txt")
+        loadUrl(url)
+        ToastUtil.toastShort("Loading web app...")
     }
 
     override fun goBack() {
@@ -115,6 +113,39 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
         } catch (e: Throwable) {
             LogUtils.log(TAG, "openInBrowser: failed to open $uri", e)
             ClipboardUtil.copy(uri.toString(), "No web browser is available to open the URL.")
+        }
+    }
+
+    private fun injectCreds(url: String?) {
+        if (url?.toUri()?.host != BASE_DOMAIN) return
+
+        localStorageLock.withLock {
+            val url = tempUrl
+            val items = tempStorageItems
+            if (!url.isNullOrEmpty() && !items.isNullOrEmpty()) {
+                LogUtils.log(
+                    TAG,
+                    "injecting tokens: ${items.entries.joinToString { it.key }}"
+                )
+                val functions = items.map { (key, value) ->
+                    "javascript:window.localStorage.setItem(\"$key\", $value);"
+                }
+                val latch = CountDownLatch(functions.size)
+                for (function in functions) {
+                    evaluateJavascript(function) {
+                        // LogUtils.log(TAG, "function input: $function")
+                        LogUtils.log(TAG, "function output: \"$it\"")
+                        latch.countDown()
+                    }
+                }
+                latch.await(1, TimeUnit.SECONDS)
+                tempStorageItems = null
+                stopLoading()
+                loadUrl(url)
+                tempUrl = null
+                ToastUtil.cancel()
+                LogUtils.log(TAG, "injecting tokens done")
+            }
         }
     }
 
@@ -145,40 +176,13 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
 
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             LogUtils.log(TAG, "onPageStarted($url)")
+            injectCreds(url)
             super.onPageStarted(view, url, favicon)
         }
 
         override fun onPageFinished(view: WebView?, url: String?) {
+            injectCreds(url)
             super.onPageFinished(view, url)
-            if (url?.toUri()?.host == BASE_DOMAIN) {
-                localStorageLock.withLock {
-                    val url = tempUrl
-                    val items = tempStorageItems
-                    if (!url.isNullOrEmpty() && !items.isNullOrEmpty()) {
-                        LogUtils.log(
-                            TAG,
-                            "injecting tokens: ${items.entries.joinToString { it.key }}"
-                        )
-                        val functions = items.map { (key, value) ->
-                            "javascript:window.localStorage.setItem(\"$key\", $value);"
-                        }
-                        val latch = CountDownLatch(functions.size)
-                        for (function in functions) {
-                            evaluateJavascript(function) {
-                                // LogUtils.log(TAG, "function input: $function")
-                                LogUtils.log(TAG, "function output: \"$it\"")
-                                latch.countDown()
-                            }
-                        }
-                        latch.await(1, TimeUnit.SECONDS)
-                        tempStorageItems = null
-                        stopLoading()
-                        loadUrl(url)
-                        tempUrl = null
-                        LogUtils.log(TAG, "injecting tokens done")
-                    }
-                }
-            }
         }
     }
 

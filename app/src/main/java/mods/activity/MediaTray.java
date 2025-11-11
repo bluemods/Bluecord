@@ -411,8 +411,7 @@ public class MediaTray {
                     .showSafely();
             text = "";
         } else if (text.equals("web")) {
-            final Context context = mediaTrayList.getContext();
-            context.startActivity(new Intent(context, DiscordBrowserActivity.class));
+            DiscordBrowserActivity.start(mediaTrayList.getContext());
         } else {
             text = customComs(original);
         }

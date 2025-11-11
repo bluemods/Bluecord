@@ -4,6 +4,8 @@
     style="@style/UiKit.ViewGroup"
     android:background="?selectableItemBackground">
 
+    <!--
+
     <View
         android:id="@id/chat_list_adapter_item_highlighted_bg"
         android:layout_width="0.0dip"
@@ -22,6 +24,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/chat_list_adapter_item_highlighted_bg" />
+
+    -->
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@id/uikit_chat_guideline"
