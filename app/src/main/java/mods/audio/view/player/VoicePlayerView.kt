@@ -126,7 +126,7 @@ class VoicePlayerView @JvmOverloads constructor(
             setState(PlayerState.ReadyToDownload(sizeInBytes))
         } else {
             // File is small, start download automatically
-            startDownload(attachment)
+            startDownload(attachment, andPlay = false)
         }
     }
 
@@ -136,7 +136,7 @@ class VoicePlayerView @JvmOverloads constructor(
             // This means we are in ReadyToDownload state
             val m = model?.attachment
             if (m != null) {
-                startDownload(m)
+                startDownload(m, andPlay = true)
             } else {
                 setState(PlayerState.Failed("Something went wrong"))
             }
@@ -153,7 +153,7 @@ class VoicePlayerView @JvmOverloads constructor(
         // The player will call back onPlayStateChanged(false)
     }
 
-    private fun startDownload(attachment: MessageAttachment) {
+    private fun startDownload(attachment: MessageAttachment, andPlay: Boolean) {
         val attachmentId = attachment.id.toString()
 
         // This is our *current* token, ensuring we only download one thing
@@ -176,7 +176,12 @@ class VoicePlayerView @JvmOverloads constructor(
                 LogUtils.log(TAG, "Download succeeded for $attachmentId, but view is stale. Discarding.")
                 return@subscribe
             }
-            post { onFileReady(file, attachmentId) }
+            post {
+                onFileReady(file, attachmentId)
+                if (andPlay) {
+                    onPlayClicked()
+                }
+            }
         }, {
             if (currentLoadToken != attachmentId) {
                 LogUtils.log(TAG, "Download failed for $attachmentId, but view is stale. Discarding.")
