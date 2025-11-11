@@ -75,14 +75,17 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
      */
     fun authenticateAndLoad(
         url: String = "https://$BASE_DOMAIN/channels/@me",
-    ) {
+    ) = localStorageLock.withLock {
         require(url.startsWith("https://$BASE_DOMAIN/")) {
             "Unsafe URL open attempt: $url"
         }
 
         // Shouldn't be here but escape anyway to prevent JS injection
+        val token = StoreUtils.getAuthToken()
+            .replace("\"", "")
+            .replace("\\", "")
+
         val userId = StoreUtils.getSelf().id
-        val token = StoreUtils.getAuthToken().replace("\"", "")
         tempUrl = url
         tempStorageItems = mapOf(
             "token" to "\"\\\"$token\\\"\"",
@@ -140,9 +143,9 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
                 }
                 latch.await(1, TimeUnit.SECONDS)
                 tempStorageItems = null
+                tempUrl = null
                 stopLoading()
                 loadUrl(url)
-                tempUrl = null
                 ToastUtil.cancel()
                 LogUtils.log(TAG, "injecting tokens done")
             }
