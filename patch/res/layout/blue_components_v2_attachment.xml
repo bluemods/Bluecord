@@ -70,7 +70,7 @@
                 android:layout_marginStart="16.0dip"
                 android:layout_marginTop="8.0dip"
                 android:layout_marginEnd="16.0dip"
-                android:text="To see V2 components you need to open the chat in web browser mode"
+                android:text="To see V2 components you need to use the web app"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/blue_id_1" />
@@ -83,7 +83,7 @@
                 android:layout_marginStart="16.0dip"
                 android:layout_marginTop="16.0dip"
                 android:layout_marginBottom="16.0dip"
-                android:text="Open In Browser"
+                android:text="Open Discord Web App"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/blue_id_2" />
