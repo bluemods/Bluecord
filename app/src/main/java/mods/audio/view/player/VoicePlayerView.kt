@@ -134,7 +134,7 @@ class VoicePlayerView @JvmOverloads constructor(
         val p = player.get()
         if (p == null || !p.isReady) {
             // This means we are in ReadyToDownload state
-            val m = model?.getAttachment()
+            val m = model?.attachment
             if (m != null) {
                 startDownload(m)
             } else {

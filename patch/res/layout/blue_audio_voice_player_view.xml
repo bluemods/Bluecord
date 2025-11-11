@@ -57,9 +57,11 @@
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content" 
         android:layout_marginRight="20.0dip" 
-        android:layout_marginBottom="5.0dip" 
+        android:layout_marginTop="4.0dip" 
+        android:layout_marginBottom="4.0dip" 
         android:layout_alignParentRight="true" 
         android:layout_alignParentBottom="true" 
         style="@style/UiKit.TextView"
     />
 </merge>
+

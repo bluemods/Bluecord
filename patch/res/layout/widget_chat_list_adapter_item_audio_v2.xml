@@ -48,7 +48,7 @@
             <mods.audio.view.player.VoicePlayerView
                 android:id="@id/blue_audio_voice_player_view"
                 android:layout_width="0dp"
-                android:layout_height="52.0dip"
+                android:layout_height="58.0dip"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/chat_list_item_attachment_download"
