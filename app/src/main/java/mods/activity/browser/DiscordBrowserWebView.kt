@@ -12,6 +12,7 @@ import android.webkit.ConsoleMessage
 import android.webkit.CookieManager
 import android.webkit.DownloadListener
 import android.webkit.GeolocationPermissions
+import android.webkit.HttpAuthHandler
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
@@ -21,10 +22,16 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.net.toUri
+import androidx.webkit.ProxyConfig
+import androidx.webkit.ProxyController
+import androidx.webkit.WebViewFeature
 import mods.DiscordTools.extractActivity
+import mods.promise.runCatchingOrLog
+import mods.proxy.CustomProxy
 import mods.utils.ClipboardUtil
 import mods.utils.LogUtils
 import mods.utils.StoreUtils
+import mods.utils.ThreadUtils
 import mods.utils.ToastUtil
 import org.json.JSONObject
 import java.util.Locale
@@ -42,6 +49,7 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
 
     private var tempStorageItems: Map<String, String>? = null
     private var tempUrl: String? = null
+    private var loadFinishedListener: Runnable? = null
     private val localStorageLock = ReentrantLock()
 
     init {
@@ -75,10 +83,12 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
      */
     fun authenticateAndLoad(
         url: String = "https://$BASE_DOMAIN/channels/@me",
+        loadFinishedListener: Runnable
     ) = localStorageLock.withLock {
         require(url.startsWith("https://$BASE_DOMAIN/")) {
             "Unsafe URL open attempt: $url"
         }
+        this.loadFinishedListener = loadFinishedListener
 
         // Shouldn't be here but escape anyway to prevent JS injection
         val token = StoreUtils.getAuthToken()
@@ -98,8 +108,34 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
             "https://.$BASE_DOMAIN",
             "locale=\"${Locale.getDefault()}\"; Domain=.$BASE_DOMAIN; Path=/;"
         )
+        configureProxy()
         loadUrl(url)
-        ToastUtil.toastShort("Loading web app...")
+    }
+
+    private fun configureProxy() {
+        runCatchingOrLog {
+            val supported = WebViewFeature.isFeatureSupported(WebViewFeature.PROXY_OVERRIDE)
+            LogUtils.log(TAG, "proxy supported = $supported")
+            if (supported) {
+                val latch = CountDownLatch(1)
+                CustomProxy.loadConfig()?.let { config ->
+                    ProxyController.getInstance().setProxyOverride(
+                        ProxyConfig.Builder()
+                            .addProxyRule(config.host+":"+config.port)
+                            .build(),
+                        ThreadUtils.sharedExecutor,
+                        latch::countDown
+                    )
+                } ?: run {
+                    ProxyController.getInstance().clearProxyOverride(
+                        ThreadUtils.sharedExecutor,
+                        latch::countDown
+                    )
+                }
+                latch.await(1, TimeUnit.SECONDS)
+                LogUtils.log(TAG, "proxy setup done")
+            }
+        }
     }
 
     override fun goBack() {
@@ -146,7 +182,6 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
                 tempUrl = null
                 stopLoading()
                 loadUrl(url)
-                ToastUtil.cancel()
                 LogUtils.log(TAG, "injecting tokens done")
             }
         }
@@ -187,6 +222,29 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
             injectCreds(url)
             super.onPageFinished(view, url)
         }
+
+        override fun onReceivedHttpAuthRequest(
+            view: WebView?,
+            handler: HttpAuthHandler,
+            host: String?,
+            realm: String?
+        ) {
+            LogUtils.log(TAG,
+                "onReceivedHttpAuthRequest(handler=$handler, host=$host, realm=$realm)")
+
+            CustomProxy.loadConfig()?.let { config ->
+                val username = config.username
+                val password = config.password
+
+                if (!username.isNullOrEmpty() && !password.isNullOrEmpty()) {
+                    LogUtils.log(TAG, "proceeding with proxy creds")
+                    handler.proceed(username, password)
+                } else {
+                    LogUtils.log(TAG, "no proxy creds, cancelling request")
+                    handler.cancel()
+                }
+            }
+        }
     }
 
     private inner class DiscordWebChromeClient : WebChromeClient() {
@@ -210,6 +268,16 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
                     consoleMessage.lineNumber(),
                 )
             )
+            val msg = consoleMessage.message()
+
+            if ("[FAST CONNECT]" in msg || "[libdiscor" in msg || "Loaded experiments" in msg) {
+                // Runtime loaded
+                localStorageLock.withLock {
+                    loadFinishedListener?.run()
+                    loadFinishedListener = null
+                }
+            }
+
             return super.onConsoleMessage(consoleMessage)
         }
 

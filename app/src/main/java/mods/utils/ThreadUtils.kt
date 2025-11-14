@@ -20,7 +20,8 @@ object ThreadUtils {
     val scheduler: ScheduledExecutorService =
         newSingleThreadScheduledExecutor("BluecordScheduler")
 
-    private val sharedExecutor: ExecutorService =
+    @JvmField
+    val sharedExecutor: ExecutorService =
         newFixedThreadPool("BluecordExecutor", 8)
 
     @JvmStatic

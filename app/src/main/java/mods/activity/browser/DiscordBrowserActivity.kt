@@ -5,11 +5,16 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.discord.models.message.Message
 import com.discord.utilities.intent.IntentUtils
 import mods.ThemingTools
+import mods.dialog.SimpleLoadingSpinner
+import mods.promise.runCatchingOrLog
 import mods.utils.StoreUtils
+import mods.utils.ToastUtil
 
 class DiscordBrowserActivity : AppCompatActivity() {
 
@@ -47,7 +52,15 @@ class DiscordBrowserActivity : AppCompatActivity() {
         }
     }
 
+    private val handler = Handler(Looper.getMainLooper())
     private lateinit var view: DiscordBrowserWebView
+    private lateinit var loadingSpinner: SimpleLoadingSpinner
+
+    private val loadTimeoutRunnable = Runnable {
+        ToastUtil.toastShort("Loading timed out, please try again")
+        runCatchingOrLog { loadingSpinner.hide() }
+        runCatchingOrLog { finish() }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +80,22 @@ class DiscordBrowserActivity : AppCompatActivity() {
             it.hasExtra(EXTRA_URL)
         }?.getStringExtra(EXTRA_URL)
 
+        loadingSpinner = SimpleLoadingSpinner(this).show("Loading, please wait...",)
+        handler.postDelayed(loadTimeoutRunnable, 10000)
+
         if (initialUrl != null) {
-            view.authenticateAndLoad(initialUrl)
+            view.authenticateAndLoad(url = initialUrl, loadFinishedListener = ::onLoadFinished)
         } else {
-            view.authenticateAndLoad()
+            view.authenticateAndLoad(loadFinishedListener = ::onLoadFinished)
+        }
+    }
+
+    private fun onLoadFinished() {
+        handler.removeCallbacks(loadTimeoutRunnable)
+        handler.post {
+            runCatchingOrLog {
+                loadingSpinner.hide()
+            }
         }
     }
 
@@ -98,5 +123,15 @@ class DiscordBrowserActivity : AppCompatActivity() {
             finish()
             true
         }
+    }
+
+    override fun onDestroy() {
+        runCatchingOrLog { view.destroy() }
+        super.onDestroy()
+    }
+
+    override fun finish() {
+        runCatchingOrLog { view.destroy() }
+        super.finish()
     }
 }
