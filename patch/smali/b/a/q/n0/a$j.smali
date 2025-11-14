@@ -530,7 +530,7 @@
 
     .line 55
     # BLUE: DO NOT SEND PING YET
-    # invoke-virtual {v0}, Lb/a/q/n0/a;->k()V
+    invoke-virtual {v0}, Lb/a/q/n0/a;->k()V
 
     goto/16 :goto_d
 
