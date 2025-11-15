@@ -17,8 +17,8 @@ public class V2ComponentAdapter extends TypeAdapter<ComponentType> {
 
     static {
         ComponentType[] v = ComponentType.values();
-        for (int i = 0; i < v.length; i++) {
-            map.put(v[i].getType(), v[i]);
+        for (ComponentType t : v) {
+            map.put(t.getType(), t);
         }
     }
 
@@ -31,6 +31,8 @@ public class V2ComponentAdapter extends TypeAdapter<ComponentType> {
 
     @Override
     public void write(JsonWriter jsonWriter, ComponentType componentType) throws IOException {
-        jsonWriter.D(componentType.getType());
+        if (componentType != null) {
+            jsonWriter.D(componentType.getType());
+        }
     }
 }
