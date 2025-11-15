@@ -11,8 +11,8 @@ public final class Constants {
 
     // Version number. This is changed on release
     // and is used for checking if Bluecord needs an update
-    public static final int    VERSION_CODE = 26300;
-    public static final String VERSION_NAME = "2.6.3";
+    public static final int    VERSION_CODE = 26401;
+    public static final String VERSION_NAME = "2.6.4";
 
     // Adds support for Bluecord emotes and other systems that use a '.'
     @Language("Regexp")
