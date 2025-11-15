@@ -81,6 +81,8 @@
 
 .field public z:Ljava/util/TimerTask;
 
+.field public _conn:Lcom/discord/rtcconnection/RtcConnection;
+
 
 # direct methods
 .method public static constructor <clinit>()V
@@ -108,7 +110,7 @@
     return-void
 .end method
 
-.method public constructor <init>(Ljava/lang/String;Ljava/lang/String;Ljavax/net/ssl/SSLSocketFactory;Lcom/discord/utilities/logging/Logger;Lb/a/q/c;Lcom/discord/utilities/time/Clock;Ljava/lang/String;)V
+.method public constructor <init>(Ljava/lang/String;Ljava/lang/String;Ljavax/net/ssl/SSLSocketFactory;Lcom/discord/utilities/logging/Logger;Lb/a/q/c;Lcom/discord/utilities/time/Clock;Ljava/lang/String;Lcom/discord/rtcconnection/RtcConnection;)V
     .locals 13
 
     move-object v0, p0
@@ -124,6 +126,10 @@
     move-object/from16 v5, p6
 
     move-object/from16 v6, p7
+
+    move-object/from16 v7, p8
+    iput-object v7, v0, Lb/a/q/n0/a;->_conn:Lcom/discord/rtcconnection/RtcConnection;
+    
 
     const-string v7, "endpoint"
 
@@ -265,6 +271,13 @@
 
 .method public static final a(Lb/a/q/n0/a;ZLjava/lang/Integer;Ljava/lang/String;)V
     .locals 7
+
+    iget-object v0, p0, Lb/a/q/n0/a;->_conn:Lcom/discord/rtcconnection/RtcConnection;
+    if-eqz v0, :cond_69
+    iget-object v0, v0, Lcom/discord/rtcconnection/RtcConnection;->fixer:Lmods/rn/RNWebRtcFix;
+    if-eqz v0, :cond_69
+    invoke-virtual {v0, p2, p3}, Lmods/rn/RNWebRtcFix;->trackWebRtcWsError(Ljava/lang/Integer;Ljava/lang/String;)V
+    :cond_69
 
     .line 1
     sget-object v0, Lb/a/q/n0/a$c;->j:Lb/a/q/n0/a$c;
@@ -846,8 +859,8 @@
     iget-object v2, p0, Lb/a/q/n0/a;->D:Ljava/lang/String;
 
     # const-string v3, "?v=5"
-    # BLUE: Move to v7 to fix WSS issues
-    const-string v3, "?v=7"
+    # BLUE: Move to v9 to fix WSS issues
+    const-string v3, "?v=9"
 
     invoke-static {v1, v2, v3}, Lb/d/b/a/a;->J(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 

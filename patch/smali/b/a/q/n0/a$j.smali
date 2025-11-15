@@ -182,7 +182,7 @@
 
     # check-cast v1, Ljava/util/Map;
     check-cast v1, Lmods/parser/MediaSinkWantsPayload;
-    invoke-virtual {v1}, Lmods/parser/MediaSinkWantsPayload;->getPixelCounts()Ljava/util/Map;
+    invoke-virtual {v1}, Lmods/parser/MediaSinkWantsPayload;->getFixedPixelCounts()Ljava/util/Map;
     move-result-object v1
 
     .line 13
@@ -530,7 +530,7 @@
 
     .line 55
     # BLUE: DO NOT SEND PING YET
-    invoke-virtual {v0}, Lb/a/q/n0/a;->k()V
+    # invoke-virtual {v0}, Lb/a/q/n0/a;->k()V
 
     goto/16 :goto_d
 
@@ -980,6 +980,11 @@
 
     move-result-object v7
 
+    invoke-virtual {v1}, Lcom/discord/rtcconnection/socket/io/Payloads$Ready;->getModes()Ljava/util/List;
+
+    move-result-object v8
+
+    invoke-interface {v2, v8}, Lb/a/q/n0/a$d;->setEncryptionModes(Ljava/util/List;)V
     invoke-interface {v2, v4, v5, v6, v7}, Lb/a/q/n0/a$d;->k(IILjava/lang/String;Ljava/util/List;)V
 
     goto :goto_b
