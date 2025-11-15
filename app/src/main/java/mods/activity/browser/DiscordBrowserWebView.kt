@@ -32,7 +32,6 @@ import mods.utils.ClipboardUtil
 import mods.utils.LogUtils
 import mods.utils.StoreUtils
 import mods.utils.ThreadUtils
-import mods.utils.ToastUtil
 import org.json.JSONObject
 import java.util.Locale
 import java.util.concurrent.CountDownLatch
@@ -82,6 +81,8 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
      * Loads the page and sets the necessary auth tokens.
      */
     fun authenticateAndLoad(
+        userId: String = StoreUtils.getSelf().id.toString(),
+        token: String = StoreUtils.getAuthToken(),
         url: String = "https://$BASE_DOMAIN/channels/@me",
         loadFinishedListener: Runnable
     ) = localStorageLock.withLock {
@@ -91,11 +92,10 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
         this.loadFinishedListener = loadFinishedListener
 
         // Shouldn't be here but escape anyway to prevent JS injection
-        val token = StoreUtils.getAuthToken()
+        val token = token
             .replace("\"", "")
             .replace("\\", "")
 
-        val userId = StoreUtils.getSelf().id
         tempUrl = url
         tempStorageItems = mapOf(
             "token" to "\"\\\"$token\\\"\"",
@@ -132,7 +132,7 @@ class DiscordBrowserWebView @JvmOverloads constructor(context: Context, attrs: A
                         latch::countDown
                     )
                 }
-                latch.await(1, TimeUnit.SECONDS)
+                latch.await(250, TimeUnit.MILLISECONDS)
                 LogUtils.log(TAG, "proxy setup done")
             }
         }

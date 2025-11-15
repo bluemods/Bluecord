@@ -11,24 +11,51 @@ import androidx.appcompat.app.AppCompatActivity
 import com.discord.models.message.Message
 import com.discord.utilities.intent.IntentUtils
 import mods.ThemingTools
+import mods.dialog.Dialogs
 import mods.dialog.SimpleLoadingSpinner
 import mods.promise.runCatchingOrLog
+import mods.proxy.CustomProxy
+import mods.utils.LogUtils
 import mods.utils.StoreUtils
 import mods.utils.ToastUtil
 
 class DiscordBrowserActivity : AppCompatActivity() {
 
     companion object {
+        private val TAG = DiscordBrowserActivity::class.java.simpleName
+
         private const val EXTRA_URL = "url"
 
         @JvmStatic
         @JvmOverloads
         fun start(context: Context, initialUrl: String? = null) {
-            val i = Intent(context, DiscordBrowserActivity::class.java)
-            if (initialUrl != null) {
-                i.putExtra(EXTRA_URL, initialUrl)
+            val proxy = CustomProxy.loadConfig()
+            if (proxy != null && proxy.type == CustomProxy.HttpProxyConfig.Type.SOCKS) {
+                Dialogs.newBuilder(context)
+                    .setTitle("Proxy Warning")
+                    .setMessage("SOCKS5 proxies are unusable in the web app mode, " +
+                            "which means Discord will see your real IP address.\n" +
+                            "To avoid this, use an HTTP proxy.\n\n" +
+                            "Open anyway?")
+                    .setPositiveButton("Yes") { startInternal(context, initialUrl) }
+                    .setNegativeButton("No")
+                    .setCancelable(false)
+                    .showSafely()
+            } else {
+                startInternal(context, initialUrl)
             }
-            context.startActivity(i)
+        }
+
+        private fun startInternal(context: Context, initialUrl: String? = null) {
+            runCatchingOrLog {
+                val i = Intent(context, DiscordBrowserActivity::class.java)
+                if (initialUrl != null) {
+                    i.putExtra(EXTRA_URL, initialUrl)
+                }
+                context.startActivity(i)
+            }.onFailure {
+                LogUtils.log(TAG, "failed to open browser")
+            }
         }
 
         @JvmStatic
