@@ -54,7 +54,7 @@ class CustomFont(context: Context?, attrs: AttributeSet?)
                             } else {
                                 Uri.fromFile(FileUtils.downloadsDir)
                             },
-                            extraMimeTypes = arrayOf("font/ttf", "font/otf")
+                            // remove mime types to fix a reported issue
                         )
                         context.extractActivity!!
                             .startActivityForResult(intent, BlueSettingsActivity.REQUEST_CODE_PICK_FONT_FILE)
