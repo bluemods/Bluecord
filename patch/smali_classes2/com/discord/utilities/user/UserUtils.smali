@@ -789,7 +789,7 @@
 
     invoke-static {p1, v0}, Ld0/z/d/m;->checkNotNullParameter(Ljava/lang/Object;Ljava/lang/String;)V
 
-    invoke-static {p1, p2, p3}, Lmods/utils/StringUtils;->getUserNameWithDiscriminator(Lcom/discord/models/user/User;Ljava/lang/Integer;Ljava/lang/Float;)Ljava/lang/CharSequence;
+    invoke-static {p1, p2, p3}, Lmods/utils/DisplayNameUtils;->getUsernameWithDiscriminator(Lcom/discord/models/user/User;Ljava/lang/Integer;Ljava/lang/Float;)Ljava/lang/CharSequence;
 
     move-result-object v0
 

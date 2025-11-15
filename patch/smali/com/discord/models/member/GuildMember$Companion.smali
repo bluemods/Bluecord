@@ -727,7 +727,7 @@
     :goto_4
     if-eqz v0, :cond_8
 
-	invoke-static {v0, p1}, Lmods/ThemingTools;->addTagForGuildNick(Ljava/lang/String;Lcom/discord/models/user/User;)Ljava/lang/String;
+	invoke-static {v0, p1}, Lmods/utils/DisplayNameUtils;->addTagForGuildNick(Ljava/lang/String;Lcom/discord/models/user/User;)Ljava/lang/String;
 
 	move-result-object v0
 
@@ -736,7 +736,7 @@
     :cond_8
     # invoke-interface {p1}, Lcom/discord/models/user/User;->getUsername()Ljava/lang/String;
 
-	invoke-static {p1}, Lmods/ThemingTools;->addTagForGuildUsername(Lcom/discord/models/user/User;)Ljava/lang/String;
+	invoke-static {p1}, Lmods/utils/DisplayNameUtils;->addTagForGuildUsername(Lcom/discord/models/user/User;)Ljava/lang/String;
 	
     move-result-object v0
 

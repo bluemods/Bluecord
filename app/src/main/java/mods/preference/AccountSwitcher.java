@@ -25,6 +25,7 @@ import mods.dialog.Dialogs;
 import mods.dialog.StandardAlerts;
 import mods.utils.AuthenticationUtils;
 import mods.utils.ClipboardUtil;
+import mods.utils.DisplayNameUtils;
 import mods.utils.LogUtils;
 import mods.utils.StoreUtils;
 import mods.utils.StringUtils;
@@ -89,7 +90,7 @@ public class AccountSwitcher extends Preference {
 
         for (int i = 0; i < backups.size(); i++) {
             AccountBackup backup = backups.get(i);
-            names[i] = StringUtils.fixAccountName(backup.getAccountName()) + "\n(backed up at " + DiscordTools.formatDate(backup.getBackupTime()) + ")";
+            names[i] = fixBackupAccountName(backup.getAccountName()) + "\n(backed up at " + DiscordTools.formatDate(backup.getBackupTime()) + ")";
         }
 
         final boolean[] checked = new boolean[backups.size()];
@@ -131,7 +132,7 @@ public class AccountSwitcher extends Preference {
         // } else if (self.getMfaEnabled()) {
         //     DiscordTools.basicAlert(context, "Account Switcher", "Unfortunately, backing up accounts with Two-Factor Authentication enabled is not possible at the moment, as Discord revokes the token every few minutes.\n\nPlease do not disable 2FA for this, account security is always more important.");
         } else {
-            final String name = StringUtils.getUsernameWithDiscriminator(self);
+            final String name = DisplayNameUtils.getUsernameWithDiscriminator(self);
 
             Dialogs.newBuilder(context)
                     .setTitle("Are you sure?")
@@ -333,5 +334,12 @@ public class AccountSwitcher extends Preference {
         public String toString() {
             return toJson().toString();
         }
+    }
+
+    private static String fixBackupAccountName(String name) {
+        if (name == null || !name.contains("#")) return name;
+        final int index = name.lastIndexOf("#");
+        if (index == -1) return name;
+        return name.substring(0, index);
     }
 }

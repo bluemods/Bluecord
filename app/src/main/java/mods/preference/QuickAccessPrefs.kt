@@ -22,8 +22,6 @@ object QuickAccessPrefs {
         private set
     @JvmStatic var emoteMode: EmoteMode = EmoteMode("")
         private set
-    @JvmStatic var tagMode: String = ""
-        private set
     @JvmStatic var disableTyping: Boolean = false
         private set
     @JvmStatic var editMode: EditMode = EditMode.OFF
@@ -43,7 +41,6 @@ object QuickAccessPrefs {
         isEditTimestampEnabled = Prefs.getBoolean(SHOW_EDIT_TIMESTAMP, false)
         isTextCharCountEnabled = Prefs.getBoolean(SHOW_TEXT_CHAR_COUNT, false)
         emoteMode = EmoteMode(Prefs.getString(EMOTE_MODE, "Off"))
-        tagMode = Prefs.getString(SHOW_TAG_V2, "Off")
         disableTyping = Prefs.getBoolean(DISABLE_TYPING, false)
         editMode = EditMode.parse(Prefs.getString(ANTI_EDIT_MODE, EditMode.OFF.prefsValue))
     }

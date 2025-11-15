@@ -405,8 +405,9 @@ public class SheetConfig {
 
         // copy name + tag to clipboard
         TextView tv3 = view.findViewById(android.R.id.hint);
+        tv3.setText("Copy Username");
         tv3.setOnClickListener(v -> {
-            ClipboardUtil.copy(StringUtils.getUsernameWithDiscriminator(state.getUser()), "Name + Tag copied to clipboard");
+            ClipboardUtil.copy(state.getUser().getUsername(), "Username copied to clipboard");
         });
         tv3.setVisibility(View.VISIBLE);
 

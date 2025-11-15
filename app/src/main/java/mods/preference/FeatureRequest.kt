@@ -19,7 +19,6 @@ import mods.dialog.SimpleLoadingSpinner
 import mods.promise.hideSpinner
 import mods.utils.ClipboardUtil
 import mods.utils.StoreUtils
-import mods.utils.StringUtils
 import mods.utils.ToastUtil
 import org.json.JSONObject
 
@@ -80,7 +79,7 @@ class FeatureRequest @SuppressLint("SetTextI18n") constructor(
             put("text", feedbackText)
             if (sendUsername) {
                 val self = StoreUtils.getSelf()
-                put("from", StringUtils.getUsernameWithDiscriminator(self))
+                put("from", self.username)
                 put("userId", self.id)
             }
         }

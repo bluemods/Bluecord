@@ -280,36 +280,27 @@
 
     if-eqz v2, :cond_7
 
-    new-instance v2, Ljava/lang/StringBuilder;
+    # new-instance v2, Ljava/lang/StringBuilder;
+    # invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
+    # invoke-interface {p1}, Lcom/discord/models/user/User;->getUsername()Ljava/lang/String;
+    # move-result-object v8
+    # invoke-virtual {v2, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    # sget-object v8, Lcom/discord/utilities/user/UserUtils;->INSTANCE:Lcom/discord/utilities/user/UserUtils;
+    # invoke-virtual {v8, p1}, Lcom/discord/utilities/user/UserUtils;->getDiscriminatorWithPadding(Lcom/discord/models/user/User;)Ljava/lang/String;
+    # move-result-object v8
+    # invoke-virtual {v2, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    # invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    # move-result-object v2
 
-    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
-
-    invoke-interface {p1}, Lcom/discord/models/user/User;->getUsername()Ljava/lang/String;
-
-    move-result-object v8
-
-    invoke-virtual {v2, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    sget-object v8, Lcom/discord/utilities/user/UserUtils;->INSTANCE:Lcom/discord/utilities/user/UserUtils;
-
-    invoke-virtual {v8, p1}, Lcom/discord/utilities/user/UserUtils;->getDiscriminatorWithPadding(Lcom/discord/models/user/User;)Ljava/lang/String;
-
-    move-result-object v8
-
-    invoke-virtual {v2, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v2
-
-    invoke-static {v2}, Lmods/utils/StringUtils;->convertLegacyDiscriminatorToUsername(Ljava/lang/String;)Ljava/lang/String;
+    invoke-static {p1}, Lmods/utils/DisplayNameUtils;->getUsernameWithDiscriminator(Lcom/discord/models/user/User;)Ljava/lang/String;
 
     move-result-object v2
 
     goto :goto_3
 
     :cond_7
-    invoke-interface {p1}, Lcom/discord/models/user/User;->getUsername()Ljava/lang/String;
+    # invoke-interface {p1}, Lcom/discord/models/user/User;->getUsername()Ljava/lang/String;
+    invoke-static {p1}, Lmods/utils/DisplayNameUtils;->getUsernameWithDiscriminator(Lcom/discord/models/user/User;)Ljava/lang/String;
 
     move-result-object v2
 

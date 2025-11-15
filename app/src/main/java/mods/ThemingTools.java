@@ -389,25 +389,6 @@ public class ThemingTools {
         return Prefs.getBoolean(PreferenceKeys.DISABLE_REPLY_MENTIONS, false);
     }
 
-    public static String addTagForGuildNick(String nickname, User user) {
-        String type = QuickAccessPrefs.getTagMode();
-
-        if ("Always".equals(type) || "When Nickname Is Set".equals(type)) {
-            nickname = nickname + " (" + StringUtils.getUsernameWithDiscriminator(user) + ")";
-        }
-        return nickname;
-    }
-
-    public static String addTagForGuildUsername(User user) {
-        String type = QuickAccessPrefs.getTagMode();
-
-        if ("Always".equals(type)) {
-            return StringUtils.getUsernameWithDiscriminator(user);
-        } else {
-            return user.getUsername();
-        }
-    }
-
     public static void setMarqueeNames(TextView tv) {
         if (tv != null && Prefs.getBoolean(PreferenceKeys.MARQUEE_NAMES, false)) {
             tv.setEllipsize(TextUtils.TruncateAt.MARQUEE);

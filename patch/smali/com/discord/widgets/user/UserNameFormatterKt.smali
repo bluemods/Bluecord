@@ -78,7 +78,7 @@
     move/from16 v6, p6
     move/from16 v7, p7
     move/from16 v8, p8
-    invoke-static/range {v0 .. v8}, Lmods/utils/StringUtils;->getSpannableForUserNameWithDiscrim(Lcom/discord/models/user/User;Ljava/lang/String;Landroid/content/Context;IIIIII)Landroid/text/SpannableStringBuilder;
+    invoke-static/range {v0 .. v8}, Lmods/utils/DisplayNameUtils;->getSpannableForUserNameWithDiscrim(Lcom/discord/models/user/User;Ljava/lang/String;Landroid/content/Context;IIIIII)Landroid/text/SpannableStringBuilder;
     move-result-object v0
     return-object v0
 .end method

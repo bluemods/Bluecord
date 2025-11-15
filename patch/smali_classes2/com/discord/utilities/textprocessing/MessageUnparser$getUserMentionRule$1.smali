@@ -150,29 +150,19 @@
     const/16 p1, 0x40
 
     .line 3
-    invoke-static {p1}, Lb/d/b/a/a;->Q(C)Ljava/lang/StringBuilder;
+    # invoke-static {p1}, Lb/d/b/a/a;->Q(C)Ljava/lang/StringBuilder;
+    # move-result-object p1
+    # invoke-interface {p2}, Lcom/discord/models/user/User;->getUsername()Ljava/lang/String;
+    # move-result-object v0
+    # invoke-virtual {p1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    # sget-object v0, Lcom/discord/utilities/user/UserUtils;->INSTANCE:Lcom/discord/utilities/user/UserUtils;
+    # invoke-virtual {v0, p2}, Lcom/discord/utilities/user/UserUtils;->getDiscriminatorWithPadding(Lcom/discord/models/user/User;)Ljava/lang/String;
+    # move-result-object p2
+    # invoke-virtual {p1, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    # invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    # move-result-object p1
 
-    move-result-object p1
-
-    invoke-interface {p2}, Lcom/discord/models/user/User;->getUsername()Ljava/lang/String;
-
-    move-result-object v0
-
-    invoke-virtual {p1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    sget-object v0, Lcom/discord/utilities/user/UserUtils;->INSTANCE:Lcom/discord/utilities/user/UserUtils;
-
-    invoke-virtual {v0, p2}, Lcom/discord/utilities/user/UserUtils;->getDiscriminatorWithPadding(Lcom/discord/models/user/User;)Ljava/lang/String;
-
-    move-result-object p2
-
-    invoke-virtual {p1, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object p1
-
-    invoke-static {p1}, Lmods/utils/StringUtils;->convertLegacyDiscriminatorToUsername(Ljava/lang/String;)Ljava/lang/String;
+    invoke-static {p2}, Lmods/utils/DisplayNameUtils;->getUsernameWithDiscriminator(Lcom/discord/models/user/User;)Ljava/lang/String;
 
     move-result-object p1
 

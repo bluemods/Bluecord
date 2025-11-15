@@ -18,7 +18,7 @@
 	<SwitchPreference android:title="Reject Incoming Calls" android:key="blue.reject.incoming" android:summary="Automatically rejects incoming calls\nNOTE: Bluecord needs to be running for this to work" />
     <!-- <SwitchPreference android:title="Enable Game Detection" android:key="force.game.detection" android:summary="TODO" /> -->
     <SwitchPreference android:title="Hide Blocked Messages" android:key="hide.blocked" android:summary="Blocked messages will be completely hidden" />
-    <ListPreference android:entries="@array/show_user_values" android:title="Show Username" android:key="show.tag.v2" android:summary="Choose whether to show the username and tag for messages" android:defaultValue="Off" android:entryValues="@array/show_user_values" />
+    <!-- <ListPreference android:entries="@array/show_user_values" android:title="Show Username" android:key="show.tag.v2" android:summary="Choose whether to show the username and tag for messages" android:defaultValue="Off" android:entryValues="@array/show_user_values" /> -->
     <!--<SwitchPreference android:title="Hide Muted Guilds" android:key="remove.muted" android:summary="Guilds will be hidden if the notification settings are set to 'nothing'" />-->
     <SwitchPreference android:title="Show Character Count" android:key="blue.show.char.count" android:summary="The message box will show the character count and capacity" />
     <SwitchPreference android:title="Show File Sizes" android:key="blue.attachment.filesize" android:summary="The media picker will show file sizes.\nIf it is over your allowed limit, it will be highlighted in red" />

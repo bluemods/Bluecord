@@ -309,7 +309,7 @@
 
     move-result-object v8
 
-    invoke-static {v8}, Lmods/utils/StringUtils;->convertLegacyDiscriminatorToUsername(Ljava/lang/String;)Ljava/lang/String;
+    invoke-static {v6}, Lmods/utils/DisplayNameUtils;->getUsernameWithDiscriminator(Lcom/discord/models/user/User;)Ljava/lang/String;
 
     move-result-object v8
 
