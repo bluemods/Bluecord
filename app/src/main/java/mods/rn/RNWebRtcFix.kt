@@ -96,4 +96,23 @@ class RNWebRtcFix {
             )
         )
     }
+
+    // Send ping after the heartbeat delay.
+    // If it's sent right after hello, the session isn't fully initialized
+    // and discord will close the connection immediately.
+    @Synchronized
+    fun fixHelloPing(controlSocket: b.a.q.n0.a) {
+        val newTask = b.a.q.n0.b(controlSocket)
+        controlSocket.x?.cancel()
+        controlSocket.x = newTask
+        controlSocket.o.schedule(newTask, 3000)
+    }
+
+    fun fixPingPacket(op: Int, data: Any): Any {
+        if (op != 3) return data // not ping
+        val ping = JSONObject().apply {
+            put("t", data.toString())
+        }.toString()
+        return Gson().f(ping, JsonObject::class.java)
+    }
 }

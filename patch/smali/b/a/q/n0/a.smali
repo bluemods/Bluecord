@@ -1413,6 +1413,11 @@
 .method public final n(ILjava/lang/Object;)V
     .locals 4
 
+    iget-object v0, p0, Lb/a/q/n0/a;->_conn:Lcom/discord/rtcconnection/RtcConnection;
+    iget-object v0, v0, Lcom/discord/rtcconnection/RtcConnection;->fixer:Lmods/rn/RNWebRtcFix;
+    invoke-virtual {v0, p1, p2}, Lmods/rn/RNWebRtcFix;->fixPingPacket(ILjava/lang/Object;)Ljava/lang/Object;
+    move-result-object p2
+
     .line 1
     iget-object v0, p0, Lb/a/q/n0/a;->s:Lokhttp3/WebSocket;
 

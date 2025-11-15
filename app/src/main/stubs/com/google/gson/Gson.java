@@ -24,4 +24,11 @@ public class Gson {
     public <T> T g(String json, Type type) throws JsonSyntaxException {
         return null;
     }
+
+    /**
+     * fromJson
+     */
+    public <T> T c(JsonElement json, Class<T> cls) throws JsonSyntaxException {
+        return null;
+    }
 }

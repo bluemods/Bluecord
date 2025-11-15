@@ -529,8 +529,12 @@
     iput-boolean v1, v0, Lb/a/q/n0/a;->w:Z
 
     .line 55
-    # BLUE: DO NOT SEND PING YET
+    # BLUE: Fix heartbeat ack issue (ping issue)
     # invoke-virtual {v0}, Lb/a/q/n0/a;->k()V
+    iget-object v2, p0, Lb/a/q/n0/a$j;->this$0:Lb/a/q/n0/a;
+    iget-object v3, v2, Lb/a/q/n0/a;->_conn:Lcom/discord/rtcconnection/RtcConnection;
+    iget-object v3, v3, Lcom/discord/rtcconnection/RtcConnection;->fixer:Lmods/rn/RNWebRtcFix;
+    invoke-virtual {v3, v2}, Lmods/rn/RNWebRtcFix;->fixHelloPing(Lb/a/q/n0/a;)V
 
     goto/16 :goto_d
 
@@ -548,21 +552,16 @@
 
     move-result-object v5
 
-    sget-object v6, Ljava/lang/Long;->TYPE:Ljava/lang/Class;
-
-    invoke-virtual {v4, v5, v6}, Lcom/google/gson/Gson;->c(Lcom/google/gson/JsonElement;Ljava/lang/Class;)Ljava/lang/Object;
-
-    move-result-object v4
-
-    const-string v5, "gson.fromJson(message.data, Long::class.java)"
-
-    invoke-static {v4, v5}, Ld0/z/d/m;->checkNotNullExpressionValue(Ljava/lang/Object;Ljava/lang/String;)V
-
-    check-cast v4, Ljava/lang/Number;
-
-    invoke-virtual {v4}, Ljava/lang/Number;->longValue()J
-
+    invoke-static {v5}, Lmods/parser/HeartbeatAck;->extract(Lcom/google/gson/JsonElement;)J
     move-result-wide v4
+    # sget-object v6, Ljava/lang/Long;->TYPE:Ljava/lang/Class;
+    # invoke-virtual {v4, v5, v6}, Lcom/google/gson/Gson;->c(Lcom/google/gson/JsonElement;Ljava/lang/Class;)Ljava/lang/Object;
+    # move-result-object v4
+    # const-string v5, "gson.fromJson(message.data, Long::class.java)"
+    # invoke-static {v4, v5}, Ld0/z/d/m;->checkNotNullExpressionValue(Ljava/lang/Object;Ljava/lang/String;)V
+    # check-cast v4, Ljava/lang/Number;
+    # invoke-virtual {v4}, Ljava/lang/Number;->longValue()J
+    # move-result-wide v4
 
     .line 59
     iget-object v6, v0, Lb/a/q/n0/a;->I:Lcom/discord/utilities/time/Clock;
