@@ -529,7 +529,8 @@
     iput-boolean v1, v0, Lb/a/q/n0/a;->w:Z
 
     .line 55
-    # BLUE: Fix heartbeat ack issue (ping issue)
+    # BLUE: DO NOT SEND PING YET
+    # BLUE: delay ping to prevent remote socket close    
     # invoke-virtual {v0}, Lb/a/q/n0/a;->k()V
     iget-object v2, p0, Lb/a/q/n0/a$j;->this$0:Lb/a/q/n0/a;
     iget-object v3, v2, Lb/a/q/n0/a;->_conn:Lcom/discord/rtcconnection/RtcConnection;
