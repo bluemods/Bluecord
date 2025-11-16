@@ -1,7 +1,8 @@
 package com.google.gson.stream;
 
 public class JsonWriter {
-    public void D(Number n) {
 
+    public JsonWriter D(Number n) {
+        return this;
     }
 }
