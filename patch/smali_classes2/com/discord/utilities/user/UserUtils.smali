@@ -1400,7 +1400,9 @@
 .end method
 
 .method public final synthesizeApiUser(Lcom/discord/models/user/User;)Lcom/discord/api/user/User;
-    .locals 27
+    .locals 28
+
+    move-object/from16 v27, p1
 
     const-string v0, "$this$synthesizeApiUser"
 
@@ -1526,6 +1528,11 @@
     move-object v2, v0
 
     invoke-direct/range {v2 .. v26}, Lcom/discord/api/user/User;-><init>(JLjava/lang/String;Lcom/discord/nullserializable/NullSerializable;Lcom/discord/nullserializable/NullSerializable;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/String;Lcom/discord/api/user/NsfwAllowance;Ljava/lang/Boolean;Lcom/discord/api/user/Phone;Ljava/lang/String;Lcom/discord/api/premium/PremiumTier;Ljava/lang/Integer;Lcom/discord/api/guildmember/GuildMember;Lcom/discord/nullserializable/NullSerializable;Lcom/discord/nullserializable/NullSerializable;I)V
+
+    move-object/from16 v1, v27
+    invoke-interface {v1}, Lcom/discord/models/user/User;->getGlobalName()Ljava/lang/String;
+    move-result-object v1
+    invoke-virtual/range {v0 .. v1}, Lcom/discord/api/user/User;->setGlobalName(Ljava/lang/String;)V
 
     return-object v0
 .end method

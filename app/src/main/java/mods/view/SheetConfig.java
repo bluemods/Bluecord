@@ -185,6 +185,17 @@ public class SheetConfig {
         // and to prevent duplicate last message requests, which results in us hitting 429 errors from Discord
         tagView.setTag(searchKey);
 
+        TextView secondName = binding.getRoot().findViewById(R.id.blue_id_5);
+        secondName.setText("@" + user.getUsername());
+        secondName.setTextSize(14f);
+        secondName.setPadding(
+                secondName.getPaddingLeft(),
+                secondName.getPaddingTop(),
+                secondName.getPaddingRight(),
+                secondName.getPaddingBottom() + ThemingTools.dipToPx(10)
+        );
+        secondName.setVisibility(View.VISIBLE);
+
         if (useDays) {
             info.append("Account created: ").append(StringUtils.convertToTimeBehind(new Date(creationTime)));
             if (isGuild) {

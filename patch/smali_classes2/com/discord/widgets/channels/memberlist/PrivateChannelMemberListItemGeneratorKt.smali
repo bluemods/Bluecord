@@ -86,7 +86,7 @@
 
     .line 1
     :cond_0
-    invoke-interface/range {p0 .. p0}, Lcom/discord/models/user/User;->getUsername()Ljava/lang/String;
+    invoke-static/range {p0 .. p0}, Lmods/utils/DisplayNameUtils;->getUsernameWithDiscriminator(Lcom/discord/models/user/User;)Ljava/lang/String;
 
     move-result-object v1
 

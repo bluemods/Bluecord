@@ -63,4 +63,9 @@ public class CoreUser implements User {
     public boolean isSystemUser() {
         return false;
     }
+
+    @Override
+    public String getGlobalName() {
+        return "";
+    }
 }

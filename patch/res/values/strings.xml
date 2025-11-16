@@ -913,7 +913,7 @@ but if and when you must, do not hesitate!
     <string name="beginning_channel_no_history">You do not have permission to view the message history of **#!!{channelName}!!**.</string>
     <string name="beginning_channel_welcome">Welcome to !!{channelName}!!!</string>
     <string name="beginning_chat_dm_mobile">This is the very beginning of your legendary conversation with !!{username}!!.</string>
-    <string name="beginning_dm">This is the beginning of your direct message history with **@!!{username}!!**.</string>
+    <string name="beginning_dm">This is the beginning of your direct message history with @**!!{username}!!**.</string>
     <string name="beginning_group_dm">Welcome to the beginning of the **!!{name}!!** group.</string>
     <string name="beginning_group_dm_managed">"You will automatically leave this group when you're done."</string>
     <string name="beginning_role_required_channel_description">This is the start of the !!{channelName}!! **private** channel. $[](topicHook)</string>
@@ -8429,7 +8429,7 @@ detection while the game has focus.
     <string name="qr_code_not_found">"Can't find this computer!"</string>
     <string name="qr_code_not_found_description">"Oh no! Wumpus can't find the computer you're trying to log in on. Make sure that the computer is connected to the internet, and try reopening the Discord desktop app."</string>
     <string name="quick_dm_blocked">You cannot message blocked users</string>
-    <string name="quick_dm_user">Message @!!{name}!!</string>
+    <string name="quick_dm_user">Message !!{name}!!</string>
     <string name="quick_switcher">Quick switcher</string>
     <string name="quick_switcher_results_channel_label">!!{name}!!, !!{type}!!, !!{guild}!!</string>
     <string name="quick_switcher_results_group_dm_label">!!{name}!!, Group Message</string>

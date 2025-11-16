@@ -41,4 +41,8 @@ public class User {
     public Boolean e() {
         return null;
     }
+
+    public String getGlobalName() {
+        return null;
+    }
 }

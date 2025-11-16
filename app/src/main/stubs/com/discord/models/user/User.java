@@ -12,6 +12,7 @@ public interface User extends Serializable {
 
     String getBio();
 
+    @Deprecated
     int getDiscriminator();
 
     int getFlags();
@@ -27,4 +28,6 @@ public interface User extends Serializable {
     boolean isBot();
 
     boolean isSystemUser();
+
+    String getGlobalName();
 }

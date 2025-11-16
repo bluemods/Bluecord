@@ -181,6 +181,20 @@
     return-void
 .end method
 
+.field private globalName:Ljava/lang/String;
+
+.method public getGlobalName()Ljava/lang/String;
+    .locals 1
+    iget-object v0, p0, Lcom/discord/models/user/MeUser;->globalName:Ljava/lang/String;
+    return-object v0
+.end method
+
+.method public setGlobalName(Ljava/lang/String;)V
+    .locals 1
+    iput-object p1, p0, Lcom/discord/models/user/MeUser;->globalName:Ljava/lang/String;
+    return-void
+.end method
+
 .method public constructor <init>(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZILcom/discord/api/premium/PremiumTier;Ljava/lang/String;ZZLjava/lang/String;IILjava/lang/String;Lcom/discord/api/user/NsfwAllowance;Ljava/lang/String;Ljava/lang/String;)V
     .locals 6
 
@@ -873,6 +887,10 @@
 
     .line 26
     invoke-direct/range {v1 .. v20}, Lcom/discord/models/user/MeUser;-><init>(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZILcom/discord/api/premium/PremiumTier;Ljava/lang/String;ZZLjava/lang/String;IILjava/lang/String;Lcom/discord/api/user/NsfwAllowance;Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual/range {p1 .. p1}, Lcom/discord/api/user/User;->getGlobalName()Ljava/lang/String;
+    move-result-object v2
+    iput-object v2, v1, Lcom/discord/models/user/MeUser;->globalName:Ljava/lang/String;
 
     return-void
 
@@ -1759,19 +1777,6 @@
     return-object v0
 .end method
 
-.method public get1337PremiumTier()Lcom/discord/api/premium/PremiumTier;
-    .locals 1
-
-    .line 1
-    iget-object v0, p0, Lcom/discord/models/user/MeUser;->premiumTier:Lcom/discord/api/premium/PremiumTier;
-
-	invoke-static {v0}, Lmods/utils/SpoofUtils;->sudoGetPremiumTier(Lcom/discord/api/premium/PremiumTier;)Lcom/discord/api/premium/PremiumTier;
-
-	move-result-object v0
-
-    return-object v0
-.end method
-
 .method public getPublicFlags()I
     .locals 1
 
@@ -2289,3 +2294,4 @@
 
     return-object v0
 .end method
+

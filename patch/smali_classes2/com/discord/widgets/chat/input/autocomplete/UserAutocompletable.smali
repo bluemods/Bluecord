@@ -160,7 +160,7 @@
     # move-result-object p1
     # invoke-virtual {p2, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
-    invoke-static {p1}, Lmods/utils/DisplayNameUtils;->getUsernameWithDiscriminator(Lcom/discord/models/user/User;)Ljava/lang/String;
+    invoke-interface {p1}, Lcom/discord/models/user/User;->getUsername()Ljava/lang/String;
     move-result-object p1
     invoke-virtual {p2, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 

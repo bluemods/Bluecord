@@ -64,6 +64,11 @@ public class MeUser implements User {
         return false;
     }
 
+    @Override
+    public String getGlobalName() {
+        return "";
+    }
+
     // NOT an override
     public final boolean getMfaEnabled() {
         return false;
