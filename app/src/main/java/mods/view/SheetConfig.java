@@ -187,13 +187,6 @@ public class SheetConfig {
 
         TextView secondName = binding.getRoot().findViewById(R.id.blue_id_5);
         secondName.setText("@" + user.getUsername());
-        secondName.setTextSize(14f);
-        secondName.setPadding(
-                secondName.getPaddingLeft(),
-                secondName.getPaddingTop(),
-                secondName.getPaddingRight(),
-                secondName.getPaddingBottom() + ThemingTools.dipToPx(10)
-        );
         secondName.setVisibility(View.VISIBLE);
 
         if (useDays) {

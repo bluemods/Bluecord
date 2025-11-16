@@ -13,7 +13,15 @@
     <androidx.constraintlayout.widget.Barrier android:id="@id/large_avatar_barrier" android:layout_width="fill_parent" android:layout_height="0.0dip" app:barrierDirection="bottom" app:constraint_referenced_ids="large_avatar" />
     <LinearLayout android:id="@id/user_profile_header_name_wrap" android:layout_width="0.0dip" android:layout_marginTop="8.0dip" android:layout_marginStart="16.0dip" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toStartOf="@id/user_profile_header_badges_recycler" app:layout_constraintHorizontal_weight="1.0" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/large_avatar_barrier" app:layout_goneMarginEnd="16.0dip" style="@style/UiKit.ViewGroup.LinearLayout">
         <com.discord.views.UsernameView android:id="@id/user_profile_header_primary_name" android:layout_width="wrap_content" android:layout_height="wrap_content" app:username_line_spacing_multiplier="1.0" app:username_singleline="false" app:username_text_appearance="@style/UiKit.TextAppearance.Bold" app:username_text_size="@dimen/uikit_textsize_xxlarge" />
-        <com.discord.utilities.view.text.SimpleDraweeSpanTextView android:textSize="@dimen/uikit_textsize_small" android:textColor="?primary_400" android:id="@id/blue_id_5" android:visibility="gone" android:singleLine="false" android:lineSpacingMultiplier="1.0" style="@style/UiKit.TextView.Semibold" />
+        <com.discord.utilities.view.text.SimpleDraweeSpanTextView 
+            android:textColor="?primary_400" 
+            android:id="@id/blue_id_5" 
+            android:visibility="gone" 
+            android:singleLine="false" 
+            android:lineSpacingMultiplier="1.0" 
+            android:paddingBottom="8dp"
+            android:textSize="14sp"
+            style="@style/UiKit.TextView.Semibold" />
         <com.discord.utilities.view.text.SimpleDraweeSpanTextView android:textSize="@dimen/uikit_textsize_small" android:textColor="?primary_400" android:id="@id/user_profile_header_secondary_name" android:visibility="gone" android:singleLine="false" android:lineSpacingMultiplier="1.0" style="@style/UiKit.TextView.Semibold" />
         <com.discord.widgets.channels.UserAkaView android:id="@id/user_aka" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" />
         <com.discord.utilities.view.text.SimpleDraweeSpanTextView android:textSize="@dimen/uikit_textsize_small" android:id="@id/user_profile_header_custom_status" android:layout_marginTop="16.0dip" android:singleLine="false" style="@style/UiKit.TextView" />
