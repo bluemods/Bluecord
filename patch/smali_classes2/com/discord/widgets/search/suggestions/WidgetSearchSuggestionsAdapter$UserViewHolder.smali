@@ -160,17 +160,17 @@
     invoke-static {v8, v0}, Ld0/z/d/m;->checkNotNullParameter(Ljava/lang/Object;Ljava/lang/String;)V
 
     .line 9
-    # new-instance v0, Ljava/lang/StringBuilder;
-    # invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
-    # invoke-interface {v8}, Lcom/discord/models/user/User;->getUsername()Ljava/lang/String;
-    # move-result-object v1
-    # invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-    # sget-object v9, Lcom/discord/utilities/user/UserUtils;->INSTANCE:Lcom/discord/utilities/user/UserUtils;
-    # invoke-virtual {v9, v8}, Lcom/discord/utilities/user/UserUtils;->getDiscriminatorWithPadding(Lcom/discord/models/user/User;)Ljava/lang/String;
-    # move-result-object v1
-    # invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-    # invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-    # move-result-object v0
+    new-instance v0, Ljava/lang/StringBuilder;
+    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+    invoke-interface {v8}, Lcom/discord/models/user/User;->getUsername()Ljava/lang/String;
+    move-result-object v1
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    sget-object v9, Lcom/discord/utilities/user/UserUtils;->INSTANCE:Lcom/discord/utilities/user/UserUtils;
+    invoke-virtual {v9, v8}, Lcom/discord/utilities/user/UserUtils;->getDiscriminatorWithPadding(Lcom/discord/models/user/User;)Ljava/lang/String;
+    move-result-object v1
+    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    move-result-object v0
 
     invoke-static {v8}, Lmods/utils/DisplayNameUtils;->getUsernameWithDiscriminator(Lcom/discord/models/user/User;)Ljava/lang/String;
 

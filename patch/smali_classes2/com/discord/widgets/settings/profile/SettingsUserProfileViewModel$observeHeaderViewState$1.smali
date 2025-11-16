@@ -177,12 +177,12 @@
 
     invoke-static/range {v3 .. v24}, Lcom/discord/models/user/MeUser;->copy$default(Lcom/discord/models/user/MeUser;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZILcom/discord/api/premium/PremiumTier;Ljava/lang/String;ZZLjava/lang/String;IILjava/lang/String;Lcom/discord/api/user/NsfwAllowance;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/discord/models/user/MeUser;
 
+    move-result-object v2
+
     invoke-virtual {v2}, Lcom/discord/models/user/MeUser;->getGlobalName()Ljava/lang/String;
     move-result-object v4 
     invoke-virtual {v2, v4}, Lcom/discord/models/user/MeUser;->setGlobalName(Ljava/lang/String;)V
     
-    move-result-object v2
-
     goto :goto_0
 
     .line 6
