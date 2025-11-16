@@ -107,7 +107,9 @@ class DiscordBrowserActivity : AppCompatActivity() {
             it.hasExtra(EXTRA_URL)
         }?.getStringExtra(EXTRA_URL)
 
-        loadingSpinner = SimpleLoadingSpinner(this).show("Loading, please wait...",)
+        loadingSpinner = SimpleLoadingSpinner(this).show(
+            "This can take up to 20 seconds, please wait..."
+        )
         handler.postDelayed(loadTimeoutRunnable, 10000)
 
         if (initialUrl != null) {
