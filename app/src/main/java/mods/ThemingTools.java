@@ -40,7 +40,6 @@ import com.discord.models.domain.emoji.Emoji;
 import com.discord.models.domain.emoji.ModelEmojiUnicode;
 import com.discord.models.message.Message;
 import com.discord.models.user.MeUser;
-import com.discord.models.user.User;
 import com.discord.stores.StoreExperiments;
 import com.discord.stores.StoreStream;
 import com.discord.utilities.textprocessing.node.EmojiNode;
@@ -66,6 +65,7 @@ import mods.preference.EmoteMode;
 import mods.preference.Prefs;
 import mods.preference.QuickAccessPrefs;
 import mods.utils.AuthenticationUtils;
+import mods.utils.BluecordSmaliVerifier;
 import mods.utils.CacheUtils;
 import mods.utils.ClipboardUtil;
 import mods.utils.EmptyUtils;
@@ -86,6 +86,7 @@ public class ThemingTools {
     public static final int KIK_BLUE_COLOR = Color.parseColor("#ff26beff");
 
     public static void init(Activity activity) {
+        BluecordSmaliVerifier.verifyProblematicClasses();
         Prefs.migrateLegacyPrefs();
         Colors.init();
         QuickAccessPrefs.reload();
