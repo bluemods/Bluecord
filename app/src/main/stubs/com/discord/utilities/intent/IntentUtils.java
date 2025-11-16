@@ -1,5 +1,6 @@
 package com.discord.utilities.intent;
 
+import android.content.Context;
 import android.content.Intent;
 
 public class IntentUtils {
@@ -7,6 +8,10 @@ public class IntentUtils {
 
     public final Intent toExternalizedSend(Intent intent) {
         return intent;
+    }
+
+    public final boolean consumeExternalRoutingIntent(Intent intent, Context context) {
+        return false;
     }
 
     public static final class RouteBuilders {
