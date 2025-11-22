@@ -8,8 +8,10 @@ import com.google.gson.JsonObject
 import mods.events.EventTracker
 import mods.promise.runCatchingOrLog
 import mods.utils.LogUtils
+import mods.utils.ToastUtil
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.concurrent.atomic.AtomicBoolean
 
 @Suppress("UNUSED")
 class RNWebRtcFix {
@@ -27,6 +29,8 @@ class RNWebRtcFix {
     )
 
     private var allowedProtocols = supportedProtocols
+
+    private val hasNotified = AtomicBoolean(false)
 
     @Synchronized
     fun selectEncryptionMode(): String {
@@ -90,6 +94,17 @@ class RNWebRtcFix {
             // Nothing to debug
             return
         }
+
+        // Check if none of the protocols allowed are ones we support.
+        // If so, notify the user that the call will not work.
+        if (allowedProtocols != supportedProtocols) {
+            if (supportedProtocols.none { it in allowedProtocols }) {
+                if (hasNotified.compareAndSet(false, true)) {
+                    ToastUtil.toastShort("Call failed: No common encryption modes found.")
+                }
+            }
+        }
+
         EventTracker.trackException(
             AbnormalWebRtcCloseError(
                 "code=$num, reason=$reason, supportedProtocols=$supportedProtocols, allowedProtocols=$allowedProtocols"
