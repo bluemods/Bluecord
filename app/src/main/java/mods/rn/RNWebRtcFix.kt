@@ -84,6 +84,7 @@ class RNWebRtcFix {
         return Gson().f(data, JsonObject::class.java)
     }
 
+    @Synchronized
     fun trackWebRtcWsError(num: Int?, reason: String?) {
         if (num == null || num in arrayOf(4004, 4015, 4011, 4006)) {
             // These are error codes the client knows how to handle;
@@ -97,7 +98,7 @@ class RNWebRtcFix {
 
         // Check if none of the protocols allowed are ones we support.
         // If so, notify the user that the call will not work.
-        if (allowedProtocols != supportedProtocols) {
+        if (allowedProtocols != supportedProtocols && allowedProtocols.isNotEmpty()) {
             if (supportedProtocols.none { it in allowedProtocols }) {
                 if (hasNotified.compareAndSet(false, true)) {
                     ToastUtil.toastShort("Call failed: No common encryption modes found.")
