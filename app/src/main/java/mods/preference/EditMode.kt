@@ -11,7 +11,7 @@ enum class EditMode(val prefsValue: String) {
         @JvmStatic
         fun parse(prefsValue: String?): EditMode {
             if (prefsValue.isNullOrEmpty()) return OFF
-            return EditMode.values().first { prefsValue.equals(it.prefsValue, true) }
+            return EditMode.values().firstOrNull { prefsValue.equals(it.prefsValue, true) } ?: OFF
         }
     }
 }
