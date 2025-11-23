@@ -101,7 +101,8 @@ class RNWebRtcFix {
         if (allowedProtocols != supportedProtocols && allowedProtocols.isNotEmpty()) {
             if (supportedProtocols.none { it in allowedProtocols }) {
                 if (hasNotified.compareAndSet(false, true)) {
-                    ToastUtil.toastShort("Call failed: No common encryption modes found.")
+                    ToastUtil.toastShort(
+                        "Call failed: No shared encryption protocols. Use play store version or check for updates.")
                 }
             }
         }
