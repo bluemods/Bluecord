@@ -245,7 +245,7 @@
 
 # virtual methods
 .method public final appendMention(Lcom/discord/models/user/User;J)V
-    .locals 9
+    .locals 10
 
     if-eqz p1, :cond_2
 
@@ -315,7 +315,7 @@
     # invoke-virtual {p2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
     # move-result-object p1
 
-    invoke-static {p1}, Lmods/utils/DisplayNameUtils;->getUsernameWithDiscriminator(Lcom/discord/models/user/User;)Ljava/lang/String;
+    invoke-static {p1}, Lmods/utils/DisplayNameUtils;->getActualUsername(Lcom/discord/models/user/User;)Ljava/lang/String;
 
     move-result-object p1
 
@@ -327,6 +327,10 @@
     new-instance v0, Ljava/lang/StringBuilder;
 
     invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v9, "@"
+
+    invoke-virtual {v0, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 
     invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 

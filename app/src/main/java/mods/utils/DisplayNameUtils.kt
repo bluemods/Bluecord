@@ -147,4 +147,14 @@ object DisplayNameUtils {
             }
         }
     }
+
+    @JvmStatic
+    fun getActualUsername(user: com.discord.api.user.User): String {
+        return user.username.orEmpty()
+    }
+
+    @JvmStatic
+    fun getActualUsername(user: User): String {
+        return user.username.orEmpty()
+    }
 }
