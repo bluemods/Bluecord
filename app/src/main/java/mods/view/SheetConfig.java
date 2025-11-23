@@ -50,6 +50,7 @@ import mods.DiscordTools;
 import mods.ThemingTools;
 import mods.activity.MediaTray;
 import mods.activity.browser.DiscordBrowserActivity;
+import mods.anti.AntiEdit;
 import mods.constants.PreferenceKeys;
 import mods.dialog.Dialogs;
 import mods.net.Net;
@@ -299,6 +300,7 @@ public class SheetConfig {
         TextView tvTranslate = binding.getRoot().findViewById(R.id.blue_id_2);
         TextView tvForward = binding.getRoot().findViewById(R.id.blue_id_3);
         TextView tvWebApp = binding.getRoot().findViewById(R.id.blue_id_4);
+        TextView tvDeleteEdits = binding.getRoot().findViewById(R.id.blue_id_5);
 
         Channel channel = model.getChannel();
         Message message = model.getMessage();
@@ -354,7 +356,18 @@ public class SheetConfig {
             }
         }
 
-        tvWebApp.setOnClickListener(v -> DiscordBrowserActivity.startForMessage(sheet.requireActivity(), message));
+        tvWebApp.setOnClickListener(v -> {
+            sheet.dismiss();
+            DiscordBrowserActivity.startForMessage(sheet.requireActivity(), message);
+        });
+
+        if (AntiEdit.hasEditedMessages(message.id)) {
+            tvDeleteEdits.setVisibility(View.VISIBLE);
+            tvDeleteEdits.setOnClickListener(v -> {
+                AntiEdit.deleteEdits(message);
+                sheet.dismiss();
+            });
+        }
     }
 
     @SuppressLint("ResourceType")

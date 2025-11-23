@@ -16,6 +16,7 @@ import mods.promise.runCatchingOrLog
 import mods.utils.FileLogger.writeWithProfileInfo
 import mods.utils.LRUCache
 import mods.utils.LogUtils
+import mods.utils.RefreshUtils
 import mods.utils.StoreUtils
 import mods.view.PrependEditNode
 import java.util.concurrent.locks.ReentrantLock
@@ -99,7 +100,8 @@ object AntiEdit {
 
         when (val mode = QuickAccessPrefs.editMode) {
             EditMode.OFF -> {}
-            EditMode.ON, EditMode.ON_AND_LOG -> {
+            EditMode.ON,
+            EditMode.ON_AND_LOG -> {
                 val oldMessage = map[newMessage.id] ?: run {
                     LogUtils.log(TAG, "edited message not found in cache:\n$newMessage")
                     return@parseEditedMessage
@@ -144,6 +146,23 @@ object AntiEdit {
             append(' ')
             append(TimeUtils.toReadableTimeString(context, message.editedTimestamp.g(), ClockFactory.get()))
             append(')')
+        }
+    }
+
+    @JvmStatic
+    fun deleteEdits(message: Message) {
+        editAppendLock.withLock {
+            editedMessages.remove(message.id)
+            Databases.get().edited.deleteEditedMessagesForMessage(message.id)
+            RefreshUtils.invalidateMessage(message.id)
+        }
+    }
+
+    @JvmStatic
+    fun hasEditedMessages(id: Long): Boolean {
+        return editAppendLock.withLock {
+            !editedMessages[id].isNullOrEmpty() ||
+                    Databases.get().edited.hasEditedMessages(id)
         }
     }
 }

@@ -1,7 +1,9 @@
 package mods.db
 
 import android.content.ContentValues
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import mods.promise.runCatchingOrLog
 
 class EditedMessagesTable(
     private val db: SQLiteDatabase
@@ -52,6 +54,25 @@ class EditedMessagesTable(
                     timestamp = c.getLong(2),
                 ))
             }
+        }
+    }
+
+    fun deleteEditedMessagesForMessage(messageId: Long): Int {
+        return db.delete(
+            TABLE_NAME,
+            "message_id=?",
+            arrayOf(messageId.toString())
+        )
+    }
+
+    fun hasEditedMessages(messageId: Long): Boolean {
+        return runCatchingOrLog {
+            db.rawQuery(
+                "SELECT 1 FROM $TABLE_NAME WHERE message_id=?",
+                arrayOf(messageId.toString())
+            ).use(Cursor::moveToNext)
+        }.getOrElse {
+            false
         }
     }
 
