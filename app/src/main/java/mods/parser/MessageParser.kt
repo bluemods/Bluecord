@@ -1,40 +1,40 @@
-package mods.parser;
+package mods.parser
 
-import static mods.parser.MessageParserConstants.TYPE_RECIPIENT_ADD;
+import com.discord.api.message.Message
+import com.discord.models.user.MeUser
+import mods.constants.PreferenceKeys
+import mods.parser.MessageParserConstants.TYPE_RECIPIENT_ADD
+import mods.preference.Prefs
+import mods.utils.LogUtils
+import mods.utils.StoreUtils
 
-import mods.utils.LogUtils;
+@Suppress("unused")
+object MessageParser {
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+    private val TAG = MessageParser::class.java.simpleName
 
-import com.discord.api.message.Message;
-import com.discord.models.user.MeUser;
-
-import mods.constants.PreferenceKeys;
-import mods.preference.Prefs;
-import mods.utils.StoreUtils;
-
-@SuppressWarnings("unused")
-public class MessageParser {
-
-    private static final String TAG = MessageParser.class.getSimpleName();
-
-    public static void handleIncoming(@Nullable Object msg) {
-        if (msg instanceof Message) {
-            Message message = (Message) msg;
-            antiGroupAdd(message);
-            // antiSpam(message);
+    @JvmStatic
+    fun handleIncoming(msg: Any?) {
+        if (msg is Message) {
+            antiGroupAdd(msg)
+            // antiSpam(msg)
         }
     }
 
-    private static void antiGroupAdd(@NonNull Message message) {
-        Integer type = message.type;
+    private fun antiGroupAdd(message: Message) {
+        val type: Int? = message.type
 
-        if (type != null && type == TYPE_RECIPIENT_ADD && Prefs.getBoolean(PreferenceKeys.DO_NOT_ADD, false)) {
-            MeUser self = StoreUtils.getSelf();
-            if (self != null && message.author.getId() != self.getId()) {
-                LogUtils.log(TAG, "attempting to leave server " + message.channelId + "\n\n" + message);
-                StoreUtils.leaveGroupDM(message.channelId);
+        if (type != null &&
+            type == TYPE_RECIPIENT_ADD &&
+            Prefs.getBoolean(PreferenceKeys.DO_NOT_ADD, false)
+        ) {
+            val self: MeUser? = StoreUtils.getSelf()
+            if (self != null && message.author.id != self.id) {
+                LogUtils.log(
+                    TAG,
+                    "attempting to leave server ${message.channelId}\n\n$message"
+                )
+                StoreUtils.leaveGroupDM(message.channelId)
             }
         }
     }
@@ -72,6 +72,5 @@ public class MessageParser {
 
         return Math.abs(currentTs - messageTs) < MAX_DIFFERENCE;
     }
-
-     */
+    */
 }
